@@ -1,29 +1,9 @@
-# vue-school-forum
-
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- The src directory contains our application's code.
+- Main.js is the application's entry file.
+- When start building an application it is usually handy to work with a local file or mockup before hitting an API or another source.
+- If the browser tries to reload the page, this shouldn't happen in a Single Page Application.
+- The class selector is way faster than the element selector, because it is more specific.
+- It's recommended to use camelCase namse when using CSS Modules.
+- keep the logic that alters the state in the parent component.
+- It's recommended to place the global styles in the root component's style tag insted of importing it in the HTML head tag as you would normally do.
+- Each Vue.set is an individual state change.

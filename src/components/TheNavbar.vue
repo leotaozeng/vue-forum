@@ -2,7 +2,7 @@
   <header class="header"
           id="header">
     <router-link :to="{name: 'Home'}"
-       class="logo">
+                 class="logo">
       <img src="../assets/images/svg/vueschool-logo.svg">
     </router-link>
 
@@ -17,17 +17,17 @@
     <nav class="navbar">
       <ul>
         <li class="navbar-user">
-          <a href="#">
+          <router-link :to="{name: 'Profile'}">
             <img class="avatar-small"
-                 src="https://pbs.twimg.com/profile_images/881260299420041217/GMVGlDea_400x400.jpg"
-                 alt="">
+                 :src="user.avatar"
+                 :alt="user.username">
             <span>
-              Alex Kyriakidis
+              {{ user.name }}
               <img class="icon-profile"
                    src="../assets/images/svg/arrow-profile.svg"
                    alt="">
             </span>
-          </a>
+          </router-link>
 
           <!-- dropdown menu -->
           <!-- add class "active-drop" to show the dropdown -->
@@ -67,7 +67,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
+  computed: {
+    ...mapGetters({
+      user: 'authUser'
+    })
+  }
 }
 </script>
 

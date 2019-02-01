@@ -15,9 +15,9 @@ export default {
 
   computed: {
     catgories () {
-      const { sourceData } = this.$store.state
+      const { categories } = this.$store.state.sourceData
 
-      return Object.values(sourceData.categories)
+      return Object.values(categories)
     }
   }
 }

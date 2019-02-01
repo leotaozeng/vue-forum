@@ -68,10 +68,9 @@ export default {
 
     threads () {
       // need to return an array of threads
-      const { sourceData } = this.$store.state
-      const threads = Object.values(sourceData.threads)
+      const { threads } = this.$store.state.sourceData
 
-      return threads.filter((thread) => thread.forumId === this.id)
+      return Object.values(threads).filter((thread) => thread.forumId === this.id)
     }
   },
 

@@ -53,13 +53,9 @@ export default {
     },
 
     posts () {
-      const { sourceData } = this.$store.state
-      const posts = Object.values(sourceData.posts)
-      const newPosts = Object.values(this.thread.posts)
+      const { posts } = this.$store.state.sourceData
 
-      return posts.filter((post) => {
-        return newPosts.includes(post['.key'])
-      })
+      return Object.values(posts).filter((post) => post.threadId === this.id)
     }
   },
 

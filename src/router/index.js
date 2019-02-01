@@ -31,6 +31,12 @@ export default new Router({
       props: true
     },
     {
+      path: '/me',
+      name: 'Profile',
+      component: () => import('@/views/PageProfile'),
+      props: true
+    },
+    {
       path: '*',
       name: 'NotFound',
       component: () => import('@/views/PageNotFound')

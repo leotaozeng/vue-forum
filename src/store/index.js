@@ -13,6 +13,7 @@ const store = new Vuex.Store({
       authId: 'VXjpr2WHa8Ux4Bnggym8QFLdv5C3'
     }
   },
+
   getters: {
     authUser: state => {
       const { sourceData } = state
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
       return sourceData.users[sourceData.authId]
     }
   },
+
   mutations,
   actions
 })

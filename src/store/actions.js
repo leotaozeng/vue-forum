@@ -1,4 +1,10 @@
 export default {
+  updateUser ({ commit }, user) {
+    const userId = user['.key']
+
+    commit('updateUser', { user, userId })
+  },
+
   addPost ({ commit }, post) {
     const postId = post['.key']
 

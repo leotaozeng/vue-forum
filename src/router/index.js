@@ -12,30 +12,44 @@ export default new Router({
       name: 'Home',
       component: () => import('@/views/PageHome')
     },
+
     {
       path: '/category/:id',
       name: 'Category',
       component: () => import('@/views/PageCategory'),
       props: true
     },
+
     {
       path: '/forum/:id',
       name: 'Forum',
       component: () => import('@/views/PageForum'),
       props: true
     },
+
     {
       path: '/thread/:id',
       name: 'ThreadShow',
       component: () => import('@/views/PageThreadShow'),
       props: true
     },
+
     {
       path: '/me',
       name: 'Profile',
       component: () => import('@/views/PageProfile'),
-      props: true
+      props: false
     },
+
+    {
+      path: '/me/edit',
+      name: 'ProfileEdit',
+      component: () => import('@/views/PageProfile'),
+      props: {
+        edit: true
+      }
+    },
+
     {
       path: '*',
       name: 'NotFound',

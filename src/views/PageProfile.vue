@@ -1,44 +1,14 @@
 <template>
   <div class="flex-grid">
-    <div class="col-3 push-top">
-      <div class="profile-card">
-        <p class="text-center">
-          <img :src="user.avatar"
-               :alt="user.username"
-               class="avatar-xlarge">
-        </p>
+    <UserProfileCard v-if="!edit"
+                     :userPostsCount="userPostsCount"
+                     :userThreadsCount="userThreadsCount"
+                     :user="user" />
 
-        <h1 class="username title">{{ user.usernameLower }}</h1>
-
-        <p class="name text-lead">{{ user.name }}</p>
-
-        <p class="text-justify">
-          {{ user.bio ? user.bio : 'No bio specified.' }}
-        </p>
-
-        <span class="online">{{ user.usernameLower }} is online</span>
-
-        <div class="stats">
-          <span>{{ userPostsCount }} posts</span>
-          <span>{{ userThreadsCount }} threads</span>
-        </div>
-
-        <hr>
-
-        <p v-if="user.website"
-           class="text-large text-center"><i class="fa fa-globe"></i>
-          <router-link :to="user.webiste">{{ user.webiste }}</router-link>
-        </p>
-      </div>
-
-      <p class="text-xsmall text-faded text-center">Member since june 2003, last visited 4 hours ago</p>
-
-      <div class="text-center">
-        <hr>
-        <a href="edit-profile.html"
-           class="btn-green btn-small">Edit Profile</a>
-      </div>
-    </div>
+    <UserProfileCardEditor v-else
+                           :userPostsCount="userPostsCount"
+                           :userThreadsCount="userThreadsCount"
+                           :user="user" />
 
     <div class="col-7 push-top">
       <div class="profile-header">
@@ -56,17 +26,26 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import PostList from '@/components/PostList'
+import UserProfileCard from '@/components/UserProfileCard'
+import UserProfileCardEditor from '@/components/UserProfileCardEditor'
+import { mapGetters } from 'vuex'
+import { countObjectProperties } from '@/utils'
 
 export default {
+  props: {
+    edit: {
+      type: Boolean
+    }
+  },
+
   computed: {
     userPostsCount () {
-      return (this.user.posts ? Object.values(this.user.posts).length : 0)
+      return countObjectProperties(this.user.posts)
     },
 
     userThreadsCount () {
-      return (this.user.threads ? Object.values(this.user.threads).length : 0)
+      return countObjectProperties(this.user.threads)
     },
 
     userPosts () {
@@ -85,7 +64,9 @@ export default {
   },
 
   components: {
-    PostList
+    PostList,
+    UserProfileCard,
+    UserProfileCardEditor
   }
 }
 </script>

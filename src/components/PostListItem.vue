@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { countObjectProperties } from '@/utils'
+
 export default {
   props: {
     post: {
@@ -40,7 +42,7 @@ export default {
     },
 
     userPostsCount () {
-      return this.user.posts ? Object.values(this.user.posts).length : 0
+      return countObjectProperties(this.user.posts)
     }
 
     // humanFriendlyDates () {

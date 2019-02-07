@@ -7,7 +7,13 @@ export const mutations = {
     Vue.set(sourceData.users, userId, user)
   },
 
-  addPost (state, { post, postId }) {
+  setThread (state, { thread, threadId }) {
+    const { sourceData } = state
+
+    Vue.set(sourceData.threads, threadId, thread)
+  },
+
+  setPost (state, { post, postId }) {
     const { sourceData } = state
 
     Vue.set(sourceData.posts, postId, post)
@@ -23,5 +29,7 @@ export const mutations = {
     const user = state.sourceData.users[userId]
 
     Vue.set(user.posts, postId, postId)
-  }
+  },
+
+  addThreadToForum () {},
 }

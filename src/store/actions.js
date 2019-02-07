@@ -5,23 +5,27 @@ export default {
     commit('updateUser', { user, userId })
   },
 
-  addPost ({ commit }, post) {
-    const postId = post['.key']
+  createPost ({ commit, state }, post) {
+    const postId = 'greatPost' + Math.random()
 
-    commit('addPost', { post, postId })
+    post.publishedAt = Math.floor(Date.now() / 1000)
+    post.userId = state.sourceData.authId
+    post['.key'] = postId
+
+    commit('setPost', { post, postId })
+    commit('addPostToThread', { threadId: post.threadId, postId })
+    commit('addPostToUser', { userId: post.userId, postId })
   },
 
-  addPostToThread ({ commit }, post) {
-    const postId = post['.key']
-    const threadId = post.threadId
+  createThread ({ commit, state, dispatch }, { thread, text }) {
+    const threadId = 'greatPost' + Math.random()
 
-    commit('addPostToThread', { threadId, postId })
-  },
+    thread.publishedAt = Math.floor(Date.now() / 1000)
+    thread.userId = state.sourceData.authId
+    thread['.key'] = threadId
 
-  addPostToUser ({ commit }, post) {
-    const postId = post['.key']
-    const userId = post.userId
+    commit('setThread', { thread, threadId })
 
-    commit('addPostToUser', { userId, postId })
+    dispatch('createPost', { text, threadId })
   }
 }

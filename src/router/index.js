@@ -28,6 +28,13 @@ export default new Router({
     },
 
     {
+      path: '/thread/create',
+      name: 'ThreadCreate',
+      component: () => import('@/views/PageThreadCreate'),
+      props: true
+    },
+
+    {
       path: '/thread/:id',
       name: 'ThreadShow',
       component: () => import('@/views/PageThreadShow'),

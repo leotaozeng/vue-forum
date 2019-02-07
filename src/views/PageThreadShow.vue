@@ -30,18 +30,12 @@ export default {
 
   methods: {
     addPost ({ text }) {
-      const postId = 'greatPost' + Math.random()
       const newPost = {
-        publishedAt: Math.floor(Date.now() / 1000),
         text,
-        threadId: this.id,
-        userId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',
-        '.key': postId
+        threadId: this.id
       }
 
-      this.$store.dispatch('addPost', newPost)
-      this.$store.dispatch('addPostToThread', newPost)
-      this.$store.dispatch('addPostToUser', newPost)
+      this.$store.dispatch('createPost', newPost)
     }
   },
 

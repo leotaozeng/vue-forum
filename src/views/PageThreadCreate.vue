@@ -23,7 +23,7 @@
       </div>
 
       <div class="btn-group">
-        <button class="btn btn-ghost">Cancel</button>
+        <button class="btn btn-ghost" @click.prevent="cancel">Cancel</button>
         <button class="btn btn-blue"
                 type="submit"
                 name="Publish">Publish</button>
@@ -35,8 +35,8 @@
 <script>
 export default {
   props: {
-    forum: {
-      type: Object,
+    forumId: {
+      type: String,
       required: true
     }
   },
@@ -52,10 +52,24 @@ export default {
     create () {
       const thread = {
         forumId: this.forum['.key'],
-        title: this.titile
+        title: this.title
       }
 
-      this.$store.dispatch('createThread', { thread, text: this.content })
+      this.$store.dispatch('createThread', { thread, text: this.content }).then(thread => {
+        this.$router.push({ name: 'ThreadShow', params: { id: thread['.key'] } })
+      })
+    },
+
+    cancel () {
+      this.$router.push({ name: 'Forum', params: { id: this.forum['.key'] } })
+    }
+  },
+
+  computed: {
+    forum () {
+      const { forums } = this.$store.state.sourceData
+
+      return forums[this.forumId]
     }
   }
 }

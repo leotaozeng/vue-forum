@@ -28,7 +28,7 @@ export default new Router({
     },
 
     {
-      path: '/thread/create',
+      path: '/thread/create/:forumId',
       name: 'ThreadCreate',
       component: () => import('@/views/PageThreadCreate'),
       props: true

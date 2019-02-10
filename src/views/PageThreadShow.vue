@@ -4,7 +4,7 @@
 
     <p>
       By <a href="#"
-         class="link-unstyled">Robin</a>,
+         class="link-unstyled">{{ user.name }}</a>,
       <AppDate :timestamp="thread.publishedAt" />.
       <span style="float:right; margin-top: 2px;"
             class="hide-mobile text-faded text-small">3 replies by 3 contributors</span>
@@ -50,6 +50,12 @@ export default {
       const { posts } = this.$store.state.sourceData
 
       return Object.values(posts).filter((post) => post.threadId === this.id)
+    },
+
+    user () {
+      const { authId, users } = this.$store.state.sourceData
+
+      return users[authId]
     }
   },
 

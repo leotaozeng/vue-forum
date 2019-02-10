@@ -18,14 +18,20 @@ export default {
   },
 
   createThread ({ commit, state, dispatch }, { thread, text }) {
-    const threadId = 'greatPost' + Math.random()
+    return new Promise((resolve, reject) => {
+      const threadId = 'greatPost' + Math.random()
 
-    thread.publishedAt = Math.floor(Date.now() / 1000)
-    thread.userId = state.sourceData.authId
-    thread['.key'] = threadId
+      thread.publishedAt = Math.floor(Date.now() / 1000)
+      thread.userId = state.sourceData.authId
+      thread['.key'] = threadId
 
-    commit('setThread', { thread, threadId })
+      commit('setThread', { thread, threadId })
+      commit('addThreadToForum', { forumId: thread.forumId, threadId })
+      commit('addThreadToUser', { userId: thread.userId, threadId })
 
-    dispatch('createPost', { text, threadId })
+      dispatch('createPost', { text, threadId })
+
+      resolve(state.sourceData.threads[threadId])
+    })
   }
 }

@@ -33,6 +33,7 @@
 
 <script>
 import AppDate from '@/components/AppDate'
+import { countObjectProperties } from '@/utils/index'
 
 export default {
   props: {
@@ -44,7 +45,9 @@ export default {
 
   computed: {
     repliesCount () {
-      return Object.values(this.thread.posts).length - 1
+      const count = countObjectProperties(this.thread.posts)
+
+      return count ? count - 1 : count
     },
 
     user () {

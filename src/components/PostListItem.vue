@@ -14,9 +14,19 @@
     </div>
 
     <div class="post-content">
-      <div>
+      <div v-if="!editing">
         <p>{{ post.text }}</p>
       </div>
+
+      <PostEditor v-else
+                  :post="post"
+                  @update="updatePost" />
+
+      <a @click="editing = true"
+         v-if="!editing"
+         style="margin-left: auto;"
+         class="link-unstyled"
+         title="Make a change"><i class="fa fa-pencil"></i></a>
     </div>
 
     <div class="post-date text-faded">
@@ -27,12 +37,31 @@
 
 <script>
 import { countObjectProperties } from '@/utils'
+import PostEditor from './PostEditor'
 
 export default {
   props: {
     post: {
       type: Object,
       required: true
+    }
+  },
+
+  data () {
+    return {
+      editing: false
+    }
+  },
+
+  methods: {
+    updatePost ({ text }) {
+      this.$store.dispatch({
+        type: 'updatePost',
+        id: this.post['.key'],
+        text
+      }).then(() => {
+        this.editing = false
+      })
     }
   },
 
@@ -52,10 +81,10 @@ export default {
     // diffForHumans () {
     //   return moment.unix(this.post.publishedAt).fromNow()
     // }
-  }
+  },
 
-  // components: {
-  //   AppDate
-  // }
+  components: {
+    PostEditor
+  }
 }
 </script>

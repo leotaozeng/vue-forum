@@ -1,19 +1,13 @@
 import Vue from 'vue'
 
 export const mutations = {
-  updateUser (state, { user, userId }) {
-    const { sourceData } = state
-
-    Vue.set(sourceData.users, userId, user)
-  },
-
-  setThread (state, { thread, threadId }) {
+  setThread (state, { threadId, thread }) {
     const { sourceData } = state
 
     Vue.set(sourceData.threads, threadId, thread)
   },
 
-  setPost (state, { post, postId }) {
+  setPost (state, { postId, post }) {
     const { sourceData } = state
 
     Vue.set(sourceData.posts, postId, post)
@@ -57,5 +51,11 @@ export const mutations = {
     }
 
     Vue.set(user.threads, threadId, threadId)
+  },
+
+  updateUser (state, { userId, user }) {
+    const { sourceData } = state
+
+    Vue.set(sourceData.users, userId, user)
   }
 }

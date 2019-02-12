@@ -2,37 +2,14 @@
   <div class="col-full push-top">
     <h1>Create new thread in <i>{{ forum.name }}</i></h1>
 
-    <form @submit.prevent="create">
-      <div class="form-group">
-        <label for="thread_title">Title:</label>
-        <input type="text"
-               id="thread_title"
-               class="form-input"
-               name="title"
-               v-model="title">
-      </div>
-
-      <div class="form-group">
-        <label for="thread_content">Content:</label>
-        <textarea id="thread_content"
-                  class="form-input"
-                  name="content"
-                  rows="8"
-                  cols="140"
-                  v-model="content"></textarea>
-      </div>
-
-      <div class="btn-group">
-        <button class="btn btn-ghost" @click.prevent="cancel">Cancel</button>
-        <button class="btn btn-blue"
-                type="submit"
-                name="Publish">Publish</button>
-      </div>
-    </form>
+    <ThreadEditor @save="create"
+                  @cancel="cancel" />
   </div>
 </template>
 
 <script>
+import ThreadEditor from '@/components/ThreadEditor'
+
 export default {
   props: {
     forumId: {
@@ -41,21 +18,14 @@ export default {
     }
   },
 
-  data () {
-    return {
-      title: '',
-      content: ''
-    }
-  },
-
   methods: {
-    create () {
+    create ({ title, text }) {
       const thread = {
         forumId: this.forum['.key'],
-        title: this.title
+        title
       }
 
-      this.$store.dispatch('createThread', { thread, text: this.content }).then(thread => {
+      this.$store.dispatch('createThread', { thread, text }).then(thread => {
         this.$router.push({ name: 'ThreadShow', params: { id: thread['.key'] } })
       })
     },
@@ -71,6 +41,10 @@ export default {
 
       return forums[this.forumId]
     }
+  },
+
+  components: {
+    ThreadEditor
   }
 }
 </script>

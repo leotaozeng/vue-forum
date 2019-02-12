@@ -7,3 +7,4 @@
 - keep the logic that alters the state in the parent component.
 - It's recommended to place the global styles in the root component's style tag insted of importing it in the HTML head tag as you would normally do.
 - Each Vue.set is an individual state change.
+- Create and Update things are usually all together.

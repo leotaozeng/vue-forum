@@ -18,7 +18,7 @@
 
     <PostList :posts="posts" />
 
-    <PostEditor @create="addPost" />
+    <PostEditor :threadId="id" />
   </div>
 </template>
 
@@ -31,17 +31,6 @@ export default {
     id: {
       type: String,
       required: true
-    }
-  },
-
-  methods: {
-    addPost ({ text }) {
-      const newPost = {
-        text,
-        threadId: this.id
-      }
-
-      this.$store.dispatch('createPost', newPost)
     }
   },
 

@@ -20,18 +20,13 @@ export default {
 
   methods: {
     create ({ title, text }) {
-      const thread = {
-        forumId: this.forum['.key'],
-        title
-      }
-
-      this.$store.dispatch('createThread', { thread, text }).then(thread => {
+      this.$store.dispatch('createThread', { forumId: this.forumId, title, text }).then(thread => {
         this.$router.push({ name: 'ThreadShow', params: { id: thread['.key'] } })
       })
     },
 
     cancel () {
-      this.$router.push({ name: 'Forum', params: { id: this.forum['.key'] } })
+      this.$router.push({ name: 'Forum', params: { id: this.forumId } })
     }
   },
 

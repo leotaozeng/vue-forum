@@ -22,9 +22,7 @@
     <div class="btn-group">
       <button class="btn btn-ghost"
               @click.prevent="cancel">Cancel</button>
-      <button class="btn btn-blue"
-              type="submit"
-              :name="isEdit">{{isEdit}}</button>
+      <button class="btn btn-blue">{{isEdit}}</button>
     </div>
   </form>
 </template>

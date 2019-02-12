@@ -20,6 +20,10 @@
 <script>
 export default {
   props: {
+    threadId: {
+      type: String
+    },
+
     post: {
       type: Object
     }
@@ -37,10 +41,8 @@ export default {
     },
 
     create () {
-      // wrap all the arguments in an object
       if (this.text) {
-        this.$emit('create', { text: this.text })
-        this.text = ''
+        this.$store.dispatch('createPost', { threadId: this.threadId, text: this.text })
       }
     },
 
@@ -58,7 +60,7 @@ export default {
 </script>
 
 <style scoped>
-  .post-editor {
-    width: 100%;
-  }
+.post-editor {
+  width: 100%;
+}
 </style>

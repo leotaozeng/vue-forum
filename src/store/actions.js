@@ -1,9 +1,12 @@
 export default {
-  createPost ({ commit, state }, post) {
+  createPost ({ commit, state }, { threadId, text }) {
     return new Promise((resolve, reject) => {
+      const post = {}
       const postId = 'greatPost' + Math.random()
 
       post.publishedAt = Math.floor(Date.now() / 1000)
+      post.text = text
+      post.threadId = threadId
       post.userId = state.sourceData.authId
       post['.key'] = postId
 
@@ -15,11 +18,14 @@ export default {
     })
   },
 
-  createThread ({ commit, state, dispatch }, { thread, text }) {
+  createThread ({ commit, state, dispatch }, { forumId, title, text }) {
     return new Promise((resolve, reject) => {
+      const thread = {}
       const threadId = 'greatThread' + Math.random()
 
+      thread.forumId = forumId
       thread.publishedAt = Math.floor(Date.now() / 1000)
+      thread.title = title
       thread.userId = state.sourceData.authId
       thread['.key'] = threadId
 
@@ -27,7 +33,7 @@ export default {
       commit('addThreadToForum', { forumId: thread.forumId, threadId })
       commit('addThreadToUser', { userId: thread.userId, threadId })
 
-      dispatch('createPost', { text, threadId }).then((post) => {
+      dispatch('createPost', { threadId, text }).then((post) => {
         commit('setThread', { threadId, thread: { ...thread, firstPostId: post['.key'] } })
       })
 
@@ -39,9 +45,7 @@ export default {
     return new Promise((resolve, reject) => {
       const post = state.sourceData.posts[id]
 
-      post.text = text
-
-      commit('setPost', { postId: id, post })
+      commit('setPost', { postId: id, post: { ...post, text } })
 
       resolve(state.sourceData.posts[id])
     })
@@ -52,19 +56,14 @@ export default {
       const thread = state.sourceData.threads[id]
       const firstPost = state.sourceData.posts[thread.firstPostId]
 
-      thread.title = title
-      firstPost.text = text
-
-      commit('setThread', { threadId: id, thread })
-      commit('setPost', { postId: firstPost['.key'], post: firstPost })
+      commit('setThread', { threadId: id, thread: { ...thread, title } })
+      commit('setPost', { postId: firstPost['.key'], post: { ...firstPost, text } })
 
       resolve(state.sourceData.threads[id])
     })
   },
 
   updateUser ({ commit }, user) {
-    const userId = user['.key']
-
-    commit('updateUser', { userId, user })
+    commit('updateUser', { userId: user['.key'], user })
   }
 }

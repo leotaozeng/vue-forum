@@ -14,19 +14,19 @@
     </div>
 
     <div class="post-content">
-      <div v-if="!editing">
-        <p>{{ post.text }}</p>
-      </div>
-
-      <PostEditor v-else
+      <PostEditor v-if="editing"
                   :post="post"
-                  @update="updatePost" />
+                  @update="editing = false"
+                  @cancel="editing = false"   />
 
-      <a @click="editing = true"
-         v-if="!editing"
-         style="margin-left: auto;"
-         class="link-unstyled"
-         title="Make a change"><i class="fa fa-pencil"></i></a>
+      <template v-else>
+        <p>{{ post.text }}</p>
+
+        <a @click="editing = true"
+           style="margin-left: auto;"
+           class="link-unstyled"
+           title="Make a change"><i class="fa fa-pencil"></i></a>
+      </template>
     </div>
 
     <div class="post-date text-faded">
@@ -50,18 +50,6 @@ export default {
   data () {
     return {
       editing: false
-    }
-  },
-
-  methods: {
-    updatePost ({ text }) {
-      this.$store.dispatch({
-        type: 'updatePost',
-        id: this.post['.key'],
-        text
-      }).then(() => {
-        this.editing = false
-      })
     }
   },
 

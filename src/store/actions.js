@@ -47,6 +47,8 @@ export default {
 
       commit('setPost', { postId: id, post: { ...post, text } })
 
+      console.log(post)
+
       resolve(state.sourceData.posts[id])
     })
   },

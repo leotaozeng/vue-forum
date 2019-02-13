@@ -11,7 +11,11 @@
       </div>
 
       <div class="form-actions">
-        <button class="btn-blue">{{ isEdit }} post</button>
+        <button class="btn"
+                v-if="isUpdate"
+                @click.prevent="cancel">Cancel</button>
+
+        <button class="btn-blue">{{ isUpdate ? 'Update' : 'Submit' }} post</button>
       </div>
     </form>
   </div>
@@ -25,7 +29,13 @@ export default {
     },
 
     post: {
-      type: Object
+      type: Object,
+      validator: (obj) => {
+        const keyIsValid = typeof obj['.key'] === 'string'
+        const textIsValid = typeof obj.text === 'string'
+
+        return keyIsValid && textIsValid
+      }
     }
   },
 
@@ -37,23 +47,37 @@ export default {
 
   methods: {
     save () {
-      this.post ? this.update() : this.create()
+      this.isUpdate ? this.update() : this.create()
     },
 
     create () {
       if (this.text) {
-        this.$store.dispatch('createPost', { threadId: this.threadId, text: this.text })
+        const payload = { threadId: this.threadId, text: this.text }
+
+        this.$store.dispatch('createPost', payload).then((post) => {
+          this.text = ''
+        })
       }
     },
 
     update () {
-      this.$emit('update', { text: this.text })
+      if (this.text) {
+        const payload = { id: this.post['.key'], text: this.text }
+
+        this.$store.dispatch('updatePost', payload).then((post) => {
+          this.$emit('update')
+        })
+      }
+    },
+
+    cancel () {
+      this.$emit('cancel')
     }
   },
 
   computed: {
-    isEdit () {
-      return this.text ? 'Update' : 'Submit'
+    isUpdate () {
+      return !!this.post
     }
   }
 }

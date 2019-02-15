@@ -17,7 +17,7 @@
       <PostEditor v-if="editing"
                   :post="post"
                   @update="editing = false"
-                  @cancel="editing = false"   />
+                  @cancel="editing = false" />
 
       <template v-else>
         <p>{{ post.text }}</p>
@@ -30,6 +30,7 @@
     </div>
 
     <div class="post-date text-faded">
+      <div v-if="post.edited" class="edition-info">edited</div>
       <AppDate :timestamp="post.publishedAt" />
     </div>
   </div>

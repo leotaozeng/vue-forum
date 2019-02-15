@@ -43,25 +43,30 @@ export default {
 
   updatePost ({ commit, state }, { id, text }) {
     return new Promise((resolve, reject) => {
-      const post = state.sourceData.posts[id]
+      const { posts, authId } = state.sourceData
 
-      commit('setPost', { postId: id, post: { ...post, text } })
+      const post = posts[id]
+      const newPost = { ...post, text, edited: { at: Math.floor(Date.now() / 1000), by: authId } }
 
-      console.log(post)
+      commit('setPost', { postId: id, post: newPost })
 
       resolve(state.sourceData.posts[id])
     })
   },
 
-  updateThread ({ commit, state }, { id, title, text }) {
+  updateThread ({ commit, state, dispatch }, { id, title, text }) {
     return new Promise((resolve, reject) => {
-      const thread = state.sourceData.threads[id]
-      const firstPost = state.sourceData.posts[thread.firstPostId]
+      const { threads } = state.sourceData
 
-      commit('setThread', { threadId: id, thread: { ...thread, title } })
-      commit('setPost', { postId: firstPost['.key'], post: { ...firstPost, text } })
+      const thread = threads[id]
+      const newThread = { ...thread, title }
 
-      resolve(state.sourceData.threads[id])
+      commit('setThread', { threadId: id, thread: newThread })
+
+      // This is asynchronous
+      dispatch('updatePost', { id: thread.firstPostId, text }).then((post) => {
+        resolve(state.sourceData.threads[id])
+      })
     })
   },
 

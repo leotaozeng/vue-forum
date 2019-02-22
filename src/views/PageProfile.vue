@@ -1,26 +1,28 @@
 <template>
   <div class="flex-grid">
-    <UserProfileCard v-if="!edit"
-                     :userPostsCount="userPostsCount"
-                     :userThreadsCount="userThreadsCount"
-                     :user="user" />
+    <UserProfileCard
+      v-if="!edit"
+      :userPostsCount="userPostsCount"
+      :userThreadsCount="userThreadsCount"
+      :user="user"
+    />
 
-    <UserProfileCardEditor v-else
-                           :userPostsCount="userPostsCount"
-                           :userThreadsCount="userThreadsCount"
-                           :user="user" />
+    <UserProfileCardEditor
+      v-else
+      :userPostsCount="userPostsCount"
+      :userThreadsCount="userThreadsCount"
+      :user="user"
+    />
 
     <div class="col-7 push-top">
       <div class="profile-header">
-        <span class="text-lead">
-          {{ user.username }}'s recent activity
-        </span>
+        <span class="text-lead">{{ user.username }}'s recent activity</span>
         <a href="#">See only started threads?</a>
       </div>
 
       <hr>
 
-      <PostList :posts="userPosts" />
+      <PostList :posts="userPosts"/>
     </div>
   </div>
 </template>
@@ -52,7 +54,9 @@ export default {
       if (this.user.posts) {
         const { posts } = this.$store.state
 
-        return Object.values(posts).filter((post) => post.userId === this.user['.key'])
+        return Object.values(posts).filter(
+          post => post.userId === this.user['.key']
+        )
       } else {
         return []
       }

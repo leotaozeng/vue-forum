@@ -7,14 +7,14 @@ export default {
       post.publishedAt = Math.floor(Date.now() / 1000)
       post.text = text
       post.threadId = threadId
-      post.userId = state.sourceData.authId
+      post.userId = state.authId
       post['.key'] = postId
 
       commit('setPost', { postId, post })
       commit('addPostToThread', { threadId: post.threadId, postId })
       commit('addPostToUser', { userId: post.userId, postId })
 
-      resolve(state.sourceData.posts[postId])
+      resolve(state.posts[postId])
     })
   },
 
@@ -26,7 +26,7 @@ export default {
       thread.forumId = forumId
       thread.publishedAt = Math.floor(Date.now() / 1000)
       thread.title = title
-      thread.userId = state.sourceData.authId
+      thread.userId = state.authId
       thread['.key'] = threadId
 
       commit('setThread', { threadId, thread })
@@ -37,26 +37,26 @@ export default {
         commit('setThread', { threadId, thread: { ...thread, firstPostId: post['.key'] } })
       })
 
-      resolve(state.sourceData.threads[threadId])
+      resolve(state.threads[threadId])
     })
   },
 
   updatePost ({ commit, state }, { id, text }) {
     return new Promise((resolve, reject) => {
-      const { posts, authId } = state.sourceData
+      const { posts, authId } = state
 
       const post = posts[id]
       const newPost = { ...post, text, edited: { at: Math.floor(Date.now() / 1000), by: authId } }
 
       commit('setPost', { postId: id, post: newPost })
 
-      resolve(state.sourceData.posts[id])
+      resolve(state.posts[id])
     })
   },
 
   updateThread ({ commit, state, dispatch }, { id, title, text }) {
     return new Promise((resolve, reject) => {
-      const { threads } = state.sourceData
+      const { threads } = state
 
       const thread = threads[id]
       const newThread = { ...thread, title }
@@ -65,7 +65,7 @@ export default {
 
       // This is asynchronous
       dispatch('updatePost', { id: thread.firstPostId, text }).then((post) => {
-        resolve(state.sourceData.threads[id])
+        resolve(state.threads[id])
       })
     })
   },

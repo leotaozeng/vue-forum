@@ -61,14 +61,14 @@ export default {
 
   computed: {
     forum () {
-      const { sourceData } = this.$store.state
+      const { forums } = this.$store.state
 
-      return sourceData.forums[this.id]
+      return forums[this.id]
     },
 
     threads () {
       // need to return an array of threads
-      const { threads } = this.$store.state.sourceData
+      const { threads } = this.$store.state
 
       return Object.values(threads).filter((thread) => thread.forumId === this.id)
     }

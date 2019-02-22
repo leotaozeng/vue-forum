@@ -56,7 +56,7 @@ export default {
 
   computed: {
     user () {
-      return this.$store.state.sourceData.users[this.post.userId]
+      return this.$store.state.users[this.post.userId]
     },
 
     userPostsCount () {

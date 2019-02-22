@@ -32,7 +32,7 @@ export default {
 
   computed: {
     forum () {
-      const { forums } = this.$store.state.sourceData
+      const { forums } = this.$store.state
 
       return forums[this.forumId]
     }

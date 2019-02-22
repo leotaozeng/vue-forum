@@ -51,7 +51,7 @@ export default {
     },
 
     user () {
-      return this.$store.state.sourceData.users[this.thread.userId]
+      return this.$store.state.users[this.thread.userId]
     }
   },
 

@@ -8,17 +8,15 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    sourceData: {
-      ...data,
-      authId: 'VXjpr2WHa8Ux4Bnggym8QFLdv5C3'
-    }
+    ...data,
+    authId: 'VXjpr2WHa8Ux4Bnggym8QFLdv5C3'
   },
 
   getters: {
     authUser: state => {
-      const { sourceData } = state
+      const { users, authId } = state
 
-      return sourceData.users[sourceData.authId]
+      return users[authId]
     }
   },
 

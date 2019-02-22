@@ -2,19 +2,19 @@ import Vue from 'vue'
 
 export const mutations = {
   setThread (state, { threadId, thread }) {
-    const { threads } = state.sourceData
+    const { threads } = state
 
     Vue.set(threads, threadId, thread)
   },
 
   setPost (state, { postId, post }) {
-    const { posts } = state.sourceData
+    const { posts } = state
 
     Vue.set(posts, postId, post)
   },
 
   addPostToThread (state, { threadId, postId }) {
-    const thread = state.sourceData.threads[threadId]
+    const thread = state.threads[threadId]
 
     if (!thread.posts) {
       Vue.set(thread, 'posts', [])
@@ -24,7 +24,7 @@ export const mutations = {
   },
 
   addPostToUser (state, { userId, postId }) {
-    const user = state.sourceData.users[userId]
+    const user = state.users[userId]
 
     if (!user.posts) {
       Vue.set(user, 'posts', [])
@@ -34,7 +34,7 @@ export const mutations = {
   },
 
   addThreadToForum (state, { forumId, threadId }) {
-    const forum = state.sourceData.forums[forumId]
+    const forum = state.forums[forumId]
 
     if (!forum.threads) {
       Vue.set(forum, 'threads', [])
@@ -44,7 +44,7 @@ export const mutations = {
   },
 
   addThreadToUser (state, { userId, threadId }) {
-    const user = state.sourceData.users[userId]
+    const user = state.users[userId]
 
     if (!user.threads) {
       Vue.set(user, 'threads', [])
@@ -54,7 +54,7 @@ export const mutations = {
   },
 
   updateUser (state, { userId, user }) {
-    const { users } = state.sourceData
+    const { users } = state
 
     Vue.set(users, userId, user)
   }

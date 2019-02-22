@@ -22,7 +22,7 @@ export default {
 
   computed: {
     categoryForums () {
-      return Object.values(this.$store.state.sourceData.forums).filter((forum) => {
+      return Object.values(this.$store.state.forums).filter((forum) => {
         return forum.categoryId === this.category['.key']
       })
     }

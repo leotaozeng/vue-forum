@@ -2393,7 +2393,6 @@ figure {
 
 .container {
   display: flex;
-  max-width: 1200px;
   margin: 0 auto;
   align-items: center;
   justify-content: center;

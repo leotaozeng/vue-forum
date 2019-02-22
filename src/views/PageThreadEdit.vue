@@ -34,14 +34,14 @@ export default {
 
   computed: {
     thread () {
-      const { threads } = this.$store.state.sourceData
+      const { threads } = this.$store.state
 
       return threads[this.id]
     },
 
     firstPost () {
       const { firstPostId } = this.thread
-      const { posts } = this.$store.state.sourceData
+      const { posts } = this.$store.state
 
       return posts[firstPostId]
     }

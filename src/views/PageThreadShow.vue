@@ -36,19 +36,19 @@ export default {
 
   computed: {
     thread () {
-      const { sourceData } = this.$store.state
+      const { threads } = this.$store.state
 
-      return sourceData.threads[this.id]
+      return threads[this.id]
     },
 
     posts () {
-      const { posts } = this.$store.state.sourceData
+      const { posts } = this.$store.state
 
       return Object.values(posts).filter((post) => post.threadId === this.id)
     },
 
     user () {
-      const { authId, users } = this.$store.state.sourceData
+      const { authId, users } = this.$store.state
 
       return users[authId]
     }

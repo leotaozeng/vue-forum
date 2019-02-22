@@ -50,7 +50,7 @@ export default {
 
     userPosts () {
       if (this.user.posts) {
-        const { posts } = this.$store.state.sourceData
+        const { posts } = this.$store.state
 
         return Object.values(posts).filter((post) => post.userId === this.user['.key'])
       } else {

@@ -42,7 +42,7 @@ export default {
           console.error('The post prop must includes a `text` attribute.')
         }
 
-        console.log(valid)
+        // console.log(valid)
         return valid
       }
     }

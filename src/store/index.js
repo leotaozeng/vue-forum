@@ -20,6 +20,7 @@ const store = new Vuex.Store({
       return users[authId]
     },
 
+    // we can't pass arguments to getters by default
     // dynamic getter
     userPostsCount (state) {
       return function (id) {

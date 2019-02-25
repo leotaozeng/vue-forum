@@ -2,18 +2,14 @@
   <div class="col-3 push-top">
     <div class="profile-card">
       <p class="text-center">
-        <img :src="user.avatar"
-             :alt="user.username"
-             class="avatar-xlarge">
+        <img :src="user.avatar" :alt="user.username" class="avatar-xlarge">
       </p>
 
       <h1 class="username title">{{ user.usernameLower }}</h1>
 
       <p class="name text-lead">{{ user.name }}</p>
 
-      <p class="text-justify">
-        {{ user.bio ? user.bio : 'No bio specified.' }}
-      </p>
+      <p class="text-justify">{{ user.bio ? user.bio : 'No bio specified.' }}</p>
 
       <span class="online">{{ user.usernameLower }} is online</span>
 
@@ -24,8 +20,8 @@
 
       <hr>
 
-      <p v-if="user.website"
-         class="text-large text-center"><i class="fa fa-globe"></i>
+      <p v-if="user.website" class="text-large text-center">
+        <i class="fa fa-globe"></i>
         <router-link :to="user.webiste">{{ user.webiste }}</router-link>
       </p>
     </div>
@@ -34,28 +30,29 @@
 
     <div class="text-center">
       <hr>
-      <router-link :to="{name: 'ProfileEdit'}"
-         class="btn-green btn-small">Edit Profile</router-link>
+      <router-link :to="{name: 'ProfileEdit'}" class="btn-green btn-small">Edit Profile</router-link>
     </div>
   </div>
 </template>
 
 <script>
+// import { mapGetters } from 'vuex'
+
 export default {
   props: {
-    userPostsCount: {
-      type: Number,
-      required: true
-    },
-
-    userThreadsCount: {
-      type: Number,
-      required: true
-    },
-
     user: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    userPostsCount () {
+      return this.$store.getters.userPostsCount(this.user['.key'])
+    },
+
+    userThreadsCount () {
+      return this.$store.getters.userThreadsCount(this.user['.key'])
     }
   }
 }

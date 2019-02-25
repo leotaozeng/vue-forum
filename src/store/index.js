@@ -14,19 +14,12 @@ const store = new Vuex.Store({
   },
 
   getters: {
-    authUser: state => {
-      const { users, authId } = state
-
-      return users[authId]
-    },
-
+    authUser: state => state.users[state.authId],
     // we can't pass arguments to getters by default
     // dynamic getter
-    userPostsCount (state) {
-      return function (id) {
-        return countObjectProperties(state.users[id])
-      }
-    }
+    userThreadsCount: state => id => countObjectProperties(state.users[id].threads),
+
+    userPostsCount: state => id => countObjectProperties(state.users[id].posts)
   },
 
   mutations,

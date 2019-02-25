@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <TheNavbar />
+    <TheNavbar/>
 
     <div class="container">
       <!-- special component -->
-      <router-view />
+      <router-view/>
     </div>
   </div>
 </template>

@@ -79,16 +79,6 @@
 <script>
 export default {
   props: {
-    userPostsCount: {
-      type: Number,
-      required: true
-    },
-
-    userThreadsCount: {
-      type: Number,
-      required: true
-    },
-
     user: {
       type: Object,
       required: true
@@ -109,6 +99,16 @@ export default {
     save () {
       this.$store.dispatch('updateUser', { ...this.activeUser })
       this.$router.push({ name: 'Profile' })
+    }
+  },
+
+  computed: {
+    userPostsCount () {
+      return this.$store.getters.userPostsCount(this.user['.key'])
+    },
+
+    userThreadsCount () {
+      return this.$store.getters.userThreadsCount(this.user['.key'])
     }
   }
 }

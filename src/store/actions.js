@@ -11,8 +11,8 @@ export default {
       post['.key'] = postId
 
       commit('setPost', { postId, post })
-      commit('addPostToThread', { threadId: post.threadId, postId })
-      commit('addPostToUser', { userId: post.userId, postId })
+      commit('addPostToThread', { parentId: post.threadId, childId: postId })
+      commit('addPostToUser', { parentId: post.userId, childId: postId })
 
       resolve(state.posts[postId])
     })
@@ -30,8 +30,8 @@ export default {
       thread['.key'] = threadId
 
       commit('setThread', { threadId, thread })
-      commit('addThreadToForum', { forumId: thread.forumId, threadId })
-      commit('addThreadToUser', { userId: thread.userId, threadId })
+      commit('addThreadToForum', { parentId: thread.forumId, childId: threadId })
+      commit('addThreadToUser', { parentId: thread.userId, childId: threadId })
 
       dispatch('createPost', { threadId, text }).then((post) => {
         commit('setThread', { threadId, thread: { ...thread, firstPostId: post['.key'] } })

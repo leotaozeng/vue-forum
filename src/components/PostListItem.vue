@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import { countObjectProperties } from '@/utils'
 import PostEditor from './PostEditor'
+// import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -58,7 +58,7 @@ export default {
     },
 
     userPostsCount () {
-      return countObjectProperties(this.user.posts)
+      return this.$store.getters.userPostsCount(this.post.userId)
     }
 
     // humanFriendlyDates () {

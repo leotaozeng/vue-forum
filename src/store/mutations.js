@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { makeAppendChildToParentMutation } from '../utils'
 
 export const mutations = {
   setThread (state, { threadId, thread }) {
@@ -13,49 +14,19 @@ export const mutations = {
     Vue.set(posts, postId, post)
   },
 
-  addPostToThread (state, { threadId, postId }) {
-    const thread = state.threads[threadId]
-
-    if (!thread.posts) {
-      Vue.set(thread, 'posts', [])
-    }
-
-    Vue.set(thread.posts, postId, postId)
-  },
-
-  addPostToUser (state, { userId, postId }) {
-    const user = state.users[userId]
-
-    if (!user.posts) {
-      Vue.set(user, 'posts', [])
-    }
-
-    Vue.set(user.posts, postId, postId)
-  },
-
-  addThreadToForum (state, { forumId, threadId }) {
-    const forum = state.forums[forumId]
-
-    if (!forum.threads) {
-      Vue.set(forum, 'threads', [])
-    }
-
-    Vue.set(forum.threads, threadId, threadId)
-  },
-
-  addThreadToUser (state, { userId, threadId }) {
-    const user = state.users[userId]
-
-    if (!user.threads) {
-      Vue.set(user, 'threads', [])
-    }
-
-    Vue.set(user.threads, threadId, threadId)
-  },
-
   updateUser (state, { userId, user }) {
     const { users } = state
 
     Vue.set(users, userId, user)
-  }
+  },
+  // accept a parent id and a child id
+  // find the parent resource in the state
+  // threadId, postId
+  addPostToThread: makeAppendChildToParentMutation({ parent: 'threads', child: 'posts' }),
+
+  addPostToUser: makeAppendChildToParentMutation({ parent: 'users', child: 'posts' }),
+
+  addThreadToForum: makeAppendChildToParentMutation({ parent: 'forums', child: 'threads' }),
+
+  addThreadToUser: makeAppendChildToParentMutation({ parent: 'users', child: 'threads' })
 }

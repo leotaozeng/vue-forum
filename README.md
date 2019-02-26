@@ -8,4 +8,4 @@
 - It's recommended to place the global styles in the root component's style tag insted of importing it in the HTML head tag as you would normally do.
 - Each Vue.set is an individual state change.
 - Create and Update things are usually all together.
-- The benefits of using higher-order functions are that the code is reusable and wirte less
+- The benefits of using higher-order functions are that the code is reusable and wirte less.

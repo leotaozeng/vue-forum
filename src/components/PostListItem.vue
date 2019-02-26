@@ -7,7 +7,9 @@
         <img class="avatar-large" :src="user.avatar" alt="avatar">
       </a>
 
-      <p class="desktop-only text-small">{{ userPostsCount }} posts</p>
+      <p class="desktop-only text-small">{{ userThreadsCount(post.userId) }} threads</p>
+
+      <p class="desktop-only text-small">{{ userPostsCount(post.userId) }} posts</p>
     </div>
 
     <div class="post-content">
@@ -36,7 +38,7 @@
 
 <script>
 import PostEditor from './PostEditor'
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -53,12 +55,13 @@ export default {
   },
 
   computed: {
+    ...mapGetters([
+      'userPostsCount',
+      'userThreadsCount'
+    ]),
+
     user () {
       return this.$store.state.users[this.post.userId]
-    },
-
-    userPostsCount () {
-      return this.$store.getters.userPostsCount(this.post.userId)
     }
 
     // humanFriendlyDates () {

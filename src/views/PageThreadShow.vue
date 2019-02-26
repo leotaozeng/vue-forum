@@ -54,9 +54,9 @@ export default {
     },
 
     user () {
-      const { authId, users } = this.$store.state
+      const { users, threads } = this.$store.state
 
-      return users[authId]
+      return users[threads[this.id].userId]
     },
 
     contributorsCount () {

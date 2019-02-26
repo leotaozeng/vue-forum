@@ -14,8 +14,8 @@
       <span class="online">{{ user.usernameLower }} is online</span>
 
       <div class="stats">
-        <span>{{ userPostsCount }} posts</span>
-        <span>{{ userThreadsCount }} threads</span>
+        <span>{{ userPostsCount(user['.key']) }} posts</span>
+        <span>{{ userThreadsCount(user['.key']) }} threads</span>
       </div>
 
       <hr>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -47,13 +47,10 @@ export default {
   },
 
   computed: {
-    userPostsCount () {
-      return this.$store.getters.userPostsCount(this.user['.key'])
-    },
-
-    userThreadsCount () {
-      return this.$store.getters.userThreadsCount(this.user['.key'])
-    }
+    ...mapGetters([
+      'userPostsCount',
+      'userThreadsCount'
+    ])
   }
 }
 </script>

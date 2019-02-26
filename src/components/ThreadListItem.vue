@@ -6,19 +6,20 @@
       </p>
 
       <p class="text-faded text-xsmall">
-        By <a href="profile.html">{{ user.name }}</a>,
-        <AppDate :timestamp="thread.publishedAt" />.
+        By
+        <a href="profile.html">{{ user.name }}</a>,
+        <AppDate :timestamp="thread.publishedAt"/>.
       </p>
     </div>
 
     <div class="activity">
-      <p class="replies-count">
-        {{ repliesCount(thread['.key']) }} reply
-      </p>
+      <p class="replies-count">{{ repliesCount(thread['.key']) }} reply</p>
 
-      <img class="avatar-medium"
-           src="http://i0.kym-cdn.com/photos/images/facebook/000/010/934/46623-batman_pikachu_super.png"
-           alt="">
+      <img
+        class="avatar-medium"
+        src="http://i0.kym-cdn.com/photos/images/facebook/000/010/934/46623-batman_pikachu_super.png"
+        alt
+      >
 
       <div>
         <p class="text-xsmall">
@@ -44,9 +45,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'repliesCount'
-    ]),
+    ...mapGetters(['repliesCount']),
 
     user () {
       return this.$store.state.users[this.thread.userId]

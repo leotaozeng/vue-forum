@@ -13,7 +13,7 @@
 
     <div class="activity">
       <p class="replies-count">
-        {{ repliesCount }} reply
+        {{ repliesCount(thread['.key']) }} reply
       </p>
 
       <img class="avatar-medium"
@@ -33,7 +33,7 @@
 
 <script>
 import AppDate from '@/components/AppDate'
-import { countObjectProperties } from '@/utils/index'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -44,11 +44,9 @@ export default {
   },
 
   computed: {
-    repliesCount () {
-      const count = countObjectProperties(this.thread.posts)
-
-      return count ? count - 1 : count
-    },
+    ...mapGetters([
+      'repliesCount'
+    ]),
 
     user () {
       return this.$store.state.users[this.thread.userId]

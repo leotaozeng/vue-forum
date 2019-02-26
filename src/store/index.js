@@ -19,7 +19,13 @@ const store = new Vuex.Store({
     // dynamic getter
     userThreadsCount: state => id => countObjectProperties(state.users[id].threads),
 
-    userPostsCount: state => id => countObjectProperties(state.users[id].posts)
+    userPostsCount: state => id => countObjectProperties(state.users[id].posts),
+
+    repliesCount: state => id => {
+      const count = countObjectProperties(state.threads[id].posts)
+
+      return count ? count - 1 : count
+    }
   },
 
   mutations,

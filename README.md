@@ -1,9 +1,11 @@
-Source:
+<h2>Source:</h2>
+
 1. <a href="https://firebase.google.com/docs/web/setup?authuser=0">Add Firebase to your JavaScript Project</a>
 2. <a href="https://firebase.google.com/docs/database/">Firebase Realtime Database</a>
 3. <a href="https://firebase.google.com/docs/database/web/start">Installation & Setup in JavaScript</a>
 ***
-Note:
+<h2>Note:</h2>
+
 1. The src directory contains our application's code.
 2. Main.js is the application's entry file.
 3. When start building an application it is usually handy to work with a local file or mockup before hitting an API or another source.

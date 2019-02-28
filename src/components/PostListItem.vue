@@ -1,5 +1,5 @@
 <template>
-  <div class="post">
+  <div v-if="user && post" class="post">
     <div class="user-info">
       <a href="#" class="user-name">{{ user.name }}</a>
 
@@ -55,10 +55,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'userPostsCount',
-      'userThreadsCount'
-    ]),
+    ...mapGetters(['userPostsCount', 'userThreadsCount']),
 
     user () {
       return this.$store.state.users[this.post.userId]

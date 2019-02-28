@@ -9,10 +9,9 @@ const config = {
   storageBucket: 'vue-forum-dc79e.appspot.com',
   messagingSenderId: '619851662792'
 }
+const defaultApp = firebase.initializeApp(config)
 
-let firebaseChat = firebase.initializeApp(config)
+// Get a reference to the database service
+const database = defaultApp.database()
 
-// Instancia do firebase
-let db = firebaseChat.database()
-
-export default db
+export { database }

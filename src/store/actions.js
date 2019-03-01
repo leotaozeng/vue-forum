@@ -1,3 +1,5 @@
+import { database } from '../../firebase.config.js'
+
 export default {
   createPost ({ commit, state }, { threadId, text }) {
     return new Promise((resolve, reject) => {
@@ -10,9 +12,9 @@ export default {
       post.userId = state.authId
       post['.key'] = postId
 
-      commit('setPost', { postId, post })
-      commit('addPostToThread', { parentId: post.threadId, childId: postId })
-      commit('addPostToUser', { parentId: post.userId, childId: postId })
+      commit('SET_POST', { postId, post })
+      commit('ADD_POST_TO_THREAD', { parentId: post.threadId, childId: postId })
+      commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
       resolve(state.posts[postId])
     })
@@ -29,12 +31,12 @@ export default {
       thread.userId = state.authId
       thread['.key'] = threadId
 
-      commit('setThread', { threadId, thread })
-      commit('addThreadToForum', { parentId: thread.forumId, childId: threadId })
-      commit('addThreadToUser', { parentId: thread.userId, childId: threadId })
+      commit('SET_THREAD', { threadId, thread })
+      commit('ADD_THREAD_TO_FORUM', { parentId: thread.forumId, childId: threadId })
+      commit('ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId })
 
       dispatch('createPost', { threadId, text }).then((post) => {
-        commit('setThread', { threadId, thread: { ...thread, firstPostId: post['.key'] } })
+        commit('SET_THREAD', { threadId, thread: { ...thread, firstPostId: post['.key'] } })
       })
 
       resolve(state.threads[threadId])
@@ -48,7 +50,7 @@ export default {
       const post = posts[id]
       const newPost = { ...post, text, edited: { at: Math.floor(Date.now() / 1000), by: authId } }
 
-      commit('setPost', { postId: id, post: newPost })
+      commit('SET_POST', { postId: id, post: newPost })
 
       resolve(state.posts[id])
     })
@@ -61,7 +63,7 @@ export default {
       const thread = threads[id]
       const newThread = { ...thread, title }
 
-      commit('setThread', { threadId: id, thread: newThread })
+      commit('SET_POST', { threadId: id, thread: newThread })
 
       // This is asynchronous
       dispatch('updatePost', { id: thread.firstPostId, text }).then((post) => {
@@ -71,6 +73,72 @@ export default {
   },
 
   updateUser ({ commit }, user) {
-    commit('updateUser', { userId: user['.key'], user })
+    commit('UPDATE_USER', { userId: user['.key'], user })
+  },
+
+  fetchThread ({ commit }, { id }) {
+    console.log('🔥 📋', id)
+    return new Promise((resolve, reject) => {
+      database
+        .ref('threads')
+        .child(id)
+        .once('value')
+        .then(snapshot => {
+          if (snapshot.val()) {
+            const thread = snapshot.val()
+
+            commit('SET_THREAD', {
+              threadId: snapshot.key,
+              thread: { ...thread, '.key': snapshot.key }
+            })
+
+            resolve(thread)
+          }
+        })
+    })
+  },
+
+  fetchUser ({ commit }, { id }) {
+    console.log('🔥 📋', id)
+    return new Promise((resolve, reject) => {
+      database
+        .ref('users')
+        .child(id)
+        .once('value')
+        .then(snapshot => {
+          if (snapshot.val()) {
+            const user = snapshot.val()
+
+            commit('UPDATE_USER', {
+              userId: snapshot.key,
+              user: { ...user, '.key': snapshot.key }
+            })
+
+            resolve(user)
+          }
+        })
+    })
+  },
+
+  fetchPost ({ commit }, { id }) {
+    console.log('🔥 📋', id)
+    return new Promise((resolve, reject) => {
+      database
+        .ref('posts')
+        .child(id)
+        .once('value')
+        .then(snapshot => {
+          if (snapshot.val()) {
+            const post = snapshot.val()
+
+            commit('SET_POST', {
+              postId: snapshot.key,
+              post: { ...post, '.key': snapshot.key }
+            })
+
+            resolve(post)
+          }
+        })
+    })
   }
 }

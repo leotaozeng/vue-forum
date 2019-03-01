@@ -1,5 +1,5 @@
 <template>
-<!-- apply a v-if in the root element -->
+  <!-- apply a v-if in the root element -->
   <div v-if="thread && user" class="col-large push-top">
     <h1>
       {{ thread.title }}
@@ -29,8 +29,7 @@
 <script>
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
-import { mapGetters } from 'vuex'
-import { database } from '../../firebase.config.js'
+import { mapGetters, mapActions } from 'vuex'
 import { countObjectProperties } from '../utils'
 
 export default {
@@ -84,66 +83,31 @@ export default {
     }
   },
 
+  methods: {
+    ...mapActions([
+      'fetchThread', // map `this.fetchThread()` to `this.$store.dispatch('fetchThread')`
+      'fetchUser',
+      'fetchPost'
+    ])
+  },
+
   // I can access this.id in the following hook
   created () {
-    // fetch thread
-    database
-      .ref('threads')
-      .child(this.id)
-      .once('value')
-      .then(snapshot => {
-        const thread = snapshot.val()
-        const postIds = Object.values(thread.posts)
+    // fetch the thread with this.id
+    this.fetchThread({ id: this.id }).then(thread => {
+      const postIds = Object.values(thread.posts)
 
-        this.$store.commit('setThread', {
-          threadId: snapshot.key,
-          thread: { ...thread, '.key': snapshot.key }
+      // fetch the user who created the thread
+      this.fetchUser({ id: thread.userId })
+
+      postIds.forEach(postId => {
+        // fetch each post of thread.posts
+        this.fetchPost({ id: postId }).then(post => {
+          // fetch the user who created the post
+          this.fetchUser({ id: post.userId })
         })
-
-        postIds.forEach(postId => {
-          // fetch post
-          database
-            .ref('posts')
-            .child(postId)
-            .once('value')
-            .then(snapshot => {
-              const post = snapshot.val()
-
-              this.$store.commit('setPost', {
-                postId: snapshot.key,
-                post: { ...post, '.key': snapshot.key }
-              })
-
-              // fetch user
-              database
-                .ref('users')
-                .child(post.userId)
-                .once('value')
-                .then(snapshot => {
-                  const user = snapshot.val()
-
-                  this.$store.commit('updateUser', {
-                    userId: snapshot.key,
-                    user: { ...user, '.key': snapshot.key }
-                  })
-                })
-            })
-        })
-
-        // fetch user
-        database
-          .ref('users')
-          .child(thread.userId)
-          .once('value')
-          .then(snapshot => {
-            const user = snapshot.val()
-
-            this.$store.commit('updateUser', {
-              userId: snapshot.key,
-              user: { ...user, '.key': snapshot.key }
-            })
-          })
       })
+    })
   }
 }
 </script>

@@ -12,7 +12,7 @@ export default {
       post.userId = state.authId
       post['.key'] = postId
 
-      commit('SET_POST', { postId, post })
+      commit('SET_POST', { id: postId, item: post })
       commit('ADD_POST_TO_THREAD', { parentId: post.threadId, childId: postId })
       commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
@@ -31,12 +31,12 @@ export default {
       thread.userId = state.authId
       thread['.key'] = threadId
 
-      commit('SET_THREAD', { threadId, thread })
+      commit('SET_THREAD', { id: threadId, item: thread })
       commit('ADD_THREAD_TO_FORUM', { parentId: thread.forumId, childId: threadId })
       commit('ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId })
 
       dispatch('createPost', { threadId, text }).then((post) => {
-        commit('SET_THREAD', { threadId, thread: { ...thread, firstPostId: post['.key'] } })
+        commit('SET_THREAD', { id: threadId, item: { ...thread, firstPostId: post['.key'] } })
       })
 
       resolve(state.threads[threadId])
@@ -50,7 +50,7 @@ export default {
       const post = posts[id]
       const newPost = { ...post, text, edited: { at: Math.floor(Date.now() / 1000), by: authId } }
 
-      commit('SET_POST', { postId: id, post: newPost })
+      commit('SET_POST', { id, item: newPost })
 
       resolve(state.posts[id])
     })
@@ -63,7 +63,7 @@ export default {
       const thread = threads[id]
       const newThread = { ...thread, title }
 
-      commit('SET_POST', { threadId: id, thread: newThread })
+      commit('SET_POST', { id, item: newThread })
 
       // This is asynchronous
       dispatch('updatePost', { id: thread.firstPostId, text }).then((post) => {
@@ -73,7 +73,7 @@ export default {
   },
 
   updateUser ({ commit }, user) {
-    commit('SET_USER', { userId: user['.key'], user })
+    commit('SET_USER', { id: user['.key'], item: user })
   },
 
   fetchThread ({ dispatch }, { id }) {
@@ -102,47 +102,11 @@ export default {
   fetchUser ({ dispatch }, { id }) {
     console.log('🔥 📋', id)
     return dispatch('fetchItem', { id, resource: 'users' })
-    // return new Promise((resolve, reject) => {
-    //   database
-    //     .ref('users')
-    //     .child(id)
-    //     .once('value')
-    //     .then(snapshot => {
-    //       if (snapshot.val()) {
-    //         const user = snapshot.val()
-
-    //         commit('SET_USER', {
-    //           userId: snapshot.key,
-    //           user: { ...user, '.key': snapshot.key }
-    //         })
-
-    //         resolve(user)
-    //       }
-    //     })
-    // })
   },
 
   fetchPost ({ dispatch }, { id }) {
     console.log('🔥 📋', id)
     return dispatch('fetchItem', { id, resource: 'posts' })
-    // return new Promise((resolve, reject) => {
-    //   database
-    //     .ref('posts')
-    //     .child(id)
-    //     .once('value')
-    //     .then(snapshot => {
-    //       if (snapshot.val()) {
-    //         const post = snapshot.val()
-
-    //         commit('SET_POST', {
-    //           postId: snapshot.key,
-    //           post: { ...post, '.key': snapshot.key }
-    //         })
-
-    //         resolve(post)
-    //       }
-    //     })
-    // })
   },
 
   fetchItem ({ commit }, { id, resource }) {
@@ -165,5 +129,13 @@ export default {
           }
         })
     })
+  },
+
+  fetchPosts ({ dispatch }, { ids }) {
+    return dispatch('fetchItems', { ids, resource: 'posts' })
+  },
+
+  fetchItems ({ dispatch }, { ids, resource }) {
+    return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
   }
 }

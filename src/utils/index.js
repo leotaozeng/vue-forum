@@ -20,3 +20,11 @@ export const makeAppendChildToParentMutation = ({ parent, child }) => {
     Vue.set(resource[child], childId, childId)
   }
 }
+
+export const makeSetItemMutation = ({ resource }) => {
+  return (state, { id, item }) => {
+    item['.key'] = id
+
+    Vue.set(state[resource], id, item)
+  }
+}

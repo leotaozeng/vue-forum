@@ -87,7 +87,8 @@ export default {
     ...mapActions([
       'fetchThread', // map `this.fetchThread()` to `this.$store.dispatch('fetchThread')`
       'fetchUser',
-      'fetchPost'
+      'fetchPost',
+      'fetchItems'
     ])
   },
 
@@ -95,14 +96,15 @@ export default {
   created () {
     // fetch the thread with this.id
     this.fetchThread({ id: this.id }).then(thread => {
-      const postIds = Object.values(thread.posts)
-
       // fetch the user who created the thread
       this.fetchUser({ id: thread.userId })
 
-      postIds.forEach(postId => {
-        // fetch each post of thread.posts
-        this.fetchPost({ id: postId }).then(post => {
+      this.fetchItems({
+        ids: Object.values(thread.posts),
+        resource: 'posts'
+      }).then(posts => {
+        // receive an array with the post object
+        posts.forEach(post => {
           // fetch the user who created the post
           this.fetchUser({ id: post.userId })
         })

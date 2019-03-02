@@ -27,3 +27,4 @@
 
 1. Single Source of Truth.
 2. Useful Library of Actions, Mutations, Getters.
+3. It's a best practice to have our actions call mutations which update our state directly.

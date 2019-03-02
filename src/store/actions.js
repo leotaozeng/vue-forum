@@ -73,70 +73,95 @@ export default {
   },
 
   updateUser ({ commit }, user) {
-    commit('UPDATE_USER', { userId: user['.key'], user })
+    commit('SET_USER', { userId: user['.key'], user })
   },
 
-  fetchThread ({ commit }, { id }) {
+  fetchThread ({ dispatch }, { id }) {
     console.log('🔥 📋', id)
+    return dispatch('fetchItem', { id, resource: 'threads' })
+    // return new Promise((resolve, reject) => {
+    //   database
+    //     .ref('threads')
+    //     .child(id)
+    //     .once('value')
+    //     .then(snapshot => {
+    //       if (snapshot.val()) {
+    //         const thread = snapshot.val()
+
+    //         commit('SET_THREAD', {
+    //           threadId: snapshot.key,
+    //           thread: { ...thread, '.key': snapshot.key }
+    //         })
+
+    //         resolve(thread)
+    //       }
+    //     })
+    // })
+  },
+
+  fetchUser ({ dispatch }, { id }) {
+    console.log('🔥 📋', id)
+    return dispatch('fetchItem', { id, resource: 'users' })
+    // return new Promise((resolve, reject) => {
+    //   database
+    //     .ref('users')
+    //     .child(id)
+    //     .once('value')
+    //     .then(snapshot => {
+    //       if (snapshot.val()) {
+    //         const user = snapshot.val()
+
+    //         commit('SET_USER', {
+    //           userId: snapshot.key,
+    //           user: { ...user, '.key': snapshot.key }
+    //         })
+
+    //         resolve(user)
+    //       }
+    //     })
+    // })
+  },
+
+  fetchPost ({ dispatch }, { id }) {
+    console.log('🔥 📋', id)
+    return dispatch('fetchItem', { id, resource: 'posts' })
+    // return new Promise((resolve, reject) => {
+    //   database
+    //     .ref('posts')
+    //     .child(id)
+    //     .once('value')
+    //     .then(snapshot => {
+    //       if (snapshot.val()) {
+    //         const post = snapshot.val()
+
+    //         commit('SET_POST', {
+    //           postId: snapshot.key,
+    //           post: { ...post, '.key': snapshot.key }
+    //         })
+
+    //         resolve(post)
+    //       }
+    //     })
+    // })
+  },
+
+  fetchItem ({ commit }, { id, resource }) {
     return new Promise((resolve, reject) => {
       database
-        .ref('threads')
+        .ref(resource)
         .child(id)
         .once('value')
         .then(snapshot => {
           if (snapshot.val()) {
-            const thread = snapshot.val()
+            const item = snapshot.val()
 
-            commit('SET_THREAD', {
-              threadId: snapshot.key,
-              thread: { ...thread, '.key': snapshot.key }
+            commit('SET_ITEM', {
+              resource,
+              id: snapshot.key,
+              item
             })
 
-            resolve(thread)
-          }
-        })
-    })
-  },
-
-  fetchUser ({ commit }, { id }) {
-    console.log('🔥 📋', id)
-    return new Promise((resolve, reject) => {
-      database
-        .ref('users')
-        .child(id)
-        .once('value')
-        .then(snapshot => {
-          if (snapshot.val()) {
-            const user = snapshot.val()
-
-            commit('UPDATE_USER', {
-              userId: snapshot.key,
-              user: { ...user, '.key': snapshot.key }
-            })
-
-            resolve(user)
-          }
-        })
-    })
-  },
-
-  fetchPost ({ commit }, { id }) {
-    console.log('🔥 📋', id)
-    return new Promise((resolve, reject) => {
-      database
-        .ref('posts')
-        .child(id)
-        .once('value')
-        .then(snapshot => {
-          if (snapshot.val()) {
-            const post = snapshot.val()
-
-            commit('SET_POST', {
-              postId: snapshot.key,
-              post: { ...post, '.key': snapshot.key }
-            })
-
-            resolve(post)
+            resolve(item)
           }
         })
     })

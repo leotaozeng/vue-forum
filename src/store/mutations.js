@@ -14,14 +14,19 @@ export const mutations = {
     Vue.set(posts, postId, post)
   },
 
-  UPDATE_USER (state, { userId, user }) {
+  SET_USER (state, { userId, user }) {
     const { users } = state
 
     Vue.set(users, userId, user)
   },
+
+  SET_ITEM (state, { resource, id, item }) {
+    item['.key'] = id
+
+    Vue.set(state[resource], id, item)
+  },
   // accept a parent id and a child id
   // find the parent resource in the state
-  // threadId, postId
   ADD_POST_TO_THREAD: makeAppendChildToParentMutation({ parent: 'threads', child: 'posts' }),
 
   ADD_POST_TO_USER: makeAppendChildToParentMutation({ parent: 'users', child: 'posts' }),

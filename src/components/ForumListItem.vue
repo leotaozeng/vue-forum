@@ -45,10 +45,7 @@ export default {
 
   methods: {
     // the mapActions helper
-    ...mapActions([
-      'fetchThreads',
-      'fetchUser'
-    ])
+    ...mapActions(['fetchThreads', 'fetchUser'])
   },
 
   computed: {
@@ -60,7 +57,7 @@ export default {
       const { threads } = this.$store.state
 
       if (this.forum.threads) {
-        return threads[Object.values(this.forum.threads)[0]]
+        return threads[Object.keys(this.forum.threads)[0]]
       }
       return 0
     },
@@ -73,18 +70,6 @@ export default {
 
     showWord () {
       return this.threadsCount <= 1 ? 'thread' : 'threads'
-    }
-  },
-
-  created () {
-    if (this.forum.threads) {
-      const threadIds = Object.keys(this.forum.threads)
-
-      this.fetchThreads({ ids: threadIds }).then(threads => {
-        threads.forEach(thread => {
-          this.fetchUser({ id: thread.userId })
-        })
-      })
     }
   },
 

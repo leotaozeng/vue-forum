@@ -1,5 +1,5 @@
 <template>
-  <div class="forum-wrapper col-full">
+  <div v-if="forum" class="forum-wrapper col-full">
     <div class="forum-header push-top">
       <div class="forum-details">
         <h1>{{ forum.name }}</h1>
@@ -7,8 +7,10 @@
         <p class="text-lead">{{ forum.description }}</p>
       </div>
 
-      <router-link :to="{name: 'ThreadCreate', params: { forumId: this.id }}"
-                   class="btn-green btn-small">Start a thread</router-link>
+      <router-link
+        :to="{name: 'ThreadCreate', params: { forumId: this.id }}"
+        class="btn-green btn-small"
+      >Start a thread</router-link>
     </div>
 
     <div class="category-item">
@@ -17,23 +19,27 @@
 
         <div class="forum-listing">
           <div class="forum-details">
-            <a href="#"
-               class="forum-name">Recipes</a>
+            <a href="#" class="forum-name">Recipes</a>
 
-            <p class="forum-description ">Recipes, Guides and Tips &amp; Tricks</p>
+            <p class="forum-description">Recipes, Guides and Tips &amp; Tricks</p>
           </div>
 
           <div class="threads-count">
-            <p class="count text-lead">1</p> threads
+            <p class="count text-lead">1</p>threads
           </div>
 
           <div class="last-thread">
-            <img class="avatar"
-                 src="http://cleaneatsfastfeets.com/wp-content/uploads/2013/05/Mr-Burns.gif"
-                 alt="">
+            <img
+              class="avatar"
+              src="http://cleaneatsfastfeets.com/wp-content/uploads/2013/05/Mr-Burns.gif"
+              alt
+            >
             <div class="last-thread-details">
               <a href="#">How I grill my fish</a>
-              <p class="text-xsmall">By <a href="profile.html">Charles Montgomery Burns</a>, 2 days ago</p>
+              <p class="text-xsmall">
+                By
+                <a href="profile.html">Charles Montgomery Burns</a>, 2 days ago
+              </p>
             </div>
           </div>
         </div>
@@ -43,13 +49,14 @@
     <div class="thread-wrapper">
       <h2 class="list-title">Threads</h2>
 
-      <ThreadList :threads="threads" />
+      <ThreadList :threads="threads"/>
     </div>
   </div>
 </template>
 
 <script>
 import ThreadList from '@/components/ThreadList'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -70,8 +77,22 @@ export default {
       // need to return an array of threads
       const { threads } = this.$store.state
 
-      return Object.values(threads).filter((thread) => thread.forumId === this.id)
+      return Object.values(threads).filter(
+        thread => thread.forumId === this.id
+      )
     }
+  },
+
+  methods: {
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUser'])
+  },
+
+  created () {
+    this.fetchForum({ id: this.id }).then(forum => {
+      this.fetchThreads({ ids: forum.threads }).then(threads => {
+        threads.forEach(thread => this.fetchUser({ id: thread.userId }))
+      })
+    })
   },
 
   components: {

@@ -1,7 +1,7 @@
 <template>
   <div class="col-full push-top">
     <h1>Welcome to the Forum</h1>
-    <CategoryList :catgories="catgories" />
+    <CategoryList :catgories="catgories"/>
   </div>
 </template>
 
@@ -24,10 +24,7 @@ export default {
 
   methods: {
     // the mapActions helper
-    ...mapActions([
-      'fetchAllCategories',
-      'fetchForums'
-    ])
+    ...mapActions(['fetchAllCategories', 'fetchForums', 'fetchThreads', 'fetchUser'])
   },
 
   beforeCreate () {
@@ -38,9 +35,17 @@ export default {
     // Since the Home page doesn't have any ids so I have to fetch all categories
     this.fetchAllCategories().then(categories => {
       categories.forEach(category => {
-        const forumIds = Object.keys(category.forums)
-
-        this.fetchForums({ ids: forumIds })
+        this.fetchForums({ ids: category.forums }).then(forums => {
+          forums.forEach(forum => {
+            if (forum.threads) {
+              this.fetchThreads({ ids: forum.threads }).then(threads => {
+                threads.forEach(thread => {
+                  this.fetchUser({ id: thread.userId })
+                })
+              })
+            }
+          })
+        })
       })
     })
   },

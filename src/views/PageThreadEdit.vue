@@ -1,5 +1,5 @@
 <template>
-  <div class="col-full push-top">
+  <div v-if="thread && firstPost" class="col-full push-top">
     <h1>Editing <i>{{ thread.title }}</i></h1>
 
     <ThreadEditor :title="thread.title"
@@ -11,6 +11,7 @@
 
 <script>
 import ThreadEditor from '@/components/ThreadEditor'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -21,8 +22,14 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'fetchThread',
+      'fetchPost',
+      'updateThread'
+    ]),
+
     update ({ title, text }) {
-      this.$store.dispatch('updateThread', { id: this.id, title, text }).then(thread => {
+      this.updateThread({ id: this.id, title, text }).then(thread => {
         this.$router.push({ name: 'ThreadShow', params: { id: this.id } })
       })
     },
@@ -45,6 +52,12 @@ export default {
 
       return posts[firstPostId]
     }
+  },
+
+  created () {
+    this.fetchThread({ id: this.id }).then(thread => {
+      this.fetchPost({ id: thread.firstPostId })
+    })
   },
 
   components: {

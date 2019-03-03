@@ -76,21 +76,6 @@ export default {
     commit('SET_USER', { id: user['.key'], item: user })
   },
 
-  fetchThread ({ dispatch }, { id }) {
-    console.log('🔥 📋', id)
-    return dispatch('fetchItem', { id, resource: 'threads' })
-  },
-
-  fetchUser ({ dispatch }, { id }) {
-    console.log('🔥 📋', id)
-    return dispatch('fetchItem', { id, resource: 'users' })
-  },
-
-  fetchPost ({ dispatch }, { id }) {
-    console.log('🔥 📋', id)
-    return dispatch('fetchItem', { id, resource: 'posts' })
-  },
-
   fetchItem ({ commit }, { id, resource }) {
     return new Promise((resolve, reject) => {
       database
@@ -113,20 +98,48 @@ export default {
     })
   },
 
+  fetchItems ({ dispatch }, { ids, resource }) {
+    return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
+  },
+
+  fetchCategory ({ dispatch }, { id }) {
+    console.log('🔥 category', id)
+    return dispatch('fetchItem', { id, resource: 'categories' })
+  },
+
+  fetchForum ({ dispatch }, { id }) {
+    console.log('🔥 forum', id)
+    return dispatch('fetchItem', { id, resource: 'forums' })
+  },
+
+  fetchThread ({ dispatch }, { id }) {
+    console.log('🔥 thread', id)
+    return dispatch('fetchItem', { id, resource: 'threads' })
+  },
+
+  fetchPost ({ dispatch }, { id }) {
+    console.log('🔥 post', id)
+    return dispatch('fetchItem', { id, resource: 'posts' })
+  },
+
+  fetchUser ({ dispatch }, { id }) {
+    console.log('🔥 user', id)
+    return dispatch('fetchItem', { id, resource: 'users' })
+  },
+
   fetchForums ({ dispatch }, { ids }) {
-    return dispatch('fetchItems', { ids, resource: 'forums' })
+    console.log('🔥 forums', ids)
+    return dispatch('fetchItems', { ids: Object.keys(ids), resource: 'forums' })
   },
 
   fetchThreads ({ dispatch }, { ids }) {
-    return dispatch('fetchItems', { ids, resource: 'threads' })
+    console.log('🔥 threads', ids)
+    return dispatch('fetchItems', { ids: Object.keys(ids), resource: 'threads' })
   },
 
   fetchPosts ({ dispatch }, { ids }) {
+    console.log('🔥 posts', ids)
     return dispatch('fetchItems', { ids, resource: 'posts' })
-  },
-
-  fetchItems ({ dispatch }, { ids, resource }) {
-    return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
   },
 
   fetchAllCategories ({ commit, state }) {

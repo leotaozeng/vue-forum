@@ -88,7 +88,7 @@ export default {
       'fetchThread', // map `this.fetchThread()` to `this.$store.dispatch('fetchThread')`
       'fetchUser',
       'fetchPost',
-      'fetchItems'
+      'fetchPosts'
     ])
   },
 
@@ -99,9 +99,8 @@ export default {
       // fetch the user who created the thread
       this.fetchUser({ id: thread.userId })
 
-      this.fetchItems({
-        ids: Object.values(thread.posts),
-        resource: 'posts'
+      this.fetchPosts({
+        ids: Object.keys(thread.posts)
       }).then(posts => {
         // receive an array with the post object
         posts.forEach(post => {

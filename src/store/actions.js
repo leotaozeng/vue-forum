@@ -79,24 +79,6 @@ export default {
   fetchThread ({ dispatch }, { id }) {
     console.log('🔥 📋', id)
     return dispatch('fetchItem', { id, resource: 'threads' })
-    // return new Promise((resolve, reject) => {
-    //   database
-    //     .ref('threads')
-    //     .child(id)
-    //     .once('value')
-    //     .then(snapshot => {
-    //       if (snapshot.val()) {
-    //         const thread = snapshot.val()
-
-    //         commit('SET_THREAD', {
-    //           threadId: snapshot.key,
-    //           thread: { ...thread, '.key': snapshot.key }
-    //         })
-
-    //         resolve(thread)
-    //       }
-    //     })
-    // })
   },
 
   fetchUser ({ dispatch }, { id }) {
@@ -131,12 +113,16 @@ export default {
     })
   },
 
-  fetchPosts ({ dispatch }, { ids }) {
-    return dispatch('fetchItems', { ids, resource: 'posts' })
-  },
-
   fetchForums ({ dispatch }, { ids }) {
     return dispatch('fetchItems', { ids, resource: 'forums' })
+  },
+
+  fetchThreads ({ dispatch }, { ids }) {
+    return dispatch('fetchItems', { ids, resource: 'threads' })
+  },
+
+  fetchPosts ({ dispatch }, { ids }) {
+    return dispatch('fetchItems', { ids, resource: 'posts' })
   },
 
   fetchItems ({ dispatch }, { ids, resource }) {

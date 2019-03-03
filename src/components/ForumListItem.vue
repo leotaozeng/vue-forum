@@ -1,5 +1,5 @@
 <template>
-  <div class="forum-listing">
+  <div v-if="thread && user" class="forum-listing">
     <div class="forum-details">
       <router-link
         class="text-xlarge"
@@ -18,11 +18,11 @@
       <img class="avatar" src="https://i.imgur.com/WPSrfGm.jpg" alt>
 
       <div class="last-thread-details">
-        <a href="thread.html">aaa</a>
+        <a href="thread.html">{{ thread.title }}</a>
 
         <p class="text-xsmall">
           By
-          <a href="profile.html">bbb</a>,
+          <a href="profile.html">{{ user.name }}</a>,
           <AppDate :timestamp="thread.publishedAt"/>
         </p>
       </div>
@@ -33,6 +33,7 @@
 <script>
 import AppDate from '@/components/AppDate'
 import { countObjectProperties } from '@/utils'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -40,6 +41,14 @@ export default {
       type: Object,
       required: true
     }
+  },
+
+  methods: {
+    // the mapActions helper
+    ...mapActions([
+      'fetchThreads',
+      'fetchUser'
+    ])
   },
 
   computed: {
@@ -64,6 +73,18 @@ export default {
 
     showWord () {
       return this.threadsCount <= 1 ? 'thread' : 'threads'
+    }
+  },
+
+  created () {
+    if (this.forum.threads) {
+      const threadIds = Object.keys(this.forum.threads)
+
+      this.fetchThreads({ ids: threadIds }).then(threads => {
+        threads.forEach(thread => {
+          this.fetchUser({ id: thread.userId })
+        })
+      })
     }
   },
 

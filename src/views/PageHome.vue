@@ -37,7 +37,6 @@ export default {
   created () {
     // Since the Home page doesn't have any ids so I have to fetch all categories
     this.fetchAllCategories().then(categories => {
-      console.log(categories)
       categories.forEach(category => {
         const forumIds = Object.keys(category.forums)
 

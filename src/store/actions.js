@@ -135,7 +135,38 @@ export default {
     return dispatch('fetchItems', { ids, resource: 'posts' })
   },
 
+  fetchForums ({ dispatch }, { ids }) {
+    return dispatch('fetchItems', { ids, resource: 'forums' })
+  },
+
   fetchItems ({ dispatch }, { ids, resource }) {
     return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
+  },
+
+  fetchAllCategories ({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      database
+        .ref('categories')
+        .once('value')
+        .then(snapshot => {
+          if (snapshot.val()) {
+            // Each category doesn't have a key yet in categoriesObject
+            // Use Object.values() should be later on
+            const categoriesObject = snapshot.val()
+
+            Object.keys(categoriesObject).forEach((categoryId) => {
+              const category = categoriesObject[categoryId]
+
+              commit('SET_ITEM', {
+                resource: 'categories',
+                id: categoryId,
+                item: category
+              })
+            })
+
+            resolve(Object.values(state.categories))
+          }
+        })
+    })
   }
 }

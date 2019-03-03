@@ -18,11 +18,11 @@
       <img class="avatar" src="https://i.imgur.com/WPSrfGm.jpg" alt>
 
       <div class="last-thread-details">
-        <a href="thread.html">{{ thread.title }}</a>
+        <a href="thread.html">aaa</a>
 
         <p class="text-xsmall">
           By
-          <a href="profile.html">{{ user.name }}</a>,
+          <a href="profile.html">bbb</a>,
           <AppDate :timestamp="thread.publishedAt"/>
         </p>
       </div>

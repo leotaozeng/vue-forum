@@ -7,6 +7,7 @@
 
 <script>
 import CategoryList from '@/components/CategoryList'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -21,13 +22,28 @@ export default {
     }
   },
 
-  beforeCreate () {
-    console.log('📡 beforeCreate', this.catgories)
+  methods: {
+    // the mapActions helper
+    ...mapActions([
+      'fetchAllCategories',
+      'fetchForums'
+    ])
   },
 
-  // Here, we have access to component's data and computed properties.
+  beforeCreate () {
+    console.log(this.fetchAllCategories)
+  },
+
   created () {
-    console.log('📡 created', this.catgories, this.$el)
+    // Since the Home page doesn't have any ids so I have to fetch all categories
+    this.fetchAllCategories().then(categories => {
+      console.log(categories)
+      categories.forEach(category => {
+        const forumIds = Object.keys(category.forums)
+
+        this.fetchForums({ ids: forumIds })
+      })
+    })
   },
 
   beforeMount () {

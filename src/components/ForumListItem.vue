@@ -1,5 +1,5 @@
 <template>
-  <div v-if="thread && user" class="forum-listing">
+  <div class="forum-listing">
     <div class="forum-details">
       <router-link
         class="text-xlarge"
@@ -18,12 +18,12 @@
       <img class="avatar" src="https://i.imgur.com/WPSrfGm.jpg" alt>
 
       <div class="last-thread-details">
-        <a href="thread.html">{{ thread.title }}</a>
+        <a v-if="thread" href="thread.html">{{ thread.title }}</a>
 
         <p class="text-xsmall">
           By
-          <a href="profile.html">{{ user.name }}</a>,
-          <AppDate :timestamp="thread.publishedAt"/>
+          <a v-if="user" href="profile.html">{{ user.name }}</a>,
+          <AppDate v-if="thread" :timestamp="thread.publishedAt"/>
         </p>
       </div>
     </div>
@@ -65,7 +65,7 @@ export default {
     user () {
       const { users } = this.$store.state
 
-      return users[this.thread.userId]
+      return this.thread ? users[this.thread.userId] : 'aa'
     },
 
     showWord () {

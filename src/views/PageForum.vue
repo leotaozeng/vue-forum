@@ -84,13 +84,18 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUser'])
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchPost', 'fetchUser'])
   },
 
   created () {
     this.fetchForum({ id: this.id }).then(forum => {
       this.fetchThreads({ ids: forum.threads }).then(threads => {
-        threads.forEach(thread => this.fetchUser({ id: thread.userId }))
+        threads.forEach(thread => {
+          this.fetchPost({ id: thread.lastPostId }).then(post => {
+            this.fetchUser({ id: post.userId })
+          })
+          this.fetchUser({ id: thread.userId })
+        })
       })
     })
   },

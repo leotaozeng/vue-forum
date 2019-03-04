@@ -13,7 +13,7 @@ export default {
       post['.key'] = postId
 
       commit('SET_POST', { id: postId, item: post })
-      commit('ADD_POST_TO_THREAD', { parentId: post.threadId, childId: postId })
+      commit('ADD_POST_TO_THREAD', { parentId: threadId, childId: postId })
       commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
       resolve(state.posts[postId])
@@ -32,7 +32,7 @@ export default {
       thread['.key'] = threadId
 
       commit('SET_THREAD', { id: threadId, item: thread })
-      commit('ADD_THREAD_TO_FORUM', { parentId: thread.forumId, childId: threadId })
+      commit('ADD_THREAD_TO_FORUM', { parentId: forumId, childId: threadId })
       commit('ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId })
 
       dispatch('createPost', { threadId, text }).then((post) => {
@@ -143,6 +143,7 @@ export default {
   },
 
   fetchAllCategories ({ commit, state }) {
+    console.log('🔥 all categories')
     return new Promise((resolve, reject) => {
       database
         .ref('categories')

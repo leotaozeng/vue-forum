@@ -1,11 +1,10 @@
 <template>
   <div v-if="thread && firstPost" class="col-full push-top">
-    <h1>Editing <i>{{ thread.title }}</i></h1>
+    <h1>Editing
+      <i>{{ thread.title }}</i>
+    </h1>
 
-    <ThreadEditor :title="thread.title"
-                  :content="firstPost.text"
-                  @save="update"
-                  @cancel="cancel" />
+    <ThreadEditor :title="thread.title" :content="firstPost.text" @save="update" @cancel="cancel"/>
   </div>
 </template>
 
@@ -22,11 +21,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'fetchThread',
-      'fetchPost',
-      'updateThread'
-    ]),
+    ...mapActions(['fetchThread', 'fetchPost', 'updateThread']),
 
     update ({ title, text }) {
       this.updateThread({ id: this.id, title, text }).then(thread => {

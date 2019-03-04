@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user" class="thread">
+  <div v-if="lastPost && lastPostUser && threadUser" class="thread">
     <div>
       <p>
         <router-link :to="{ name: 'ThreadShow', params: { id: thread['.key'] }}">{{ thread.title }}</router-link>
@@ -7,7 +7,7 @@
 
       <p class="text-faded text-xsmall">
         By
-        <a href="profile.html">{{ user.name }}</a>,
+        <a href="profile.html">{{ threadUser.name }}</a>,
         <AppDate :timestamp="thread.publishedAt"/>.
       </p>
     </div>
@@ -23,10 +23,10 @@
 
       <div>
         <p class="text-xsmall">
-          <a href="profile.html">Bruce Wayne</a>
+          <a href="profile.html">{{ lastPostUser.name }}</a>
         </p>
 
-        <p class="text-xsmall text-faded">2 hours ago</p>
+        <AppDate v-if="thread" :timestamp="lastPost.publishedAt"/>
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@
 
 <script>
 import AppDate from '@/components/AppDate'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -47,8 +47,18 @@ export default {
   computed: {
     ...mapGetters(['repliesCount']),
 
-    user () {
-      return this.$store.state.users[this.thread.userId]
+    ...mapState(['posts', 'users']),
+
+    lastPost () {
+      return this.posts[this.thread.lastPostId]
+    },
+
+    lastPostUser () {
+      return this.users[this.lastPost.userId]
+    },
+
+    threadUser () {
+      return this.users[this.thread.userId]
     }
   },
 

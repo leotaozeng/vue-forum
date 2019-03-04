@@ -1,9 +1,11 @@
 <template>
   <div v-if="forum" class="col-full push-top">
-    <h1>Create new thread in <i>{{ forum.name }}</i></h1>
+    <h1>
+      Create new thread in
+      <i>{{ forum.name }}</i>
+    </h1>
 
-    <ThreadEditor @save="create"
-                  @cancel="cancel" />
+    <ThreadEditor @save="create" @cancel="cancel"/>
   </div>
 </template>
 
@@ -20,13 +22,14 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'fetchForum'
-    ]),
+    ...mapActions(['fetchForum', 'createThread']),
 
     create ({ title, text }) {
-      this.$store.dispatch('createThread', { forumId: this.forumId, title, text }).then(thread => {
-        this.$router.push({ name: 'ThreadShow', params: { id: thread['.key'] } })
+      this.createThread({ forumId: this.forumId, title, text }).then(thread => {
+        this.$router.push({
+          name: 'ThreadShow',
+          params: { id: thread['.key'] }
+        })
       })
     },
 
@@ -42,7 +45,7 @@ export default {
       return forums[this.forumId]
     }
   },
-
+  // lifecycle hook
   created () {
     this.fetchForum({ id: this.forumId })
   },

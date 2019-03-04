@@ -84,12 +84,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'fetchThread', // map `this.fetchThread()` to `this.$store.dispatch('fetchThread')`
-      'fetchUser',
-      'fetchPost',
-      'fetchPosts'
-    ])
+    ...mapActions(['fetchThread', 'fetchUser', 'fetchPost', 'fetchPosts'])
   },
 
   // I can access this.id in the following hook

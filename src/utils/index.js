@@ -8,10 +8,11 @@ export const countObjectProperties = obj => {
   }
 }
 
-export const makeAppendChildToParentMutation = ({ parent, child }) => {
-  return (state, { parentId, childId }) => {
+export const makeAppendChildToParentMutation = ({ parent, child }) =>
+  (state, { parentId, childId }) => {
+    console.log(parent, parentId)
     // cannot use a variable after the dot
-    const resource = state[parent][parentId] // user.name === user['name']
+    let resource = state[parent][parentId] // user.name === user['name']
 
     if (!resource[child]) {
       Vue.set(resource, child, [])
@@ -19,10 +20,5 @@ export const makeAppendChildToParentMutation = ({ parent, child }) => {
 
     Vue.set(resource[child], childId, childId)
   }
-}
 
-export const makeSetItemMutation = ({ resource }) => {
-  return (state, { id, item }) => {
-    Vue.set(state[resource], id, item)
-  }
-}
+export const makeSetItemMutation = ({ resource }) => (state, { id, item }) => Vue.set(state[resource], id, item)

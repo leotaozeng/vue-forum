@@ -24,7 +24,12 @@ export default {
 
   methods: {
     // the mapActions helper
-    ...mapActions(['fetchAllCategories', 'fetchForums', 'fetchThreads', 'fetchUser'])
+    ...mapActions([
+      'fetchAllCategories',
+      'fetchForums',
+      'fetchThread',
+      'fetchUser'
+    ])
   },
 
   beforeCreate () {
@@ -38,11 +43,9 @@ export default {
         this.fetchForums({ ids: category.forums }).then(forums => {
           forums.forEach(forum => {
             if (forum.threads) {
-              this.fetchThreads({ ids: forum.threads }).then(threads => {
-                threads.forEach(thread => {
-                  this.fetchUser({ id: thread.userId })
-                })
-              })
+              this.fetchThread({ id: Object.keys(forum.threads)[0] }).then(
+                thread => this.fetchUser({ id: thread.userId })
+              )
             }
           })
         })

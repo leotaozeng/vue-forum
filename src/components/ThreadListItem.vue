@@ -13,7 +13,7 @@
     </div>
 
     <div class="activity">
-      <p class="replies-count">{{ repliesCount(thread['.key']) }} reply</p>
+      <p class="replies-count">{{ threadRepliesCount(thread['.key']) }} reply</p>
 
       <img
         class="avatar-medium"
@@ -45,7 +45,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['repliesCount']),
+    ...mapGetters(['threadRepliesCount']),
 
     ...mapState(['posts', 'users']),
 

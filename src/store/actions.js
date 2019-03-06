@@ -1,8 +1,8 @@
 import { database } from '../../firebase.config.js'
 
 export default {
-  createPost ({ commit, state }, { threadId, text }) {
-    return new Promise((resolve, reject) => {
+  createPost: ({ commit, state }, { threadId, text }) =>
+    new Promise((resolve, reject) => {
       const post = {}
       const postId = 'greatPost' + Math.random()
 
@@ -17,11 +17,10 @@ export default {
       commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
       resolve(state.posts[postId])
-    })
-  },
+    }),
 
-  createThread ({ commit, state, dispatch }, { forumId, title, text }) {
-    return new Promise((resolve, reject) => {
+  createThread: ({ commit, state, dispatch }, { forumId, title, text }) =>
+    new Promise((resolve, reject) => {
       const thread = {}
       const threadId = 'greatThread' + Math.random()
 
@@ -40,11 +39,10 @@ export default {
       })
 
       resolve(state.threads[threadId])
-    })
-  },
+    }),
 
-  updatePost ({ commit, state }, { id, text }) {
-    return new Promise((resolve, reject) => {
+  updatePost: ({ commit, state }, { id, text }) =>
+    new Promise((resolve, reject) => {
       const { posts, authId } = state
 
       const post = posts[id]
@@ -53,11 +51,10 @@ export default {
       commit('SET_POST', { id, item: newPost })
 
       resolve(state.posts[id])
-    })
-  },
+    }),
 
-  updateThread ({ commit, state, dispatch }, { id, title, text }) {
-    return new Promise((resolve, reject) => {
+  updateThread: ({ commit, state, dispatch }, { id, title, text }) =>
+    new Promise((resolve, reject) => {
       const { threads } = state
 
       const thread = threads[id]
@@ -69,15 +66,12 @@ export default {
       dispatch('updatePost', { id: thread.firstPostId, text }).then((post) => {
         resolve(state.threads[id])
       })
-    })
-  },
+    }),
 
-  updateUser ({ commit }, user) {
-    commit('SET_USER', { id: user['.key'], item: user })
-  },
+  updateUser: ({ commit }, user) => commit('SET_USER', { id: user['.key'], item: user }),
 
-  fetchItem ({ commit }, { id, resource }) {
-    return new Promise((resolve, reject) => {
+  fetchItem: ({ commit }, { id, resource }) =>
+    new Promise((resolve, reject) => {
       database
         .ref(resource)
         .child(id)
@@ -95,56 +89,24 @@ export default {
             resolve(item)
           }
         })
-    })
-  },
+    }),
 
-  fetchItems ({ dispatch }, { ids, resource }) {
-    return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
-  },
+  fetchItems: ({ dispatch }, { ids, resource }) => Promise.all(Object.keys(ids).map(id => dispatch('fetchItem', { id, resource }))),
 
-  fetchCategory ({ dispatch }, { id }) {
-    console.log('🔥 category', id)
-    return dispatch('fetchItem', { id, resource: 'categories' })
-  },
+  fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'categories' }),
+  fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'forums' }),
+  fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'threads' }),
+  fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'posts' }),
+  fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'users' }),
 
-  fetchForum ({ dispatch }, { id }) {
-    console.log('🔥 forum', id)
-    return dispatch('fetchItem', { id, resource: 'forums' })
-  },
+  fetchCategories: ({ dispatch }, { ids }) => dispatch('fetchItem', { ids, resource: 'categories' }),
+  fetchForums: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'forums' }),
+  fetchThreads: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'threads' }),
+  fetchPosts: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'posts' }),
+  fetchUsers: ({ dispatch }, { ids }) => dispatch('fetchItem', { ids, resource: 'users' }),
 
-  fetchThread ({ dispatch }, { id }) {
-    console.log('🔥 thread', id)
-    return dispatch('fetchItem', { id, resource: 'threads' })
-  },
-
-  fetchPost ({ dispatch }, { id }) {
-    console.log('🔥 post', id)
-    return dispatch('fetchItem', { id, resource: 'posts' })
-  },
-
-  fetchUser ({ dispatch }, { id }) {
-    console.log('🔥 user', id)
-    return dispatch('fetchItem', { id, resource: 'users' })
-  },
-
-  fetchForums ({ dispatch }, { ids }) {
-    console.log('🔥 forums', ids)
-    return dispatch('fetchItems', { ids: Object.keys(ids), resource: 'forums' })
-  },
-
-  fetchThreads ({ dispatch }, { ids }) {
-    console.log('🔥 threads', ids)
-    return dispatch('fetchItems', { ids: Object.keys(ids), resource: 'threads' })
-  },
-
-  fetchPosts ({ dispatch }, { ids }) {
-    console.log('🔥 posts', ids)
-    return dispatch('fetchItems', { ids, resource: 'posts' })
-  },
-
-  fetchAllCategories ({ commit, state }) {
-    console.log('🔥 all categories')
-    return new Promise((resolve, reject) => {
+  fetchAllCategories: ({ commit, state }) =>
+    new Promise((resolve, reject) => {
       database
         .ref('categories')
         .once('value')
@@ -168,5 +130,4 @@ export default {
           }
         })
     })
-  }
 }

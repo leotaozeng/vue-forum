@@ -17,7 +17,7 @@
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
-      >{{ repliesCount(id) }} replies by {{ contributorsCount }} contributors</span>
+      >{{ threadRepliesCount(id) }} replies by {{ contributorsCount }} contributors</span>
     </p>
 
     <PostList :posts="posts"/>
@@ -46,7 +46,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['repliesCount']),
+    ...mapGetters(['threadRepliesCount']),
 
     thread () {
       const { threads } = this.$store.state

@@ -2,18 +2,11 @@
   <div class="post-editor">
     <form @submit.prevent="save">
       <div class="form-group">
-        <textarea name=""
-                  id=""
-                  cols="30"
-                  rows="10"
-                  class="form-input"
-                  v-model="text"></textarea>
+        <textarea name id cols="30" rows="10" class="form-input" v-model="text"></textarea>
       </div>
 
       <div class="form-actions">
-        <button class="btn"
-                v-if="isUpdate"
-                @click.prevent="cancel">Cancel</button>
+        <button class="btn" v-if="isUpdate" @click.prevent="cancel">Cancel</button>
 
         <button class="btn-blue">{{ isUpdate ? 'Update' : 'Submit' }} post</button>
       </div>
@@ -30,7 +23,7 @@ export default {
 
     post: {
       type: Object,
-      validator: (obj) => {
+      validator: obj => {
         const keyIsValid = typeof obj['.key'] === 'string'
         const textIsValid = typeof obj.text === 'string'
         const valid = keyIsValid && textIsValid
@@ -63,7 +56,7 @@ export default {
       if (this.text) {
         const payload = { threadId: this.threadId, text: this.text }
 
-        this.$store.dispatch('createPost', payload).then((post) => {
+        this.$store.dispatch('createPost', payload).then(post => {
           this.text = ''
         })
       }
@@ -73,9 +66,7 @@ export default {
       if (this.text) {
         const payload = { id: this.post['.key'], text: this.text }
 
-        this.$store.dispatch('updatePost', payload).then((post) => {
-          this.$emit('update')
-        })
+        this.$store.dispatch('updatePost', payload).then(post => this.$emit('update'))
       }
     },
 

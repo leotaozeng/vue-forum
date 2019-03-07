@@ -95,7 +95,7 @@ export default {
       this.fetchUser({ id: thread.userId })
 
       this.fetchPosts({
-        ids: Object.keys(thread.posts)
+        ids: thread.posts
       }).then(posts => {
         // receive an array with the post object
         posts.forEach(post => {

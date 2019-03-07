@@ -1,4 +1,5 @@
 import Vue from 'vue'
+// import firebase from 'firebase'
 
 export const countObjectProperties = obj => {
   if (typeof obj === 'object') {
@@ -21,4 +22,6 @@ export const makeAppendChildToParentMutation = ({ parent, child }) =>
     Vue.set(resource[child], childId, childId)
   }
 
-export const makeSetItemMutation = ({ resource }) => (state, { id, item }) => Vue.set(state[resource], id, item)
+export const makeSetItemMutation = ({ resource }) => (state, { id, item }) => {
+  Vue.set(state[resource], id, item)
+}

@@ -1,10 +1,33 @@
 import { database } from '../../firebase.config.js'
+// import firebase from 'firebase'
+
+// function writeNewPost (resource) {
+//   // A post entry.
+//   var postData = {
+//     author: username,
+//     uid: uid,
+//     body: body,
+//     title: title,
+//     starCount: 0,
+//     authorPic: picture
+//   }
+
+//   // Get a key for a new Post.
+//   var newPostKey = database.ref(resource).push().key
+
+//   // Write the new post's data simultaneously in the posts list and the user's post list.
+//   var updates = {}
+//   updates['/posts/' + newPostKey] = postData
+//   updates['/user-posts/' + uid + '/' + newPostKey] = postData
+
+//   return firebase.database().ref().update(updates)
+// }
 
 export default {
   createPost: ({ commit, state }, { threadId, text }) =>
     new Promise((resolve, reject) => {
       const post = {}
-      const postId = 'greatPost' + Math.random()
+      const postId = database.ref('posts').push().key
 
       post.publishedAt = Math.floor(Date.now() / 1000)
       post.text = text
@@ -12,7 +35,7 @@ export default {
       post.userId = state.authId
       post['.key'] = postId
 
-      commit('SET_POST', { id: postId, item: post })
+      commit('SET_POST', { id: postId.key, item: post })
       commit('ADD_POST_TO_THREAD', { parentId: threadId, childId: postId })
       commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
@@ -71,10 +94,9 @@ export default {
   updateUser: ({ commit }, user) => commit('SET_USER', { id: user['.key'], item: user }),
 
   fetchItem: ({ commit }, { id, resource }) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve, reject) =>
       database
-        .ref(resource)
-        .child(id)
+        .ref(`${resource}/${id}`)
         .once('value')
         .then(snapshot => {
           if (snapshot.val()) {
@@ -88,8 +110,7 @@ export default {
 
             resolve(item)
           }
-        })
-    }),
+        })),
 
   fetchItems: ({ dispatch }, { ids, resource }) => Promise.all(Object.keys(ids).map(id => dispatch('fetchItem', { id, resource }))),
 

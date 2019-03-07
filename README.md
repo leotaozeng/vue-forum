@@ -22,6 +22,8 @@
 13. The created hook is a great time to fire an AJAX call.
 14. The mounted hook is similar to JQuery's ready function.
 15. We should fetch only the data we need.
+16. A set of rules is called a preset.
+17. Whenever we need to run code on every page we can use the root instance that lives in the main.js file.
 ***
 <h2>Vuex provides:</h2>
 

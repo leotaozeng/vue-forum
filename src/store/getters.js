@@ -2,8 +2,7 @@ import { countObjectProperties } from '@/utils'
 
 export default {
   authUser: state => {
-    // return state.users[state.authId]
-    return {}
+    return state.users[state.authId]
   },
   // we can't pass arguments to getters by default
   // dynamic getter

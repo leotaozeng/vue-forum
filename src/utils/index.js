@@ -16,6 +16,7 @@ export const makeAppendChildToParentMutation = ({ parent, child }) =>
     let resource = state[parent][parentId] // user.name === user['name']
 
     if (!resource[child]) {
+      console.log(1)
       Vue.set(resource, child, [])
     }
 

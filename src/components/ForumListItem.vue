@@ -33,9 +33,13 @@
 <script>
 import AppDate from '@/components/AppDate'
 import { countObjectProperties } from '@/utils'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
+  components: {
+    AppDate
+  },
+
   props: {
     forum: {
       type: Object,
@@ -49,32 +53,29 @@ export default {
   },
 
   computed: {
+    ...mapState(['threads', 'users']),
+
     threadsCount () {
       return countObjectProperties(this.forum.threads)
     },
 
     thread () {
-      const { threads } = this.$store.state
+      const { threads } = this.forum
 
-      if (this.forum.threads) {
-        return threads[Object.keys(this.forum.threads)[0]]
+      if (threads) {
+        return this.threads[Object.keys(threads)[0]]
       }
+
       return 0
     },
 
     user () {
-      const { users } = this.$store.state
-
-      return this.thread ? users[this.thread.userId] : 'aa'
+      return this.thread ? this.users[this.thread.userId] : 'aa'
     },
 
     showWord () {
       return this.threadsCount <= 1 ? 'thread' : 'threads'
     }
-  },
-
-  components: {
-    AppDate
   }
 }
 </script>

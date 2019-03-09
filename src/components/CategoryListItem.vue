@@ -9,10 +9,14 @@
 </template>
 
 <script>
-
 import ForumList from '@/components/ForumList'
+import { mapState } from 'vuex'
 
 export default {
+  components: {
+    ForumList
+  },
+
   props: {
     category: {
       type: Object,
@@ -21,15 +25,13 @@ export default {
   },
 
   computed: {
+    ...mapState(['forums']),
+
     categoryForums () {
-      return Object.values(this.$store.state.forums).filter((forum) => {
+      return Object.values(this.forums).filter((forum) => {
         return forum.categoryId === this.category['.key']
       })
     }
-  },
-
-  components: {
-    ForumList
   }
 }
 </script>

@@ -3,8 +3,8 @@ import { database } from '../../firebase.config.js'
 export default {
   createPost: ({ commit, state }, { threadId, text }) =>
     new Promise((resolve, reject) => {
-      const post = {}
       const postId = database.ref('posts').push().key
+      const post = {}
 
       post.publishedAt = Math.floor(Date.now() / 1000)
       post.text = text
@@ -24,35 +24,53 @@ export default {
         commit('ADD_POST_TO_THREAD', { parentId: post.threadId, childId: postId })
         commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
+        // Must get post from the state since the post I created doesn't contain the key property
         resolve(state.posts[postId])
       })
     }),
 
-  createThread: ({ commit, state, dispatch }, { forumId, title, text }) =>
+  createThread: ({ commit, state }, { forumId, title, text }) =>
     new Promise((resolve, reject) => {
-      const thread = {}
       const threadId = database.ref('threads').push().key
+      const postId = database.ref('posts').push().key
+      const thread = {}
+      const post = {}
 
+      thread.firstPostId = postId
       thread.forumId = forumId
+      thread.lastPostId = postId
+
+      thread.posts = {
+        [postId]: postId
+      }
+
       thread.publishedAt = Math.floor(Date.now() / 1000)
       thread.title = title
       thread.userId = state.authId
-      // The key cannot contain ., $, #, [, ], /,
-      // thread['.key'] = threadId
 
-      var updates = {}
+      post.publishedAt = Math.floor(Date.now() / 1000)
+      post.text = text
+      post.threadId = threadId
+      post.userId = state.authId
+
+      const updates = {}
+
       updates[`/threads/${threadId}`] = thread
       updates[`/forums/${thread.forumId}/threads/${threadId}`] = threadId
       updates[`/users/${thread.userId}/threads/${threadId}`] = threadId
 
+      updates[`/posts/${postId}`] = post
+      updates[`/users/${post.userId}/posts/${postId}`] = postId
+
       database.ref().update(updates).then(() => {
-        commit('SET_THREAD', { id: threadId, item: thread })
+        // update post
+        commit('SET_ITEM', { resource: 'threads', id: threadId, item: thread })
         commit('ADD_THREAD_TO_FORUM', { parentId: forumId, childId: threadId })
         commit('ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId })
-
-        dispatch('createPost', { threadId, text }).then((post) => {
-          commit('SET_THREAD', { id: threadId, item: { ...thread, firstPostId: post['.key'] } })
-        })
+        // update thread
+        commit('SET_ITEM', { resource: 'posts', id: postId, item: post })
+        commit('ADD_POST_TO_THREAD', { parentId: threadId, childId: postId })
+        commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
         resolve(state.threads[threadId])
       })

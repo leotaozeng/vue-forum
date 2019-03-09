@@ -49,7 +49,7 @@
     <div class="thread-wrapper">
       <h2 class="list-title">Threads</h2>
 
-      <ThreadList :threads="threads"/>
+      <ThreadList :threads="forumThreads"/>
     </div>
   </div>
 </template>
@@ -71,18 +71,15 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      stateForums: 'forums',
-      stateThreads: 'threads'
-    }),
+    ...mapState(['forums', 'threads']),
 
     forum () {
-      return this.stateForums[this.forumId]
+      return this.forums[this.forumId]
     },
 
-    threads () {
+    forumThreads () {
       // need to return an array of threads
-      return Object.values(this.stateThreads).filter(
+      return Object.values(this.threads).filter(
         thread => thread.forumId === this.forumId
       )
     }

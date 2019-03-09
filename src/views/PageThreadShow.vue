@@ -20,7 +20,7 @@
       >{{ threadRepliesCount(id) }} replies by {{ contributorsCount }} contributors</span>
     </p>
 
-    <PostList :posts="posts"/>
+    <PostList :posts="threadPosts"/>
 
     <PostEditor :threadId="id"/>
   </div>
@@ -47,26 +47,22 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      stateThreads: 'threads',
-      statePosts: 'posts',
-      stateUsers: 'users'
-    }),
+    ...mapState(['threads', 'posts', 'users']),
 
     ...mapGetters(['threadRepliesCount']),
 
     thread () {
-      return this.stateThreads[this.id]
+      return this.threads[this.id]
     },
 
-    posts () {
-      return Object.values(this.statePosts).filter(
+    threadPosts () {
+      return Object.values(this.posts).filter(
         post => post.threadId === this.id
       )
     },
 
     user () {
-      return this.stateUsers[this.thread.userId]
+      return this.users[this.thread.userId]
     },
 
     contributorsCount () {

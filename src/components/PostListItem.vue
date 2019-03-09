@@ -38,9 +38,13 @@
 
 <script>
 import PostEditor from './PostEditor'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
+  components: {
+    PostEditor
+  },
+
   props: {
     post: {
       type: Object,
@@ -55,10 +59,12 @@ export default {
   },
 
   computed: {
+    ...mapState(['users']),
+
     ...mapGetters(['userPostsCount', 'userThreadsCount']),
 
     user () {
-      return this.$store.state.users[this.post.userId]
+      return this.users[this.post.userId]
     }
 
     // humanFriendlyDates () {
@@ -68,10 +74,6 @@ export default {
     // diffForHumans () {
     //   return moment.unix(this.post.publishedAt).fromNow()
     // }
-  },
-
-  components: {
-    PostEditor
   }
 }
 </script>

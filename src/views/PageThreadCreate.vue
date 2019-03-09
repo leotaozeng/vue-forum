@@ -34,7 +34,7 @@ export default {
     },
 
     cancel () {
-      this.$router.push({ name: 'Forum', params: { id: this.forumId } })
+      this.$router.push({ name: 'Forum', params: { forumId: this.forumId } })
     }
   },
 

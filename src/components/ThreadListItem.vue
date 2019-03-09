@@ -37,6 +37,10 @@ import AppDate from '@/components/AppDate'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
+  components: {
+    AppDate
+  },
+
   props: {
     thread: {
       type: Object,
@@ -45,9 +49,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['threadRepliesCount']),
-
     ...mapState(['posts', 'users']),
+
+    ...mapGetters(['threadRepliesCount']),
 
     lastPost () {
       return this.posts[this.thread.lastPostId]
@@ -60,10 +64,6 @@ export default {
     threadUser () {
       return this.users[this.thread.userId]
     }
-  },
-
-  components: {
-    AppDate
   }
 }
 </script>

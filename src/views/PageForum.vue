@@ -8,7 +8,7 @@
       </div>
 
       <router-link
-        :to="{name: 'ThreadCreate', params: { forumId: this.id }}"
+        :to="{name: 'ThreadCreate', params: { forumId: this.forumId }}"
         class="btn-green btn-small"
       >Start a thread</router-link>
     </div>
@@ -56,29 +56,34 @@
 
 <script>
 import ThreadList from '@/components/ThreadList'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
+  components: {
+    ThreadList
+  },
+
   props: {
-    id: {
+    forumId: {
       type: String,
       required: true
     }
   },
 
   computed: {
-    forum () {
-      const { forums } = this.$store.state
+    ...mapState({
+      stateForums: 'forums',
+      stateThreads: 'threads'
+    }),
 
-      return forums[this.id]
+    forum () {
+      return this.stateForums[this.forumId]
     },
 
     threads () {
       // need to return an array of threads
-      const { threads } = this.$store.state
-
-      return Object.values(threads).filter(
-        thread => thread.forumId === this.id
+      return Object.values(this.stateThreads).filter(
+        thread => thread.forumId === this.forumId
       )
     }
   },
@@ -88,7 +93,7 @@ export default {
   },
 
   created () {
-    this.fetchForum({ id: this.id }).then(forum => {
+    this.fetchForum({ id: this.forumId }).then(forum => {
       this.fetchThreads({ ids: forum.threads }).then(threads => {
         threads.forEach(thread => {
           this.fetchPost({ id: thread.lastPostId }).then(post => {
@@ -98,10 +103,6 @@ export default {
         })
       })
     })
-  },
-
-  components: {
-    ThreadList
   }
 }
 </script>

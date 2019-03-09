@@ -1,27 +1,4 @@
 import { database } from '../../firebase.config.js'
-// import firebase from 'firebase'
-
-// function writeNewPost (resource) {
-//   // A post entry.
-//   var postData = {
-//     author: username,
-//     uid: uid,
-//     body: body,
-//     title: title,
-//     starCount: 0,
-//     authorPic: picture
-//   }
-
-//   // Get a key for a new Post.
-//   var newPostKey = database.ref(resource).push().key
-
-//   // Write the new post's data simultaneously in the posts list and the user's post list.
-//   var updates = {}
-//   updates['/posts/' + newPostKey] = postData
-//   updates['/user-posts/' + uid + '/' + newPostKey] = postData
-
-//   return firebase.database().ref().update(updates)
-// }
 
 export default {
   createPost: ({ commit, state }, { threadId, text }) =>
@@ -33,35 +10,52 @@ export default {
       post.text = text
       post.threadId = threadId
       post.userId = state.authId
-      post['.key'] = postId
+      // The key cannot contain ., $, #, [, ], /,
+      // post['.key'] = postId
 
-      commit('SET_POST', { id: postId.key, item: post })
-      commit('ADD_POST_TO_THREAD', { parentId: threadId, childId: postId })
-      commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
+      // Update right now
+      var updates = {}
+      updates[`/posts/${postId}`] = post
+      updates[`/threads/${post.threadId}/posts/${postId}`] = postId
+      updates[`/users/${post.userId}/posts/${postId}`] = postId
 
-      resolve(state.posts[postId])
+      database.ref().update(updates).then(() => {
+        commit('SET_ITEM', { resource: 'posts', id: postId, item: post })
+        commit('ADD_POST_TO_THREAD', { parentId: post.threadId, childId: postId })
+        commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
+
+        resolve(state.posts[postId])
+      })
     }),
 
   createThread: ({ commit, state, dispatch }, { forumId, title, text }) =>
     new Promise((resolve, reject) => {
       const thread = {}
-      const threadId = 'greatThread' + Math.random()
+      const threadId = database.ref('threads').push().key
 
       thread.forumId = forumId
       thread.publishedAt = Math.floor(Date.now() / 1000)
       thread.title = title
       thread.userId = state.authId
-      thread['.key'] = threadId
+      // The key cannot contain ., $, #, [, ], /,
+      // thread['.key'] = threadId
 
-      commit('SET_THREAD', { id: threadId, item: thread })
-      commit('ADD_THREAD_TO_FORUM', { parentId: forumId, childId: threadId })
-      commit('ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId })
+      var updates = {}
+      updates[`/threads/${threadId}`] = thread
+      updates[`/forums/${thread.forumId}/threads/${threadId}`] = threadId
+      updates[`/users/${thread.userId}/threads/${threadId}`] = threadId
 
-      dispatch('createPost', { threadId, text }).then((post) => {
-        commit('SET_THREAD', { id: threadId, item: { ...thread, firstPostId: post['.key'] } })
+      database.ref().update(updates).then(() => {
+        commit('SET_THREAD', { id: threadId, item: thread })
+        commit('ADD_THREAD_TO_FORUM', { parentId: forumId, childId: threadId })
+        commit('ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId })
+
+        dispatch('createPost', { threadId, text }).then((post) => {
+          commit('SET_THREAD', { id: threadId, item: { ...thread, firstPostId: post['.key'] } })
+        })
+
+        resolve(state.threads[threadId])
       })
-
-      resolve(state.threads[threadId])
     }),
 
   updatePost: ({ commit, state }, { id, text }) =>

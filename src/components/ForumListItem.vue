@@ -3,7 +3,7 @@
     <div class="forum-details">
       <router-link
         class="text-xlarge"
-        :to="{name: 'Forum', params: { id: forum['.key'] }}"
+        :to="{name: 'Forum', params: { forumId: forum['.key'] }}"
       >{{ forum.name }}</router-link>
 
       <p>{{ forum.description }}</p>

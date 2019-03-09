@@ -29,7 +29,8 @@
 <script>
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
-import { mapGetters, mapActions } from 'vuex'
+// Order: State, Getters, Mutations, Actions
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { countObjectProperties } from '../utils'
 
 export default {
@@ -46,24 +47,26 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      stateThreads: 'threads',
+      statePosts: 'posts',
+      stateUsers: 'users'
+    }),
+
     ...mapGetters(['threadRepliesCount']),
 
     thread () {
-      const { threads } = this.$store.state
-
-      return threads[this.id]
+      return this.stateThreads[this.id]
     },
 
     posts () {
-      const { posts } = this.$store.state
-
-      return Object.values(posts).filter(post => post.threadId === this.id)
+      return Object.values(this.statePosts).filter(
+        post => post.threadId === this.id
+      )
     },
 
     user () {
-      const { users } = this.$store.state
-
-      return users[this.thread.userId]
+      return this.stateUsers[this.thread.userId]
     },
 
     contributorsCount () {

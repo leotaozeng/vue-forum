@@ -21,7 +21,7 @@ export default new Router({
     },
 
     {
-      path: '/forum/:id',
+      path: '/forum/:forumId',
       name: 'Forum',
       component: () => import('@/views/PageForum'),
       props: true

@@ -1,13 +1,15 @@
 <template>
   <div class="col-full push-top">
     <h1>Welcome to the Forum</h1>
+
     <CategoryList :catgories="catgories"/>
   </div>
 </template>
 
 <script>
 import CategoryList from '@/components/CategoryList'
-import { mapActions } from 'vuex'
+// Order: State, Getters, Mutations, Actions
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -15,25 +17,22 @@ export default {
   },
 
   computed: {
-    catgories () {
-      const { categories } = this.$store.state
+    ...mapState([
+      'categories'
+    ]),
 
-      return Object.values(categories)
+    catgories () {
+      return Object.values(this.categories)
     }
   },
 
   methods: {
-    // the mapActions helper
     ...mapActions([
       'fetchAllCategories',
       'fetchForums',
       'fetchThread',
       'fetchUser'
     ])
-  },
-
-  beforeCreate () {
-    console.log(this.fetchAllCategories)
   },
 
   created () {
@@ -51,14 +50,6 @@ export default {
         })
       })
     })
-  },
-
-  beforeMount () {
-    console.log('📡 beforeMount', this.catgories, this.$el)
-  },
-
-  mounted () {
-    console.log('📡 mounted', this.catgories, this.$el)
   }
 }
 </script>

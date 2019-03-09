@@ -8,9 +8,13 @@
 
 <script>
 import CategoryListItem from '@/components/CategoryListItem'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
+  components: {
+    CategoryListItem
+  },
+
   props: {
     id: {
       type: String,
@@ -19,10 +23,10 @@ export default {
   },
 
   computed: {
-    category () {
-      const { categories } = this.$store.state
+    ...mapState(['categories']),
 
-      return categories[this.id]
+    category () {
+      return this.categories[this.id]
     }
   },
 
@@ -44,10 +48,6 @@ export default {
         })
       })
     })
-  },
-
-  components: {
-    CategoryListItem
   }
 }
 </script>

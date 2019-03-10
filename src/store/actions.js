@@ -36,6 +36,7 @@ export default {
       const thread = {}
       const post = {}
 
+      thread.contributors = state.authId
       thread.firstPostId = postId
       thread.forumId = forumId
       thread.lastPostId = postId
@@ -76,30 +77,48 @@ export default {
       })
     }),
 
-  updatePost: ({ commit, state }, { id, text }) =>
+  updatePost: ({ commit, state }, { postId, text }) =>
     new Promise((resolve, reject) => {
       const { posts, authId } = state
 
-      const post = posts[id]
-      const newPost = { ...post, text, edited: { at: Math.floor(Date.now() / 1000), by: authId } }
+      const edited = { at: Math.floor(Date.now() / 1000), by: authId }
 
-      commit('SET_POST', { id, item: newPost })
+      const post = posts[postId]
+      const newPost = { ...post, text, edited }
+      delete newPost['.key']
 
-      resolve(state.posts[id])
+      const updates = {}
+      updates[`/posts/${postId}`] = newPost
+      database.ref().update(updates).then(() => {
+        commit('SET_POST', { id: postId, item: newPost })
+
+        resolve(state.posts[postId])
+      })
     }),
 
-  updateThread: ({ commit, state, dispatch }, { id, title, text }) =>
+  updateThread: ({ commit, state, dispatch }, { threadId, title, text }) =>
     new Promise((resolve, reject) => {
-      const { threads } = state
+      const { threads, posts, authId } = state
 
-      const thread = threads[id]
+      const thread = threads[threadId]
       const newThread = { ...thread, title }
+      delete newThread['.key']
 
-      commit('SET_POST', { id, item: newThread })
+      const edited = { at: Math.floor(Date.now() / 1000), by: authId }
 
-      // This is asynchronous
-      dispatch('updatePost', { id: thread.firstPostId, text }).then((post) => {
-        resolve(state.threads[id])
+      const post = posts[thread.firstPostId]
+      const newPost = { ...post, text, edited }
+      delete newPost['.key']
+
+      const updates = {}
+      updates[`/threads/${threadId}`] = newThread
+      updates[`/posts/${thread.firstPostId}`] = newPost
+
+      database.ref().update(updates).then(() => {
+        commit('SET_THREAD', { id: threadId, item: newThread })
+        commit('SET_POST', { id: thread.firstPostId, item: newPost })
+
+        resolve(state.threads[threadId])
       })
     }),
 

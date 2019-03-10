@@ -1,5 +1,5 @@
 <template>
-  <div class="col-full push-top">
+  <div v-if="ready" class="col-full push-top">
     <h1>Welcome to the Forum</h1>
 
     <CategoryList :catgories="catgories"/>
@@ -16,10 +16,14 @@ export default {
     CategoryList
   },
 
+  data () {
+    return {
+      ready: false
+    }
+  },
+
   computed: {
-    ...mapState([
-      'categories'
-    ]),
+    ...mapState(['categories']),
 
     catgories () {
       return Object.values(this.categories)
@@ -37,19 +41,17 @@ export default {
 
   created () {
     // Since the Home page doesn't have any ids so I have to fetch all categories
-    this.fetchAllCategories().then(categories => {
-      categories.forEach(category => {
-        this.fetchForums({ ids: category.forums }).then(forums => {
-          forums.forEach(forum => {
-            if (forum.threads) {
-              this.fetchThread({ id: Object.keys(forum.threads)[0] }).then(
-                thread => this.fetchUser({ id: thread.userId })
-              )
-            }
-          })
-        })
+    this.fetchAllCategories()
+      .then(categories =>
+        Promise.all(
+          categories.map(category =>
+            this.fetchForums({ ids: category.forums })
+          )
+        )
+      )
+      .then(() => {
+        this.ready = true
       })
-    })
   }
 }
 </script>

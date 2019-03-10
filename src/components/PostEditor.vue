@@ -64,7 +64,7 @@ export default {
 
     update () {
       if (this.text) {
-        const payload = { id: this.post['.key'], text: this.text }
+        const payload = { postId: this.post['.key'], text: this.text }
 
         this.$store.dispatch('updatePost', payload).then(post => this.$emit('update'))
       }

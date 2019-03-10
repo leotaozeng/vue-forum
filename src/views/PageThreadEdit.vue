@@ -24,7 +24,7 @@ export default {
     ...mapActions(['fetchThread', 'fetchPost', 'updateThread']),
 
     update ({ title, text }) {
-      this.updateThread({ id: this.id, title, text }).then(thread => {
+      this.updateThread({ threadId: this.id, title, text }).then(thread => {
         this.$router.push({ name: 'ThreadShow', params: { id: this.id } })
       })
     },

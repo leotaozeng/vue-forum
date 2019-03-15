@@ -1,5 +1,5 @@
 <template>
-  <div v-if="lastPost && lastPostUser && threadUser" class="thread">
+  <div class="thread">
     <div>
       <p>
         <router-link :to="{ name: 'ThreadShow', params: { id: thread['.key'] }}">{{ thread.title }}</router-link>
@@ -7,7 +7,7 @@
 
       <p class="text-faded text-xsmall">
         By
-        <a href="profile.html">{{ threadUser.name }}</a>,
+        <a href="profile.html">aaa</a>,
         <AppDate :timestamp="thread.publishedAt"/>.
       </p>
     </div>
@@ -15,7 +15,7 @@
     <div class="activity">
       <p class="replies-count">{{ threadRepliesCount(thread['.key']) }} reply</p>
 
-      <img
+      <!-- <img
         class="avatar-medium"
         src="http://i0.kym-cdn.com/photos/images/facebook/000/010/934/46623-batman_pikachu_super.png"
         alt
@@ -27,7 +27,7 @@
         </p>
 
         <AppDate v-if="thread" :timestamp="lastPost.publishedAt"/>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

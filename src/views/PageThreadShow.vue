@@ -1,6 +1,6 @@
 <template>
   <!-- apply a v-if in the root element -->
-  <div v-if="thread && user" class="col-large push-top">
+  <div v-if="asyncDataStatus_ready" class="col-large push-top">
     <h1>
       {{ thread.title }}
       <router-link
@@ -32,8 +32,11 @@ import PostEditor from '@/components/PostEditor'
 // Order: State, Getters, Mutations, Actions
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { countObjectProperties } from '../utils'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
+  mixins: [asyncDataStatus],
+
   components: {
     PostList,
     PostEditor

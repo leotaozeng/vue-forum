@@ -24,9 +24,8 @@
 15. We should fetch only the data we need.
 16. A set of rules is called a preset.
 17. Whenever we need to run code on every page we can use the root instance that lives in the main.js file.
-18. For making global functionality avaliable in multiple components, here is a couple options:
-    * Use Vuex
-    * Create a base page component
+18. It's recommended to prefix all properties of a mixin and use the mixin name as the prefix.
+19. To use the Firebase CLI, we have to install it globally.    
 ***
 <h2>Vuex provides:</h2>
 

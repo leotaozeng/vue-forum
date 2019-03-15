@@ -1,5 +1,5 @@
 <template>
-  <div v-if="forum" class="forum-wrapper col-full">
+  <div v-if="asyncDataStatus_ready" class="forum-wrapper col-full">
     <div class="forum-header push-top">
       <div class="forum-details">
         <h1>{{ forum.name }}</h1>
@@ -57,8 +57,11 @@
 <script>
 import ThreadList from '@/components/ThreadList'
 import { mapState, mapActions } from 'vuex'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
+  mixins: [asyncDataStatus],
+
   components: {
     ThreadList
   },
@@ -90,15 +93,10 @@ export default {
   },
 
   created () {
-    this.fetchForum({ id: this.forumId }).then(forum => {
-      this.fetchThreads({ ids: forum.threads }).then(threads => {
-        threads.forEach(thread => {
-          this.fetchPost({ id: thread.lastPostId }).then(post => {
-            this.fetchUser({ id: post.userId })
-          })
-          this.fetchUser({ id: thread.userId })
-        })
-      })
+    this.fetchForum({ id: this.forumId }).then(forum =>
+      this.fetchThreads({ ids: forum.threads })
+    ).then(() => {
+      this.asyncDataStatus_ready = true
     })
   }
 }

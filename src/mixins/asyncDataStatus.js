@@ -1,8 +1,13 @@
-export const myMixin = {
+export default {
   data () {
     return {
-      ready: false
+      asyncDataStatus_ready: false
     }
   },
-  created () { }
+
+  methods: {
+    rasyncDataStatus_fetched () {
+      this.asyncDataStatus_ready = !this.asyncDataStatus_ready
+    }
+  }
 }

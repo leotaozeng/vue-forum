@@ -39,7 +39,7 @@ export default {
 
   created () {
     this.fetchCategory({ id: this.id }).then(category =>
-      Promise.all(return this.fetchForums({ ids: category.forums }))
+      Promise.all(this.fetchForums({ ids: category.forums }))
     ).then((a) => {
       console.log(a)
     })

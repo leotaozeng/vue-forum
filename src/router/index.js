@@ -65,6 +65,12 @@ export default new Router({
     },
 
     {
+      path: '/signup',
+      name: 'SignUp',
+      component: () => import('@/views/PageSignUp')
+    },
+
+    {
       path: '*',
       name: 'NotFound',
       component: () => import('@/views/PageNotFound')

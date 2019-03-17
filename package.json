@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "db:seed": "firebase database:set / src/data-copy.json -y"
   },
   "dependencies": {
     "firebase": "^5.8.5",

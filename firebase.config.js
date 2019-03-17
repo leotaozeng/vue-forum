@@ -1,14 +1,14 @@
 import firebase from 'firebase'
 import 'firebase/database'
-
+console.log(process.env)
 // Initialize Firebase
 const config = {
-  apiKey: 'AIzaSyAaQR4LmN8jWEgLpYl8L3GpiACkkVH_Sfg',
-  authDomain: 'vue-forum-dc79e.firebaseapp.com',
-  databaseURL: 'https://vue-forum-dc79e.firebaseio.com',
-  projectId: 'vue-forum-dc79e',
-  storageBucket: 'vue-forum-dc79e.appspot.com',
-  messagingSenderId: '619851662792'
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.VUE_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID
 }
 const defaultApp = firebase.initializeApp(config)
 

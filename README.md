@@ -25,7 +25,8 @@
 16. A set of rules is called a preset.
 17. Whenever we need to run code on every page we can use the root instance that lives in the main.js file.
 18. It's recommended to prefix all properties of a mixin and use the mixin name as the prefix.
-19. To use the Firebase CLI, we have to install it globally.    
+19. To use the Firebase CLI, we have to install it globally.  
+20. Using environment variables is very practical for using different databases or API keys.  
 ***
 <h2>Vuex provides:</h2>
 

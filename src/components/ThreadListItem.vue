@@ -2,12 +2,14 @@
   <div class="thread">
     <div>
       <p>
-        <router-link :to="{ name: 'ThreadShow', params: { id: thread['.key'] }}">{{ thread.title }}</router-link>
+        <router-link
+          :to="{ name: 'ThreadShow', params: { threadId: thread['.key'] }}"
+        >{{ thread.title }}</router-link>
       </p>
 
       <p class="text-faded text-xsmall">
         By
-        <a href="profile.html">aaa</a>,
+        <a href="profile.html">{{ threadUser.name }}</a>,
         <AppDate :timestamp="thread.publishedAt"/>.
       </p>
     </div>
@@ -27,7 +29,7 @@
         </p>
 
         <AppDate v-if="thread" :timestamp="lastPost.publishedAt"/>
-      </div> -->
+      </div>-->
     </div>
   </div>
 </template>

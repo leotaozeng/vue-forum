@@ -1,32 +1,32 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <form class="card card-form">
-        <h1 class="text-center">Register</h1>
+      <form @submit.prevent="signup" class="card card-form">
+        <h1 class="text-center">Create your Account</h1>
 
         <div class="form-group">
           <label for="name">Full Name</label>
-          <input id="name" type="text" class="form-input">
+          <input id="name" type="text" class="form-input" v-model="form.name">
         </div>
 
         <div class="form-group">
           <label for="username">Username</label>
-          <input id="username" type="text" class="form-input">
+          <input id="username" type="text" class="form-input" v-model="form.username">
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" type="email" class="form-input">
+          <input id="email" type="email" class="form-input" v-model="form.email">
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input id="password" type="password" class="form-input">
+          <input id="password" type="password" class="form-input" v-model="form.password">
         </div>
 
         <div class="form-group">
           <label for="avatar">Avatar</label>
-          <input id="avatar" type="text" class="form-input">
+          <input id="avatar" type="text" class="form-input" v-model="form.avatar">
         </div>
 
         <div class="form-actions">
@@ -44,7 +44,25 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      form: {
+        name: null,
+        username: null,
+        email: null,
+        password: null,
+        avatar: null
+      }
+    }
+  },
+
+  methods: {
+    signup () {
+      console.log(this.form)
+    }
+  }
+}
 </script>
 
 <style>

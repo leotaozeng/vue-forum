@@ -6,7 +6,11 @@ export default {
   },
   // we can't pass arguments to getters by default
   // dynamic getter
-  userThreadsCount: state => id => countObjectProperties(state.users[id].threads),
+  userThreadsCount: state => {
+    return id => {
+      return countObjectProperties(state.users[id].threads)
+    }
+  },
   userPostsCount: state => id => countObjectProperties(state.users[id].posts),
   threadRepliesCount: state => id => {
     const count = countObjectProperties(state.threads[id].posts)

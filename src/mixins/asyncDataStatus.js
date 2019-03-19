@@ -1,3 +1,5 @@
+// A mixin is an object
+// prefix all properties of a mixin
 export default {
   data () {
     return {
@@ -6,7 +8,7 @@ export default {
   },
 
   methods: {
-    rasyncDataStatus_fetched () {
+    asyncDataStatus_fetched () {
       this.asyncDataStatus_ready = !this.asyncDataStatus_ready
     }
   }

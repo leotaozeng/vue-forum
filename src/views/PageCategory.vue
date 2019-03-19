@@ -8,8 +8,8 @@
 
 <script>
 import CategoryListItem from '@/components/CategoryListItem'
-import { mapState, mapActions } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   mixins: [asyncDataStatus],
@@ -19,7 +19,7 @@ export default {
   },
 
   props: {
-    id: {
+    categoryId: {
       type: String,
       required: true
     }
@@ -29,20 +29,19 @@ export default {
     ...mapState(['categories']),
 
     category () {
-      return this.categories[this.id]
+      return this.categories[this.categoryId]
     }
   },
 
   methods: {
-    ...mapActions(['fetchCategory', 'fetchForums', 'fetchThreads', 'fetchUser'])
+    ...mapActions(['fetchCategory', 'fetchForums'])
   },
 
   created () {
-    this.fetchCategory({ id: this.id }).then(category =>
-      Promise.all(this.fetchForums({ ids: category.forums }))
-    ).then((a) => {
-      console.log(a)
-    })
+    // action
+    this.fetchCategory({ id: this.categoryId })
+      .then(category => this.fetchForums({ ids: category.forums }))
+      .then(this.asyncDataStatus_fetched)
   }
 }
 </script>

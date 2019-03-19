@@ -89,15 +89,18 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchForum', 'fetchThreads', 'fetchPost', 'fetchUser'])
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUser'])
   },
 
   created () {
-    this.fetchForum({ id: this.forumId }).then(forum =>
-      this.fetchThreads({ ids: forum.threads })
-    ).then(() => {
-      this.asyncDataStatus_ready = true
-    })
+    this.fetchForum({ id: this.forumId })
+      .then(forum => this.fetchThreads({ ids: forum.threads }))
+      .then(threads =>
+        Promise.all(
+          threads.map(thread => this.fetchUser({ id: thread.userId }))
+        )
+      )
+      .then(this.asyncDataStatus_fetched)
   }
 }
 </script>

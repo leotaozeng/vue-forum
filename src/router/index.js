@@ -14,7 +14,7 @@ export default new Router({
     },
 
     {
-      path: '/category/:id',
+      path: '/category/:categoryId',
       name: 'Category',
       component: () => import('@/views/PageCategory'),
       props: true
@@ -42,7 +42,7 @@ export default new Router({
     },
 
     {
-      path: '/thread/:id',
+      path: '/thread/:threadId',
       name: 'ThreadShow',
       component: () => import('@/views/PageThreadShow'),
       props: true

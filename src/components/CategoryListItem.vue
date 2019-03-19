@@ -1,10 +1,12 @@
 <template>
   <div class="forum-list">
     <h2 class="list-title">
-      <router-link :to="{name: 'Category', params: {id: category['.key']}}">{{ category.name }}</router-link>
+      <router-link
+        :to="{name: 'Category', params: {categoryId: category['.key']}}"
+      >{{ category.name }}</router-link>
     </h2>
 
-    <ForumList :forums="categoryForums" />
+    <ForumList :forums="categoryForums"/>
   </div>
 </template>
 
@@ -28,13 +30,10 @@ export default {
     ...mapState(['forums']),
 
     categoryForums () {
-      return Object.values(this.forums).filter((forum) => {
-        return forum.categoryId === this.category['.key']
-      })
+      return Object.values(this.forums).filter(
+        forum => forum.categoryId === this.category['.key']
+      )
     }
   }
 }
 </script>
-
-<style>
-</style>

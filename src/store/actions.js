@@ -168,13 +168,14 @@ export default {
             // Use Object.values() should be later on
             const categoriesObject = snapshot.val()
 
-            Object.keys(categoriesObject).forEach((categoryId) => {
-              const category = categoriesObject[categoryId]
+            // forEach returns the value undefined and is not chainable
+            Object.keys(categoriesObject).forEach((id) => {
+              const category = categoriesObject[id]
 
               commit('SET_ITEM', {
                 resource: 'categories',
-                id: categoryId,
-                item: category
+                item: category,
+                id
               })
             })
 

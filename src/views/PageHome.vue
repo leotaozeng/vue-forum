@@ -4,13 +4,14 @@
 
     <CategoryList :catgories="catgories"/>
   </div>
+  <div v-else>loading...</div>
 </template>
 
 <script>
 import CategoryList from '@/components/CategoryList'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 // Order: State, Getters, Mutations, Actions
 import { mapState, mapActions } from 'vuex'
-import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
   mixins: [asyncDataStatus],
@@ -28,25 +29,18 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'fetchAllCategories',
-      'fetchForums',
-      'fetchThread',
-      'fetchUser'
-    ])
+    ...mapActions(['fetchAllCategories', 'fetchForums'])
   },
 
   created () {
     // Since the Home page doesn't have any ids so I have to fetch all categories
     this.fetchAllCategories()
-      .then(categories =>
-        Promise.all(
+      .then(categories => {
+        return Promise.all(
           categories.map(category => this.fetchForums({ ids: category.forums }))
         )
-      )
-      .then(() => {
-        this.rasyncDataStatus_fetched()
       })
+      .then(this.asyncDataStatus_fetched)
   }
 }
 </script>

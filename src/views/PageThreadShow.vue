@@ -4,7 +4,7 @@
     <h1>
       {{ thread.title }}
       <router-link
-        :to="{name: 'ThreadEdit', params: {id}}"
+        :to="{name: 'ThreadEdit', params: {id: threadId}}"
         class="btn-green btn-small"
         tag="button"
       >Edit Thread</router-link>
@@ -17,22 +17,21 @@
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
-      >{{ threadRepliesCount(id) }} replies by {{ contributorsCount }} contributors</span>
+      >{{ threadRepliesCount(threadId) }} replies by {{ contributorsCount }} contributors</span>
     </p>
 
     <PostList :posts="threadPosts"/>
 
-    <PostEditor :threadId="id"/>
+    <PostEditor :threadId="threadId"/>
   </div>
 </template>
 
 <script>
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
-// Order: State, Getters, Mutations, Actions
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { countObjectProperties } from '../utils'
-import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
   mixins: [asyncDataStatus],
@@ -43,7 +42,7 @@ export default {
   },
 
   props: {
-    id: {
+    threadId: {
       type: String,
       required: true
     }
@@ -55,12 +54,12 @@ export default {
     ...mapGetters(['threadRepliesCount']),
 
     thread () {
-      return this.threads[this.id]
+      return this.threads[this.threadId]
     },
 
     threadPosts () {
       return Object.values(this.posts).filter(
-        post => post.threadId === this.id
+        post => post.threadId === this.threadId
       )
     },
 
@@ -91,21 +90,17 @@ export default {
 
   // I can access this.id in the following hook
   created () {
-    // fetch the thread with this.id
-    this.fetchThread({ id: this.id }).then(thread => {
-      // fetch the user who created the thread
-      this.fetchUser({ id: thread.userId })
-
-      this.fetchPosts({
-        ids: thread.posts
-      }).then(posts => {
-        // receive an array with the post object
-        posts.forEach(post => {
-          // fetch the user who created the post
-          this.fetchUser({ id: post.userId })
-        })
+    // fetch the thread with this.threadId
+    this.fetchThread({ id: this.threadId })
+      .then(thread => {
+        // fetch the user who created the thread
+        this.fetchUser({ id: thread.userId })
+        return this.fetchPosts({ ids: thread.posts })
       })
-    })
+      .then(posts =>
+        Promise.all(posts.map(post => this.fetchUser({ id: post.userId })))
+      )
+      .then(this.asyncDataStatus_fetched)
   }
 }
 </script>

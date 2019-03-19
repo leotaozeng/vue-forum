@@ -10,6 +10,7 @@ export default {
   methods: {
     asyncDataStatus_fetched () {
       this.asyncDataStatus_ready = !this.asyncDataStatus_ready
+      this.$emit('ready')
     }
   }
 }

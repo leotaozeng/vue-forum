@@ -4,7 +4,6 @@
 
     <CategoryList :catgories="catgories"/>
   </div>
-  <div v-else>loading...</div>
 </template>
 
 <script>

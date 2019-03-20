@@ -34,11 +34,11 @@ export default {
   created () {
     // Since the Home page doesn't have any ids so I have to fetch all categories
     this.fetchAllCategories()
-      .then(categories => {
-        return Promise.all(
+      .then(categories =>
+        Promise.all(
           categories.map(category => this.fetchForums({ ids: category.forums }))
         )
-      })
+      )
       .then(this.asyncDataStatus_fetched)
   }
 }

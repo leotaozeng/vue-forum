@@ -8,6 +8,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  created () {
+    this.$emit('ready')
+  }
+}
+</script>
+
 <style lang="scss" module>
 .centered {
   text-align: center;

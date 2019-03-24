@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn-blue btn-block">Register</button>
+          <button type="submit" class="btn-blue btn-block">Sign up</button>
         </div>
       </form>
 
@@ -61,9 +61,10 @@ export default {
     signup () {
       console.log(this.form)
     }
+  },
+
+  created () {
+    this.$emit('ready')
   }
 }
 </script>
-
-<style>
-</style>

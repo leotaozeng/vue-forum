@@ -1,34 +1,7 @@
 import { database } from '../../firebase.config.js'
+import firebase from 'firebase'
 
 export default {
-  createPost: ({ commit, state }, { threadId, text }) =>
-    new Promise((resolve, reject) => {
-      const postId = database.ref('posts').push().key
-      const post = {}
-
-      post.publishedAt = Math.floor(Date.now() / 1000)
-      post.text = text
-      post.threadId = threadId
-      post.userId = state.authId
-      // The key cannot contain ., $, #, [, ], /,
-      // post['.key'] = postId
-
-      // Update right now
-      var updates = {}
-      updates[`/posts/${postId}`] = post
-      updates[`/threads/${post.threadId}/posts/${postId}`] = postId
-      updates[`/users/${post.userId}/posts/${postId}`] = postId
-
-      database.ref().update(updates).then(() => {
-        commit('SET_ITEM', { resource: 'posts', id: postId, item: post })
-        commit('ADD_POST_TO_THREAD', { parentId: post.threadId, childId: postId })
-        commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
-
-        // Must get post from the state since the post I created doesn't contain the key property
-        resolve(state.posts[postId])
-      })
-    }),
-
   createThread: ({ commit, state }, { forumId, title, text }) =>
     new Promise((resolve, reject) => {
       const threadId = database.ref('threads').push().key
@@ -77,24 +50,66 @@ export default {
       })
     }),
 
-  updatePost: ({ commit, state }, { postId, text }) =>
+  createPost: ({ commit, state }, { threadId, text }) =>
     new Promise((resolve, reject) => {
-      const { posts, authId } = state
+      const postId = database.ref('posts').push().key
+      const post = {}
 
-      const edited = { at: Math.floor(Date.now() / 1000), by: authId }
+      post.publishedAt = Math.floor(Date.now() / 1000)
+      post.text = text
+      post.threadId = threadId
+      post.userId = state.authId
+      // The key cannot contain ., $, #, [, ], /,
+      // post['.key'] = postId
 
-      const post = posts[postId]
-      const newPost = { ...post, text, edited }
-      delete newPost['.key']
+      // Update right now
+      var updates = {}
+      updates[`/posts/${postId}`] = post
+      updates[`/threads/${post.threadId}/posts/${postId}`] = postId
+      updates[`/users/${post.userId}/posts/${postId}`] = postId
 
-      const updates = {}
-      updates[`/posts/${postId}`] = newPost
       database.ref().update(updates).then(() => {
-        commit('SET_POST', { id: postId, item: newPost })
+        commit('SET_ITEM', { resource: 'posts', id: postId, item: post })
+        commit('ADD_POST_TO_THREAD', { parentId: post.threadId, childId: postId })
+        commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
+        // Must get post from the state since the post I created doesn't contain the key property
         resolve(state.posts[postId])
       })
     }),
+
+  createUser: ({ commit, state }, { id, email, name, username, avatar = null }) =>
+    new Promise((resolve, reject) => {
+      const user = {}
+      const registeredAt = Math.floor(Date.now() / 1000)
+
+      user.avatar = avatar
+      user.email = email.toLowerCase()
+      user.name = name
+      user.registeredAt = registeredAt
+      user.username = username
+      user.usernameLower = username.toLowerCase()
+
+      database.ref('users').child(id).set(user).then(() => {
+        commit('SET_ITEM', { resource: 'users', id, item: user })
+
+        resolve(state.users[id])
+      })
+    }),
+
+  signUpUserWithEmailAndPassword ({ dispatch }, { email, password }) {
+    return new Promise((resolve, reject) => {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(user => {
+          resolve(user)
+        })
+        .catch(error => {
+          reject(error.message)
+        })
+    })
+  },
 
   updateThread: ({ commit, state, dispatch }, { threadId, title, text }) =>
     new Promise((resolve, reject) => {
@@ -119,6 +134,25 @@ export default {
         commit('SET_POST', { id: thread.firstPostId, item: newPost })
 
         resolve(state.threads[threadId])
+      })
+    }),
+
+  updatePost: ({ commit, state }, { postId, text }) =>
+    new Promise((resolve, reject) => {
+      const { posts, authId } = state
+
+      const edited = { at: Math.floor(Date.now() / 1000), by: authId }
+
+      const post = posts[postId]
+      const newPost = { ...post, text, edited }
+      delete newPost['.key']
+
+      const updates = {}
+      updates[`/posts/${postId}`] = newPost
+      database.ref().update(updates).then(() => {
+        commit('SET_POST', { id: postId, item: newPost })
+
+        resolve(state.posts[postId])
       })
     }),
 

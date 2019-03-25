@@ -4,7 +4,7 @@
 
     <div class="container">
       <!-- special component -->
-      <router-view v-show="showPage" v-on:ready="pageReady"/>
+      <router-view v-show="showPage" v-on:ready="pageReady(true)"/>
 
       <AppSpinner v-show="!showPage"/>
     </div>
@@ -29,9 +29,9 @@ export default {
   },
 
   methods: {
-    pageReady () {
+    pageReady (status) {
       NProgress.done()
-      this.showPage = true
+      this.showPage = status
     }
   },
 

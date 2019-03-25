@@ -6,22 +6,22 @@
 
         <div class="form-group">
           <label for="name">Full Name</label>
-          <input id="name" type="text" class="form-input" v-model="form.name">
+          <input id="name" type="text" class="form-input" v-model="form.name" required>
         </div>
 
         <div class="form-group">
           <label for="username">Username</label>
-          <input id="username" type="text" class="form-input" v-model="form.username">
+          <input id="username" type="text" class="form-input" v-model="form.username" required>
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" type="email" class="form-input" v-model="form.email">
+          <input id="email" type="email" class="form-input" v-model="form.email" required>
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input id="password" type="password" class="form-input" v-model="form.password">
+          <input id="password" type="password" class="form-input" v-model="form.password" required>
         </div>
 
         <div class="form-group">
@@ -59,7 +59,26 @@ export default {
 
   methods: {
     signup () {
-      console.log(this.form)
+      const { name, username, email, password, avatar } = this.form
+      // don't couple the component to Firebae
+      this.$store
+        .dispatch('signUpUserWithEmailAndPassword', { email, password })
+        .then(user => {
+          const { uid } = user.user
+
+          this.$store
+            .dispatch('createUser', {
+              id: uid,
+              name,
+              username,
+              email,
+              password,
+              avatar
+            })
+            .then(user => {
+              this.$router.push({ name: 'Home' })
+            })
+        })
     }
   },
 

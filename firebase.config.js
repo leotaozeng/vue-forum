@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 import 'firebase/database'
-console.log(process.env)
+
 // Initialize Firebase
 const config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,

@@ -1,12 +1,11 @@
-<h2>Documentations:</h2>
-
+## Documentations:
 1. <a href="https://firebase.google.com/docs/web/setup?authuser=0">Add Firebase to your JavaScript Project</a>
-2. <a href="https://firebase.google.com/docs/database/">Firebase Realtime Database</a>
-3. <a href="https://firebase.google.com/docs/database/web/start">Installation & Setup in JavaScript</a>
-4. <a href="https://vuex.vuejs.org/">What is Vuex?</a>
-***
-<h2>Notes:</h2>
+2. <a href="https://firebase.google.com/docs/auth/web/password-auth">Authenticate with Firebase using Password-Based Accounts using Javascript</a>
+3. <a href="https://firebase.google.com/docs/database/">Firebase Realtime Database</a>
+4. <a href="https://firebase.google.com/docs/database/web/start">Installation & Setup in JavaScript</a>
+5. <a href="https://vuex.vuejs.org/">What is Vuex?</a>
 
+## Notes:
 1. The src directory contains our application's code.
 2. Main.js is the application's entry file.
 3. When start building an application it is usually handy to work with a local file or mockup before hitting an API or another source.
@@ -27,9 +26,8 @@
 18. It's recommended to prefix all properties of a mixin and use the mixin name as the prefix.
 19. To use the Firebase CLI, we have to install it globally.  
 20. Using environment variables is very practical for using different databases or API keys.  
-***
-<h2>Vuex provides:</h2>
 
+##Vuex provides:
 1. Single Source of Truth.
 2. Useful Library of Actions, Mutations, Getters.
 3. It's a best practice to have our actions call mutations which update our state directly.

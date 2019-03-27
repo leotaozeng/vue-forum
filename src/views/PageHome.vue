@@ -10,7 +10,7 @@
 import CategoryList from '@/components/CategoryList'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 // Order: State, Getters, Mutations, Actions
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   mixins: [asyncDataStatus],
@@ -27,19 +27,19 @@ export default {
     }
   },
 
-  methods: {
-    ...mapActions(['fetchAllCategories', 'fetchForums'])
-  },
-
-  created () {
-    // Since the Home page doesn't have any ids so I have to fetch all categories
-    this.fetchAllCategories()
+  // The earlier I instantiate the call
+  // the more time it has to resolve before the user sees the page.
+  beforeCreate () {
+    this.$store
+      .dispatch('fetchAllCategories')
       .then(categories =>
         Promise.all(
-          categories.map(category => this.fetchForums({ ids: category.forums }))
+          categories.map(category =>
+            this.$store.dispatch({ type: 'fetchForums', ids: category.forums })
+          )
         )
       )
-      .then(this.asyncDataStatus_fetched)
+      .then(() => this.asyncDataStatus_fetched())
   }
 }
 </script>

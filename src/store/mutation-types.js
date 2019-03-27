@@ -4,6 +4,8 @@ export const SET_POST = 'SET_POST'
 
 export const SET_USER = 'SET_USER'
 
+export const SET_AUTH_USER = 'SET_AUTH_USER'
+
 export const SET_ITEM = 'SET_ITEM'
 
 export const ADD_POST_TO_THREAD = 'ADD_POST_TO_THREAD'

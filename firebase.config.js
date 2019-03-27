@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import 'firebase/database'
+import store from '@/store'
 
 // Initialize Firebase
 const config = {
@@ -10,9 +10,15 @@ const config = {
   storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID
 }
-const defaultApp = firebase.initializeApp(config)
+const app = firebase.initializeApp(config)
+const database = app.database() // Get a reference to the database service
 
-// Get a reference to the database service
-const database = defaultApp.database()
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    store.dispatch({ type: 'fetchAuthUser', id: user.uid })
+  } else {
+    store.dispatch({ type: 'fetchUser', id: store.state.authId })
+  }
+})
 
 export { database }

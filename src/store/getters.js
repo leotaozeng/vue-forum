@@ -1,9 +1,7 @@
 import { countObjectProperties } from '@/utils'
-
+// Getters will receive the state as their 1st argument
 export default {
-  authUser: state => {
-    return state.users[state.authId]
-  },
+  authUser: state => state.users[state.authId],
   // we can't pass arguments to getters by default
   // dynamic getter
   userThreadsCount: state => {

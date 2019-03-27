@@ -27,7 +27,7 @@
 19. To use the Firebase CLI, we have to install it globally.  
 20. Using environment variables is very practical for using different databases or API keys.  
 
-##Vuex provides:
+## Vuex provides:
 1. Single Source of Truth.
 2. Useful Library of Actions, Mutations, Getters.
 3. It's a best practice to have our actions call mutations which update our state directly.

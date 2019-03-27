@@ -95,8 +95,9 @@ export default {
       .then(thread => {
         // fetch the user who created the thread
         this.fetchUser({ id: thread.userId })
-        return this.fetchPosts({ ids: thread.posts })
+        return thread
       })
+      .then(thread => this.fetchPosts({ ids: thread.posts }))
       .then(posts =>
         Promise.all(posts.map(post => this.fetchUser({ id: post.userId })))
       )

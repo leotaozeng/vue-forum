@@ -7,13 +7,14 @@ import actions from './actions'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+  strict: true,
   state: {
     categories: {},
     forums: {},
     threads: {},
     posts: {},
     users: {},
-    authId: 'VXjpr2WHa8Ux4Bnggym8QFLdv5C3'
+    authId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2'
   },
   getters,
   mutations,

@@ -26,7 +26,7 @@
 
         <div class="form-group">
           <label for="avatar">Avatar</label>
-          <input id="avatar" type="text" class="form-input" v-model="form.avatar">
+          <input id="avatar" type="text" class="form-input" v-model="form.avatar" required>
         </div>
 
         <div class="form-actions">
@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   data () {
     return {
@@ -58,31 +60,30 @@ export default {
   },
 
   methods: {
+    ...mapActions(['signUpUserWithEmailAndPassword', 'createUser', 'fetchAuthUser']),
+
     signup () {
       const { name, username, email, password, avatar } = this.form
+
       // don't couple the component to Firebae
-      this.$store
-        .dispatch('signUpUserWithEmailAndPassword', { email, password })
+      this.signUpUserWithEmailAndPassword({ email, password })
         .then(user => {
           const { uid } = user.user
 
-          this.$store
-            .dispatch('createUser', {
-              id: uid,
-              name,
-              username,
-              email,
-              password,
-              avatar
-            })
-            .then(user => {
-              this.$router.push({ name: 'Home' })
-            })
+          return this.createUser({
+            id: uid,
+            name,
+            username,
+            email,
+            password,
+            avatar
+          })
         })
+        .then(user => this.$router.push({ name: 'Home' }))
     }
   },
 
-  created () {
+  beforeCreate () {
     this.$emit('ready')
   }
 }

@@ -164,9 +164,9 @@ export default {
         .ref(`${resource}/${id}`)
         .once('value')
         .then(snapshot => {
-          if (snapshot.val()) {
-            const item = snapshot.val()
+          const item = snapshot.val()
 
+          if (item) {
             commit('SET_ITEM', {
               resource,
               id: snapshot.key,
@@ -179,13 +179,15 @@ export default {
 
   fetchItems: ({ dispatch }, { ids, resource }) => Promise.all(Object.keys(ids).map(id => dispatch('fetchItem', { id, resource }))),
 
+  fetchAuthUser: ({ dispatch, commit, state }, { id }) => dispatch({ type: 'fetchUser', id }).then(() => commit('SET_AUTH_USER', id)),
+
   fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'categories' }),
   fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'forums' }),
   fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'threads' }),
   fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'posts' }),
   fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'users' }),
 
-  fetchCategories: ({ dispatch }, { ids }) => dispatch('fetchItem', { ids, resource: 'categories' }),
+  fetchCategories: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'categories' }),
   fetchForums: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'forums' }),
   fetchThreads: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'threads' }),
   fetchPosts: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'posts' }),

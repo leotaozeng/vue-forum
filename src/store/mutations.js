@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { makeAppendChildToParentMutation, makeSetItemMutation } from '../utils'
-import { SET_THREAD, SET_POST, SET_USER, SET_ITEM, ADD_POST_TO_THREAD, ADD_POST_TO_USER, ADD_THREAD_TO_FORUM, ADD_THREAD_T0_USER } from './mutation-types'
+import { SET_THREAD, SET_POST, SET_USER, SET_AUTH_USER, SET_ITEM, ADD_POST_TO_THREAD, ADD_POST_TO_USER, ADD_THREAD_TO_FORUM, ADD_THREAD_T0_USER } from './mutation-types'
 
 export default {
   [SET_THREAD]: makeSetItemMutation({ resource: 'threads' }),
@@ -8,6 +8,10 @@ export default {
   [SET_POST]: makeSetItemMutation({ resource: 'posts' }),
 
   [SET_USER]: makeSetItemMutation({ resource: 'users' }),
+
+  [SET_AUTH_USER] (state, id) {
+    state.authId = id
+  },
 
   [SET_ITEM] (state, { resource, id, item }) {
     item['.key'] = id

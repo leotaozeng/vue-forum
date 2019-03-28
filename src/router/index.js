@@ -71,6 +71,12 @@ export default new Router({
     },
 
     {
+      path: '/signin',
+      name: 'SignIn',
+      component: () => import('@/views/PageSignIn')
+    },
+
+    {
       path: '*',
       name: 'NotFound',
       component: () => import('@/views/PageNotFound')

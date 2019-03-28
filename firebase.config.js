@@ -15,10 +15,11 @@ const database = app.database() // Get a reference to the database service
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    store.dispatch({ type: 'fetchAuthUser', id: user.uid })
-  } else {
-    store.dispatch({ type: 'fetchUser', id: store.state.authId })
+    store.dispatch('fetchAuthUser', { id: user.uid })
   }
+  // } else {
+  //   store.dispatch({ type: 'fetchUser', id: store.state.authId })
+  // }
 })
 
 export { database }

@@ -6,27 +6,27 @@
 
         <div class="form-group">
           <label for="name">Full Name</label>
-          <input id="name" type="text" class="form-input" v-model="form.name" required>
+          <input id="name" type="text" class="form-input" v-model="form.name" autofocus>
         </div>
 
         <div class="form-group">
           <label for="username">Username</label>
-          <input id="username" type="text" class="form-input" v-model="form.username" required>
+          <input id="username" type="text" class="form-input" v-model="form.username">
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
-          <input id="email" type="email" class="form-input" v-model="form.email" required>
+          <input id="email" type="email" class="form-input" v-model="form.email">
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input id="password" type="password" class="form-input" v-model="form.password" required>
+          <input id="password" type="password" class="form-input" v-model="form.password">
         </div>
 
         <div class="form-group">
           <label for="avatar">Avatar</label>
-          <input id="avatar" type="text" class="form-input" v-model="form.avatar" required>
+          <input id="avatar" type="text" class="form-input" v-model="form.avatar">
         </div>
 
         <div class="form-actions">
@@ -35,7 +35,7 @@
       </form>
 
       <div class="text-center push-top">
-        <button class="btn-red btn-xsmall">
+        <button @click="signUpWithGoogle" class="btn-red btn-xsmall">
           <i class="fa fa-google fa-btn"></i>Sign up with Google
         </button>
       </div>
@@ -60,7 +60,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['signUpUserWithEmailAndPassword', 'createUser', 'fetchAuthUser']),
+    ...mapActions([
+      'signUpUserWithEmailAndPassword',
+      'signInWithGoogle',
+      'createUser'
+    ]),
 
     signup () {
       const { name, username, email, password, avatar } = this.form
@@ -79,6 +83,11 @@ export default {
             avatar
           })
         })
+        .then(user => this.$router.push({ name: 'Home' }))
+    },
+
+    signUpWithGoogle () {
+      this.signInWithGoogle()
         .then(user => this.$router.push({ name: 'Home' }))
     }
   },

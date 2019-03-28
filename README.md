@@ -3,7 +3,8 @@
 2. <a href="https://firebase.google.com/docs/auth/web/password-auth">Authenticate with Firebase using Password-Based Accounts using Javascript</a>
 3. <a href="https://firebase.google.com/docs/database/">Firebase Realtime Database</a>
 4. <a href="https://firebase.google.com/docs/database/web/start">Installation & Setup in JavaScript</a>
-5. <a href="https://vuex.vuejs.org/">What is Vuex?</a>
+5. <a href="https://firebase.google.com/docs/auth/web/google-signin">Authenticate Using Google Sign-In with JavaScript</a>
+6. <a href="https://vuex.vuejs.org/">What is Vuex?</a>
 
 ## Notes:
 1. The src directory contains our application's code.

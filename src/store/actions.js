@@ -97,18 +97,34 @@ export default {
       })
     }),
 
-  signUpUserWithEmailAndPassword ({ dispatch }, { email, password }) {
-    return new Promise((resolve, reject) => {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(user => {
-          resolve(user)
+  signUpUserWithEmailAndPassword (context, { email, password }) {
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+  },
+
+  signInWithEmailAndPassword (context, { email, password }) {
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+  },
+
+  signInWithGoogle ({ dispatch }) {
+    // Create an instance of the Google provider object:
+    const provider = new firebase.auth.GoogleAuthProvider()
+    // To sign in with a pop-up window
+    return firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        // The signed-in user info.
+        const { uid, email, displayName, photoURL } = result.user
+
+        database.ref('users').child(uid).once('value').then(snapshot => {
+          if (!snapshot.exists()) {
+            dispatch('createUser', { email, id: uid, name: displayName, username: email, avatar: photoURL })
+              .then(() => dispatch('fetchAuthUser', { id: uid }))
+          }
         })
-        .catch(error => {
-          reject(error.message)
-        })
-    })
+      })
+  },
+
+  signOut ({ commit }) {
+    return firebase.auth().signOut().then(() => commit('SET_AUTH_USER', null))
   },
 
   updateThread: ({ commit, state, dispatch }, { threadId, title, text }) =>
@@ -172,14 +188,20 @@ export default {
               id: snapshot.key,
               item
             })
-
-            resolve(item)
           }
+
+          resolve(item)
         })),
 
   fetchItems: ({ dispatch }, { ids, resource }) => Promise.all(Object.keys(ids).map(id => dispatch('fetchItem', { id, resource }))),
 
-  fetchAuthUser: ({ dispatch, commit, state }, { id }) => dispatch({ type: 'fetchUser', id }).then(() => commit('SET_AUTH_USER', id)),
+  fetchAuthUser: ({ dispatch, commit }, { id }) => {
+    database.ref('users').child(id).once('value').then(snapshot => {
+      if (snapshot.exists()) {
+        dispatch({ type: 'fetchUser', id }).then(() => commit('SET_AUTH_USER', id))
+      }
+    })
+  },
 
   fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'categories' }),
   fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'forums' }),

@@ -26,7 +26,9 @@
 17. Whenever we need to run code on every page we can use the root instance that lives in the main.js file.
 18. It's recommended to prefix all properties of a mixin and use the mixin name as the prefix.
 19. To use the Firebase CLI, we have to install it globally.  
-20. Using environment variables is very practical for using different databases or API keys.  
+20. Using environment variables is very practical for using different databases or API keys.
+21. Route protection is essential in any application that allows users to authenticate.
+22. Route components (the ones passed to the router configuration).   
 
 ## Vuex provides:
 1. Single Source of Truth.

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-grid">
+  <div v-if="user" class="flex-grid">
     <UserProfileCard v-if="!edit" :user="user"/>
 
     <UserProfileCardEditor v-else :user="user"/>
@@ -21,7 +21,8 @@
 import PostList from '@/components/PostList'
 import UserProfileCard from '@/components/UserProfileCard'
 import UserProfileCardEditor from '@/components/UserProfileCardEditor'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import store from '@/store/index'
 
 export default {
   props: {
@@ -31,27 +32,39 @@ export default {
   },
 
   computed: {
+    ...mapState(['posts']),
+
+    ...mapGetters({
+      user: 'authUser'
+    }),
+
     userPosts () {
       if (this.user.posts) {
-        const { posts } = this.$store.state
-
-        return Object.values(posts).filter(
+        return Object.values(this.posts).filter(
           post => post.userId === this.user['.key']
         )
       } else {
         return []
       }
-    },
-
-    ...mapGetters({
-      user: 'authUser'
-    })
+    }
   },
 
   components: {
     PostList,
     UserProfileCard,
     UserProfileCardEditor
+  },
+
+  beforeUpdate () {
+    this.$emit('ready')
+  },
+
+  beforeRouteEnter (to, from, next) {
+    if (store.state.authId) {
+      next()
+    } else {
+      next({ name: 'Home' })
+    }
   }
 }
 </script>

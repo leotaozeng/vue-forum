@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import NProgress from 'nprogress'
+import Vuelidate from 'vuelidate'
 import App from '@/App.vue'
 import router from '@/router/index'
 import store from '@/store/index'
 import AppDate from '@/components/AppDate'
 import '../firebase.config'
 
+Vue.use(Vuelidate)
 Vue.component('AppDate', AppDate)
 Vue.config.productionTip = false
 

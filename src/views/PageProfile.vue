@@ -7,6 +7,7 @@
     <div class="col-7 push-top">
       <div class="profile-header">
         <span class="text-lead">{{ user.username }}'s recent activity</span>
+
         <a href="#">See only started threads?</a>
       </div>
 
@@ -59,7 +60,11 @@ export default {
     this.$emit('ready')
   },
 
+  // In-Component Guards
   beforeRouteEnter (to, from, next) {
+    // does NOT have access to `this` component instance,
+    // because it has not been created yet when this guard is called!
+    // this.$store would be undefined
     if (store.state.authId) {
       next()
     } else {

@@ -1,11 +1,10 @@
-import { database } from '../../firebase.config.js'
-import firebase from 'firebase'
+import { auth, database, GoogleAuthProvider } from '../../firebase.config.js'
 
 export default {
   createThread: ({ commit, state }, { forumId, title, text }) =>
     new Promise((resolve, reject) => {
-      const threadId = database.ref('threads').push().key
-      const postId = database.ref('posts').push().key
+      const threadId = database.ref().child('threads').push().key
+      const postId = database.ref().child('posts').push().key
       const thread = {}
       const post = {}
 
@@ -27,8 +26,7 @@ export default {
       post.threadId = threadId
       post.userId = state.authId
 
-      const updates = {}
-
+      var updates = {}
       updates[`/threads/${threadId}`] = thread
       updates[`/forums/${thread.forumId}/threads/${threadId}`] = threadId
       updates[`/users/${thread.userId}/threads/${threadId}`] = threadId
@@ -37,11 +35,12 @@ export default {
       updates[`/users/${post.userId}/posts/${postId}`] = postId
 
       database.ref().update(updates).then(() => {
-        // update post
+        // Update post.
         commit('SET_ITEM', { resource: 'threads', id: threadId, item: thread })
         commit('ADD_THREAD_TO_FORUM', { parentId: forumId, childId: threadId })
         commit('ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId })
-        // update thread
+
+        // Update thread.
         commit('SET_ITEM', { resource: 'posts', id: postId, item: post })
         commit('ADD_POST_TO_THREAD', { parentId: threadId, childId: postId })
         commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
@@ -52,28 +51,33 @@ export default {
 
   createPost: ({ commit, state }, { threadId, text }) =>
     new Promise((resolve, reject) => {
-      const postId = database.ref('posts').push().key
+      // Get a key for a new Post.
+      const postId = database.ref().child('posts').push().key
       const post = {}
 
       post.publishedAt = Math.floor(Date.now() / 1000)
       post.text = text
       post.threadId = threadId
       post.userId = state.authId
-      // The key cannot contain ., $, #, [, ], /,
+      // The key can't contain ., $, #, [, ], /.
       // post['.key'] = postId
 
-      // Update right now
+      // Update right now.
       var updates = {}
       updates[`/posts/${postId}`] = post
       updates[`/threads/${post.threadId}/posts/${postId}`] = postId
+      updates[`/threads/${post.threadId}/contributors/${post.userId}`] = post.userId
       updates[`/users/${post.userId}/posts/${postId}`] = postId
 
+      // The firebase update is asynchronous.
       database.ref().update(updates).then(() => {
+        // Add the .key again.
         commit('SET_ITEM', { resource: 'posts', id: postId, item: post })
+        commit('ADD_CONTRIBUTOR_TO_THREAD', { parentId: post.threadId, childId: post.userId })
         commit('ADD_POST_TO_THREAD', { parentId: post.threadId, childId: postId })
         commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
 
-        // Must get post from the state since the post I created doesn't contain the key property
+        // Must get post from the state since the post I created doesn't contain the key property.
         resolve(state.posts[postId])
       })
     }),
@@ -98,56 +102,48 @@ export default {
     }),
 
   signUpUserWithEmailAndPassword (context, { email, password }) {
-    return firebase.auth().createUserWithEmailAndPassword(email, password)
+    return auth.createUserWithEmailAndPassword(email, password)
   },
 
   signInWithEmailAndPassword (context, { email, password }) {
-    return firebase.auth().signInWithEmailAndPassword(email, password)
+    return auth.signInWithEmailAndPassword(email, password)
   },
 
   signInWithGoogle ({ dispatch }) {
-    // Create an instance of the Google provider object:
-    const provider = new firebase.auth.GoogleAuthProvider()
-    // To sign in with a pop-up window
-    return firebase.auth().signInWithPopup(provider)
-      .then((result) => {
-        // The signed-in user info.
-        const { uid, email, displayName, photoURL } = result.user
+    // To sign in with a pop-up window.
+    return auth.signInWithPopup(GoogleAuthProvider).then(result => {
+      // The signed-in user info.
+      const { uid, email, displayName, photoURL } = result.user
 
-        database.ref('users').child(uid).once('value').then(snapshot => {
-          if (!snapshot.exists()) {
-            dispatch('createUser', { email, id: uid, name: displayName, username: email, avatar: photoURL })
-              .then(() => dispatch('fetchAuthUser', { id: uid }))
-          }
-        })
+      database.ref('users').child(uid).once('value').then(snapshot => {
+        if (!snapshot.exists()) {
+          dispatch('createUser', { email, id: uid, name: displayName, username: email, avatar: photoURL })
+            .then(() => dispatch('fetchAuthUser', { id: uid }))
+        }
       })
+    })
   },
 
   signOut ({ commit }) {
-    return firebase.auth().signOut().then(() => commit('SET_AUTH_USER', null))
+    return auth.signOut().then(() => commit('SET_AUTH_USER', null))
   },
 
   updateThread: ({ commit, state, dispatch }, { threadId, title, text }) =>
     new Promise((resolve, reject) => {
       const { threads, posts, authId } = state
-
       const thread = threads[threadId]
-      const newThread = { ...thread, title }
-      delete newThread['.key']
+      const post = posts[thread.firstPostId]
 
       const edited = { at: Math.floor(Date.now() / 1000), by: authId }
 
-      const post = posts[thread.firstPostId]
-      const newPost = { ...post, text, edited }
-      delete newPost['.key']
-
       const updates = {}
-      updates[`/threads/${threadId}`] = newThread
-      updates[`/posts/${thread.firstPostId}`] = newPost
+      updates[`/threads/${threadId}/title`] = title
+      updates[`/posts/${thread.firstPostId}/edited`] = edited
+      updates[`/posts/${thread.firstPostId}/text`] = text
 
       database.ref().update(updates).then(() => {
-        commit('SET_THREAD', { id: threadId, item: newThread })
-        commit('SET_POST', { id: thread.firstPostId, item: newPost })
+        commit('SET_THREAD', { id: threadId, item: { ...thread, title } })
+        commit('SET_POST', { id: thread.firstPostId, item: { ...post, text, edited } })
 
         resolve(state.threads[threadId])
       })
@@ -156,17 +152,16 @@ export default {
   updatePost: ({ commit, state }, { postId, text }) =>
     new Promise((resolve, reject) => {
       const { posts, authId } = state
+      const post = posts[postId]
 
       const edited = { at: Math.floor(Date.now() / 1000), by: authId }
 
-      const post = posts[postId]
-      const newPost = { ...post, text, edited }
-      delete newPost['.key']
-
       const updates = {}
-      updates[`/posts/${postId}`] = newPost
+      updates[`/posts/${postId}/edited`] = edited
+      updates[`/posts/${postId}/text`] = text
+
       database.ref().update(updates).then(() => {
-        commit('SET_POST', { id: postId, item: newPost })
+        commit('SET_POST', { resource: 'posts', id: postId, item: { ...post, text, edited } })
 
         resolve(state.posts[postId])
       })
@@ -174,7 +169,7 @@ export default {
 
   updateUser: ({ commit }, user) => commit('SET_USER', { id: user['.key'], item: user }),
 
-  fetchItem: ({ commit }, { id, resource }) =>
+  fetchItem: ({ state, commit }, { id, resource }) =>
     new Promise((resolve, reject) =>
       database
         .ref(`${resource}/${id}`)
@@ -190,10 +185,15 @@ export default {
             })
           }
 
-          resolve(item)
+          resolve(state[resource][id])
         })),
 
-  fetchItems: ({ dispatch }, { ids, resource }) => Promise.all(Object.keys(ids).map(id => dispatch('fetchItem', { id, resource }))),
+  // Each fetchItem call retuens a promise.
+  fetchItems: ({ dispatch }, { ids, resource }) => {
+    ids = Array.isArray(ids) ? ids : Object.keys(ids)
+
+    return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
+  },
 
   fetchAuthUser: ({ dispatch, commit }, { id }) => {
     database.ref('users').child(id).once('value').then(snapshot => {
@@ -202,18 +202,6 @@ export default {
       }
     })
   },
-
-  fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'categories' }),
-  fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'forums' }),
-  fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'threads' }),
-  fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'posts' }),
-  fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'users' }),
-
-  fetchCategories: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'categories' }),
-  fetchForums: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'forums' }),
-  fetchThreads: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'threads' }),
-  fetchPosts: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'posts' }),
-  fetchUsers: ({ dispatch }, { ids }) => dispatch('fetchItem', { ids, resource: 'users' }),
 
   fetchAllCategories: ({ commit, state }) =>
     new Promise((resolve, reject) => {
@@ -236,9 +224,21 @@ export default {
                 id
               })
             })
-
-            resolve(Object.values(state.categories))
           }
+
+          resolve(Object.values(state.categories))
         })
-    })
+    }),
+
+  fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'categories' }),
+  fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'forums' }),
+  fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'threads' }),
+  fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'posts' }),
+  fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'users' }),
+
+  fetchCategories: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'categories' }),
+  fetchForums: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'forums' }),
+  fetchThreads: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'threads' }),
+  fetchPosts: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'posts' }),
+  fetchUsers: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'users' })
 }

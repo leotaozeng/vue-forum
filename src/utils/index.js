@@ -1,5 +1,4 @@
 import Vue from 'vue'
-// import firebase from 'firebase'
 
 export const countObjectProperties = obj => {
   if (typeof obj === 'object') {
@@ -11,12 +10,11 @@ export const countObjectProperties = obj => {
 
 export const makeAppendChildToParentMutation = ({ parent, child }) =>
   (state, { parentId, childId }) => {
-    console.log(parent, parentId)
-    // cannot use a variable after the dot
-    let resource = state[parent][parentId] // user.name === user['name']
+    // Can't use a variable after the dot.
+    // Find the parent resource in the state.
+    var resource = state[parent][parentId] // user.name === user['name']
 
     if (!resource[child]) {
-      console.log(1)
       Vue.set(resource, child, [])
     }
 

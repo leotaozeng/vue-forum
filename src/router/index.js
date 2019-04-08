@@ -35,7 +35,7 @@ export default new Router({
     },
 
     {
-      path: '/thread/edit/:id',
+      path: '/thread/edit/:threadId',
       name: 'ThreadEdit',
       component: () => import('@/views/PageThreadEdit'),
       props: true

@@ -1,10 +1,10 @@
 <template>
   <!-- apply a v-if in the root element -->
   <div v-if="asyncDataStatus_ready" class="col-large push-top">
-    <h1>
+    <h1 id="moderation" class="space-between">
       {{ thread.title }}
       <router-link
-        :to="{name: 'ThreadEdit', params: {id: threadId}}"
+        :to="{name: 'ThreadEdit', params: {threadId}}"
         class="btn-green btn-small"
         tag="button"
       >Edit Thread</router-link>
@@ -22,7 +22,7 @@
 
     <PostList :posts="threadPosts"/>
 
-    <PostEditor :threadId="threadId"/>
+    <PostEditor v-if="authId" :threadId="threadId"/>
   </div>
 </template>
 
@@ -49,7 +49,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['threads', 'posts', 'users']),
+    ...mapState(['threads', 'posts', 'users', 'authId']),
 
     ...mapGetters(['threadRepliesCount']),
 
@@ -88,7 +88,11 @@ export default {
     ...mapActions(['fetchThread', 'fetchUser', 'fetchPost', 'fetchPosts'])
   },
 
-  // I can access this.id in the following hook
+  beforeCreate () {
+    // this.threadId === undefined
+  },
+
+  // I can access this.threadId in the following hook
   created () {
     // fetch the thread with this.threadId
     this.fetchThread({ id: this.threadId })

@@ -12,10 +12,15 @@
 <script>
 import ThreadEditor from '@/components/ThreadEditor'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
-import { mapActions } from 'vuex'
+// import store from '@/store/index'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   mixins: [asyncDataStatus],
+
+  components: {
+    ThreadEditor
+  },
 
   props: {
     forumId: {
@@ -31,7 +36,7 @@ export default {
       this.createThread({ forumId: this.forumId, title, text }).then(thread =>
         this.$router.push({
           name: 'ThreadShow',
-          params: { id: thread['.key'] }
+          params: { threadId: thread['.key'] }
         })
       )
     },
@@ -42,19 +47,30 @@ export default {
   },
 
   computed: {
-    forum () {
-      const { forums } = this.$store.state
+    ...mapState(['forums']),
 
-      return forums[this.forumId]
+    forum () {
+      return this.forums[this.forumId]
     }
   },
-  // lifecycle hook
+
   created () {
     this.fetchForum({ id: this.forumId }).then(this.asyncDataStatus_fetched)
   },
 
-  components: {
-    ThreadEditor
+  beforeRouteLeave (to, from, next) {
+    console.log(this)
+    if (!this.title || !this.text) {
+      next()
+    } else {
+      const confirmed = window.confirm(
+        'Are you sure you want to leave? Unsaved changes will be lost.'
+      )
+
+      if (confirmed) {
+        next()
+      }
+    }
   }
 }
 </script>

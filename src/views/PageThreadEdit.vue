@@ -12,13 +12,13 @@
 <script>
 import ThreadEditor from '@/components/ThreadEditor'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   mixins: [asyncDataStatus],
 
   props: {
-    id: {
+    threadId: {
       type: String,
       required: true
     }
@@ -28,9 +28,9 @@ export default {
     ...mapActions(['fetchThread', 'fetchPost', 'updateThread']),
 
     update ({ title, text }) {
-      this.updateThread({ threadId: this.id, title, text }).then(thread => {
+      this.updateThread({ threadId: this.threadId, title, text }).then(thread =>
         this.$router.push({ name: 'ThreadShow', params: { id: this.id } })
-      })
+      )
     },
 
     cancel () {
@@ -39,22 +39,21 @@ export default {
   },
 
   computed: {
-    thread () {
-      const { threads } = this.$store.state
+    ...mapState(['threads', 'posts']),
 
-      return threads[this.id]
+    thread () {
+      return this.threads[this.threadId]
     },
 
     firstPost () {
       const { firstPostId } = this.thread
-      const { posts } = this.$store.state
 
-      return posts[firstPostId]
+      return this.posts[firstPostId]
     }
   },
 
   created () {
-    this.fetchThread({ id: this.id })
+    this.fetchThread({ id: this.threadId })
       .then(thread => this.fetchPost({ id: thread.firstPostId }))
       .then(this.asyncDataStatus_fetched)
   },

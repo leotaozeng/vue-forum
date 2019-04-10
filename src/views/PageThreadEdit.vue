@@ -5,7 +5,13 @@
       <i>{{ thread.title }}</i>
     </h1>
 
-    <ThreadEditor :title="thread.title" :content="firstPost.text" @save="update" @cancel="cancel"/>
+    <ThreadEditor
+      ref="editor"
+      :title="thread.title"
+      :content="firstPost.text"
+      @save="update"
+      @cancel="cancel"
+    />
   </div>
 </template>
 
@@ -15,6 +21,10 @@ import asyncDataStatus from '@/mixins/asyncDataStatus'
 import { mapState, mapActions } from 'vuex'
 
 export default {
+  components: {
+    ThreadEditor
+  },
+
   mixins: [asyncDataStatus],
 
   props: {
@@ -24,13 +34,26 @@ export default {
     }
   },
 
+  data () {
+    return {
+      updated: false
+    }
+  },
+
   methods: {
     ...mapActions(['fetchThread', 'fetchPost', 'updateThread']),
 
     update ({ title, text }) {
-      this.updateThread({ threadId: this.threadId, title, text }).then(thread =>
-        this.$router.push({ name: 'ThreadShow', params: { id: this.id } })
-      )
+      if (this.hasUnsavedChanges) {
+        this.updateThread({ threadId: this.threadId, title, text }).then(
+          thread => {
+            this.updated = true
+            this.$router.push({ name: 'ThreadShow', params: { id: this.id } })
+          }
+        )
+      } else {
+        console.log('error')
+      }
     },
 
     cancel () {
@@ -49,6 +72,12 @@ export default {
       const { firstPostId } = this.thread
 
       return this.posts[firstPostId]
+    },
+
+    hasUnsavedChanges () {
+      const { title, content } = this.$refs.editor.form
+
+      return title !== this.thread.title || content !== this.firstPost.text
     }
   },
 
@@ -58,8 +87,20 @@ export default {
       .then(this.asyncDataStatus_fetched)
   },
 
-  components: {
-    ThreadEditor
+  beforeRouteLeave (to, from, next) {
+    if (this.hasUnsavedChanges && !this.updated) {
+      const answer = window.confirm(
+        'Do you really want to leave? you have unsaved changes!'
+      )
+
+      if (answer) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
+    }
   }
 }
 </script>

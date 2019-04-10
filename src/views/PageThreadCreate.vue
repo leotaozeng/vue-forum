@@ -5,7 +5,7 @@
       <i>{{ forum.name }}</i>
     </h1>
 
-    <ThreadEditor @save="create" @cancel="cancel"/>
+    <ThreadEditor ref="editor" @save="publish" @cancel="cancel"/>
   </div>
 </template>
 
@@ -29,16 +29,29 @@ export default {
     }
   },
 
+  data () {
+    return {
+      published: false
+    }
+  },
+
   methods: {
     ...mapActions(['fetchForum', 'createThread']),
 
-    create ({ title, text }) {
-      this.createThread({ forumId: this.forumId, title, text }).then(thread =>
-        this.$router.push({
-          name: 'ThreadShow',
-          params: { threadId: thread['.key'] }
-        })
-      )
+    publish ({ title, text }) {
+      if (this.isNotEmpty) {
+        this.createThread({ forumId: this.forumId, title, text }).then(
+          thread => {
+            this.published = true
+            this.$router.push({
+              name: 'ThreadShow',
+              params: { threadId: thread['.key'] }
+            })
+          }
+        )
+      } else {
+        console.log('error')
+      }
     },
 
     cancel () {
@@ -51,6 +64,18 @@ export default {
 
     forum () {
       return this.forums[this.forumId]
+    },
+
+    isNotEmpty () {
+      const { title, content } = this.$refs.editor.form
+
+      return title && content
+    },
+
+    hasUnsavedChanges () {
+      const { title, content } = this.$refs.editor.form
+
+      return title || content
     }
   },
 
@@ -59,17 +84,18 @@ export default {
   },
 
   beforeRouteLeave (to, from, next) {
-    console.log(this)
-    if (!this.title || !this.text) {
-      next()
-    } else {
-      const confirmed = window.confirm(
-        'Are you sure you want to leave? Unsaved changes will be lost.'
+    if (this.hasUnsavedChanges && !this.published) {
+      const answer = window.confirm(
+        'Do you really want to leave? you have unsaved changes!'
       )
 
-      if (confirmed) {
+      if (answer) {
         next()
+      } else {
+        next(false)
       }
+    } else {
+      next()
     }
   }
 }

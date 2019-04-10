@@ -57,9 +57,7 @@ export default {
     save () {
       const { title, content } = this.form
 
-      if (title && content) {
-        this.$emit('save', { title, text: content })
-      }
+      this.$emit('save', { title, text: content })
     },
 
     cancel () {

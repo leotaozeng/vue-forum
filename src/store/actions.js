@@ -94,7 +94,7 @@ export default {
       user.username = username
       user.usernameLower = username.toLowerCase()
 
-      database.ref('users').child(id).set(user).then(() => {
+      database.ref(`users/${id}`).set(user).then(() => {
         commit('SET_ITEM', { resource: 'users', id, item: user })
 
         resolve(state.users[id])

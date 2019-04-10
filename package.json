@@ -9,11 +9,11 @@
     "db:seed": "firebase database:set / src/data-copy.json -y"
   },
   "dependencies": {
-    "firebase": "^5.9.2",
+    "firebase": "^5.9.3",
     "moment": "^2.23.0",
     "nprogress": "^0.2.0",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.1",
+    "vue-router": "^3.0.3",
     "vuelidate": "^0.7.4",
     "vuex": "^3.1.0"
   },

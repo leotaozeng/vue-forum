@@ -33,9 +33,17 @@
 21. Route protection is essential in any application that allows users to authenticate.
 22. Route components (the ones passed to the router configuration).
 23. Create a generic action.
-24. Create a generic mutation.  
+24. Create a generic mutation.
 
-## Vuex provides:
+### Vue-Router
+1. Route protection is essential in any application.
+2. A navigation guard acts as a middleware that can protect a route component.
+3. A common need is to protect specific routes from guests.
+
+### Form
+1. Wrap form's data in a form object.
+
+### Vuex provides:
 1. Single Source of Truth.
 2. Useful Library of Actions, Mutations, Getters.
 3. It's a best practice to have our actions call mutations which update our state directly.

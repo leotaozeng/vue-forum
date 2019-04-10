@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import NProgress from 'nprogress'
 import Vuelidate from 'vuelidate'
 import App from '@/App.vue'
 import router from '@/router/index'
@@ -14,12 +13,5 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
-  render: h => h(App),
-  beforeCreate () {
-    NProgress.configure({
-      speed: 100,
-      showSpinner: false
-    })
-    NProgress.start()
-  }
+  render: h => h(App)
 }).$mount('#app')

@@ -150,7 +150,7 @@ export default {
 
       this.$v.form.$touch()
 
-      if (this.$v.form.$invalid) {
+      if (!this.$v.form.$invalid) {
         console.log('error')
       } else {
         // don't couple the component to Firebae

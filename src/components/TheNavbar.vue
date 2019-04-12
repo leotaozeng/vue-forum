@@ -39,30 +39,30 @@
               </li>
 
               <li class="dropdown-menu-item">
-                <a @click="this.signOut">Sign out</a>
+                <a @click.prevent="logout" title="Log out of your account">Log out</a>
               </li>
             </ul>
           </div>
         </li>
 
         <li class="navbar-item">
-          <a @click="this.signOut">Sign out</a>
+          <a @click.prevent="logout" title="Log out of your account">Log out</a>
         </li>
       </ul>
 
       <ul v-else>
         <li class="navbar-item">
-          <router-link :to="{ name: 'SignIn' }">Sign in</router-link>
+          <router-link :to="{ name: 'Login' }">Log in</router-link>
         </li>
 
         <li class="navbar-item">
-          <router-link :to="{ name: 'SignUp' }">Sign up</router-link>
+          <router-link :to="{ name: 'Signup' }">Sign up</router-link>
         </li>
       </ul>
 
-      <!-- <ul>
+      <ul>
         <li class="navbar-item">
-          <a href="index.html">Home</a>
+          <router-link :to="{ name: 'Home'}">Home</router-link>
         </li>
         <li class="navbar-item">
           <a href="category.html">Category</a>
@@ -72,15 +72,15 @@
         </li>
         <li class="navbar-item">
           <a href="thread.html">Thread</a>
-      </li>-->
-      <!-- Show these option only on mobile-->
-      <!-- <li class="navbar-item mobile-only">
+        </li>
+        <!-- Show these option only on mobile-->
+        <li class="navbar-item mobile-only">
           <a href="profile.html">My Profile</a>
         </li>
         <li class="navbar-item mobile-only">
           <a href="#">Logout</a>
-      </li>-->
-      <!-- </ul> -->
+        </li>
+      </ul>
     </nav>
   </header>
 </template>
@@ -96,7 +96,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['signOut']),
+    ...mapActions(['logout']),
 
     switchDropdownStatus () {
       this.userDropDownOpen = !this.userDropDownOpen

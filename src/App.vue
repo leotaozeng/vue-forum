@@ -4,7 +4,9 @@
 
     <div class="container">
       <!-- special component -->
-      <router-view v-show="showPage" v-on:ready="pageReady(true)"/>
+      <transition name="fade">
+        <router-view v-show="showPage" v-on:ready="pageReady(true)"></router-view>
+      </transition>
 
       <AppSpinner v-show="!showPage"/>
     </div>
@@ -42,11 +44,11 @@ export default {
     })
     NProgress.start()
 
-    this.$router.beforeEach((to, from, next) => {
-      NProgress.start()
-      this.showPage = false
-      next()
-    })
+    // this.$router.beforeEach((to, from, next) => {
+    //   NProgress.start()
+    //   this.showPage = false
+    //   next()
+    // })
   }
 }
 </script>
@@ -56,6 +58,15 @@ export default {
 @import "~nprogress/nprogress.css";
 
 #nprogress .bar {
-  background-color: #57AD8D;
+  background-color: #57ad8d;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

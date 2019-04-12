@@ -23,7 +23,6 @@ import PostList from '@/components/PostList'
 import UserProfileCard from '@/components/UserProfileCard'
 import UserProfileCardEditor from '@/components/UserProfileCardEditor'
 import { mapState, mapGetters } from 'vuex'
-import store from '@/store/index'
 
 export default {
   props: {
@@ -58,18 +57,6 @@ export default {
 
   beforeUpdate () {
     this.$emit('ready')
-  },
-
-  // In-Component Guards
-  beforeRouteEnter (to, from, next) {
-    // does NOT have access to `this` component instance,
-    // because it has not been created yet when this guard is called!
-    // this.$store would be undefined
-    if (store.state.authId) {
-      next()
-    } else {
-      next({ name: 'Home' })
-    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="flex-grid justify-center">
     <div class="col-2">
       <form @submit.prevent="signup" class="card card-form">
-        <h1 class="text-center">Create your Account</h1>
+        <h1 class="text-center">Get Started for Free</h1>
 
         <div class="form-group">
           <label for="name">Full Name</label>
@@ -79,13 +79,12 @@
         <div class="form-actions">
           <button type="submit" class="btn-blue btn-block">Sign up</button>
         </div>
-      </form>
 
-      <div class="text-center push-top">
-        <button @click="signUpWithGoogle" class="btn-red btn-xsmall">
-          <i class="fa fa-google fa-btn"></i>Sign up with Google
-        </button>
-      </div>
+        <div class="text-center push-top">
+          Have an account?
+          <router-link :to="{name: 'Login'}">Log in</router-link>
+        </div>
+      </form>
     </div>
   </div>
 </template>

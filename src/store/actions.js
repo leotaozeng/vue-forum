@@ -124,7 +124,7 @@ export default {
     })
   },
 
-  signOut ({ commit }) {
+  logout ({ commit }) {
     return auth.signOut().then(() => commit('SET_AUTH_USER', null))
   },
 

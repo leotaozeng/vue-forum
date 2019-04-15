@@ -51,9 +51,14 @@ export default {
   },
 
   computed: {
-    ...mapState(['posts', 'users']),
+    ...mapState({
+      posts: state => state.posts.items,
+      users: state => state.users.items
+    }),
 
-    ...mapGetters(['threadRepliesCount']),
+    ...mapGetters({
+      threadRepliesCount: 'threads/threadRepliesCount'
+    }),
 
     lastPost () {
       return this.posts[this.thread.lastPostId]

@@ -27,7 +27,9 @@ export default {
   },
 
   computed: {
-    ...mapState(['forums']),
+    ...mapState({
+      forums: state => state.forums.items
+    }),
 
     categoryForums () {
       return Object.values(this.forums).filter(

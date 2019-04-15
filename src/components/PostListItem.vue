@@ -59,7 +59,9 @@ export default {
   },
 
   computed: {
-    ...mapState(['users']),
+    ...mapState({
+      users: state => state.users.items
+    }),
 
     ...mapGetters(['userPostsCount', 'userThreadsCount']),
 

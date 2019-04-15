@@ -1,0 +1,30 @@
+import Vue from 'vue'
+
+// higher order function
+const makeSetItemMutation = () => {
+  return (state, { id, item }) => Vue.set(state.items, id, item)
+}
+
+const makeAppendChildToParentMutation = ({ parent, child }) => {
+  return (state, { parentId, childId }) => {
+    // Can't use a variable after the dot.
+    // Find the parent resource in the state.
+    var resource = state[parent].items[parentId] // user.name === user['name']
+
+    if (!resource[child]) {
+      Vue.set(resource, child, [])
+    }
+
+    Vue.set(resource[child], childId, childId)
+  }
+}
+
+const countObjectProperties = obj => {
+  if (typeof obj === 'object') {
+    return Object.keys(obj).length
+  } else {
+    return 0
+  }
+}
+
+export { makeSetItemMutation, makeAppendChildToParentMutation, countObjectProperties }

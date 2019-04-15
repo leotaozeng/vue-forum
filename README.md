@@ -39,6 +39,10 @@
 1. Route protection is essential in any application.
 2. A navigation guard acts as a middleware that can protect a route component.
 3. A common need is to protect specific routes from guests.
+4. Component-less routes are routes that don't use a component.
+
+### Vuex
+1. Highly recommend using namespaced modules from the early stages of application
 
 ### Form
 1. Wrap form's data in a form object.

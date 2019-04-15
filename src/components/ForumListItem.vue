@@ -15,7 +15,7 @@
     </div>
 
     <div class="last-thread">
-      <img class="avatar" src="https://i.imgur.com/WPSrfGm.jpg" alt>
+      <img class="avatar" :src="user.avatar" alt="This is the user's avatar">
 
       <div class="last-thread-details">
         <a v-if="thread" href="thread.html">{{ thread.title }}</a>
@@ -33,7 +33,7 @@
 <script>
 import AppDate from '@/components/AppDate'
 import { countObjectProperties } from '@/utils'
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -47,13 +47,11 @@ export default {
     }
   },
 
-  methods: {
-    // the mapActions helper
-    ...mapActions(['fetchThreads', 'fetchUser'])
-  },
-
   computed: {
-    ...mapState(['threads', 'users']),
+    ...mapState({
+      threads: state => state.threads.items,
+      users: state => state.users.items
+    }),
 
     threadsCount () {
       return countObjectProperties(this.forum.threads)

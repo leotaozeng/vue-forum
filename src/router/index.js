@@ -33,14 +33,16 @@ const router = new Router({
       path: '/thread/create/:forumId',
       name: 'ThreadCreate',
       component: () => import('@/views/PageThreadCreate'),
-      props: true
+      props: true,
+      meta: { requiresAuth: true }
     },
 
     {
       path: '/thread/edit/:threadId',
       name: 'ThreadEdit',
       component: () => import('@/views/PageThreadEdit'),
-      props: true
+      props: true,
+      meta: { requiresAuth: true }
     },
 
     {
@@ -55,34 +57,41 @@ const router = new Router({
       name: 'Profile',
       component: () => import('@/views/PageProfile'),
       props: false,
-      beforeEnter: (to, from, next) => {
-        if (store.state.authId) {
-          next()
-        } else {
-          next({ name: 'Home' })
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'bar',
+          component: () => import('@/views/PageProfile')
         }
-      }
+      ]
     },
 
     {
       path: '/me/edit',
       name: 'ProfileEdit',
       component: () => import('@/views/PageProfile'),
-      props: {
-        edit: true
-      }
+      props: { edit: true },
+      meta: { requiresAuth: true }
     },
 
     {
       path: '/signup',
       name: 'Signup',
-      component: () => import('@/views/PageSignUp')
+      component: () => import('@/views/PageSignUp'),
+      meta: { requiresGuest: true }
     },
 
     {
       path: '/login',
       name: 'Login',
-      component: () => import('@/views/PageLogIn')
+      component: () => import('@/views/PageLogIn'),
+      meta: { requiresGuest: true }
+    },
+
+    {
+      path: '/logout',
+      name: 'Logout',
+      beforeEnter: (to, from, next) => store.dispatch('logout')
     },
 
     {
@@ -94,8 +103,23 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(`navigating to ${to.name} from ${from.name}`)
-  next()
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    console.log(1, store.state.authId)
+    if (store.state.authId) {
+      next()
+    } else {
+      next({ name: 'Login' })
+    }
+  } else if (to.matched.some(record => record.meta.requiresGuest)) {
+    console.log(2, store.state.authId)
+    if (store.state.authId) {
+      next({ name: 'Home' })
+    } else {
+      next()
+    }
+  } else {
+    next() // make sure to always call next()!
+  }
 })
 
 export default router

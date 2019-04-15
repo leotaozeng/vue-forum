@@ -74,7 +74,10 @@ export default {
   },
 
   computed: {
-    ...mapState(['forums', 'threads']),
+    ...mapState({
+      forums: state => state.forums.items,
+      threads: state => state.threads.items
+    }),
 
     forum () {
       return this.forums[this.forumId]
@@ -89,15 +92,19 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUser'])
+    ...mapActions([
+      'forums/fetchForum',
+      'threads/fetchThreads',
+      'users/fetchUser'
+    ])
   },
 
   created () {
-    this.fetchForum({ id: this.forumId })
-      .then(forum => this.fetchThreads({ ids: forum.threads }))
+    this['forums/fetchForum']({ id: this.forumId })
+      .then(forum => this['threads/fetchThreads']({ ids: forum.threads }))
       .then(threads =>
         Promise.all(
-          threads.map(thread => this.fetchUser({ id: thread.userId }))
+          threads.map(thread => this['users/fetchUser']({ id: thread.userId }))
         )
       )
       .then(this.asyncDataStatus_fetched)

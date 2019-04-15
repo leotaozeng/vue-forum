@@ -4,7 +4,7 @@ import App from '@/App.vue'
 import router from '@/router/index'
 import store from '@/store/index'
 import AppDate from '@/components/AppDate'
-import '../firebase.config'
+import '@/firebase.config'
 
 Vue.use(Vuelidate)
 Vue.component('AppDate', AppDate)

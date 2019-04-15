@@ -39,14 +39,14 @@
               </li>
 
               <li class="dropdown-menu-item">
-                <a @click.prevent="logout" title="Log out of your account">Log out</a>
+                <router-link :to="{name: 'Logout'}" title="Log out of your account">Log out</router-link>
               </li>
             </ul>
           </div>
         </li>
 
         <li class="navbar-item">
-          <a @click.prevent="logout" title="Log out of your account">Log out</a>
+          <router-link :to="{name: 'Logout'}" title="Log out of your account">Log out</router-link>
         </li>
       </ul>
 
@@ -74,8 +74,8 @@
           <a href="thread.html">Thread</a>
         </li>
         <!-- Show these option only on mobile-->
-        <li class="navbar-item mobile-only">
-          <a href="profile.html">My Profile</a>
+        <li class="navbar-item">
+          <router-link :to="{name: 'Profile'}">My Profile</router-link>
         </li>
         <li class="navbar-item mobile-only">
           <a href="#">Logout</a>
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -96,8 +96,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['logout']),
-
     switchDropdownStatus () {
       this.userDropDownOpen = !this.userDropDownOpen
     }
@@ -105,7 +103,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      user: 'authUser'
+      user: 'auth/authUser'
     })
   }
 }

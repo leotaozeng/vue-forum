@@ -25,7 +25,7 @@
       </form>
 
       <div class="push-top text-center">
-        <button class="btn-red btn-xsmall" @click="signinWithGoogle">
+        <button class="btn-red btn-xsmall" @click="loginWithGoogle">
           <i class="fa fa-google fa-btn"></i>Log In with Google
         </button>
       </div>
@@ -56,7 +56,7 @@ export default {
         .then(user => this.$router.push({ name: 'Home' }))
     },
 
-    signinWithGoogle () {
+    loginWithGoogle () {
       this.signInWithGoogle()
         .then(user => this.$router.push({ name: 'Home' }))
     }

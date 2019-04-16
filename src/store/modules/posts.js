@@ -65,9 +65,9 @@ export default {
         })
       }),
 
-    fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'posts' }),
+    fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'posts' }, { root: true }),
 
-    fetchPosts: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'posts' })
+    fetchPosts: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'posts' }, { root: true })
   },
 
   getters: {}

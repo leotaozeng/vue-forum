@@ -63,7 +63,10 @@ export default {
       users: state => state.users.items
     }),
 
-    ...mapGetters(['userPostsCount', 'userThreadsCount']),
+    ...mapGetters({
+      userPostsCount: 'users/userPostsCount',
+      userThreadsCount: 'users/userThreadsCount'
+    }),
 
     user () {
       return this.users[this.post.userId]

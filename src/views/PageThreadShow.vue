@@ -22,7 +22,12 @@
 
     <PostList :posts="threadPosts"/>
 
-    <PostEditor v-if="authId" :threadId="threadId"/>
+    <PostEditor v-if="authUser" :threadId="threadId"/>
+
+    <div v-else class="text-center" style="margin-bottom: 50px;">
+      <router-link :to="{ name: 'Login'}">Log in</router-link> or
+      <router-link :to="{ name: 'Signup'}">Sign up</router-link> to post a reply.
+    </div>
   </div>
 </template>
 
@@ -49,9 +54,16 @@ export default {
   },
 
   computed: {
-    ...mapState(['threads', 'posts', 'users', 'authId']),
+    ...mapState({
+      threads: state => state.threads.items,
+      posts: state => state.posts.items,
+      users: state => state.users.items
+    }),
 
-    ...mapGetters(['threadRepliesCount']),
+    ...mapGetters({
+      threadRepliesCount: 'threads/threadRepliesCount',
+      authUser: 'auth/authUser'
+    }),
 
     thread () {
       return this.threads[this.threadId]
@@ -85,7 +97,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchThread', 'fetchUser', 'fetchPost', 'fetchPosts'])
+    ...mapActions({
+      fetchThread: 'threads/fetchThread',
+      fetchUser: 'users/fetchUser',
+      fetchPosts: 'posts/fetchPosts'
+    })
   },
 
   beforeCreate () {

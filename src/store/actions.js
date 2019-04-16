@@ -1,6 +1,10 @@
 import { database } from '../firebase.config.js'
 
 export default {
+  changeShowPageStatus: ({ commit }, status) => {
+    commit('SET_SHOW_PAGE', status)
+  },
+
   fetchItem: ({ state, commit }, { id, resource }) =>
     new Promise((resolve, reject) =>
       database

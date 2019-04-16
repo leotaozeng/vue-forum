@@ -25,7 +25,7 @@ export default {
         const thread = {}
         const post = {}
 
-        thread.contributors = state.authId
+        thread.contributors = rootState.auth.authId
         thread.firstPostId = postId
         thread.forumId = forumId
         thread.lastPostId = postId
@@ -36,12 +36,12 @@ export default {
 
         thread.publishedAt = Math.floor(Date.now() / 1000)
         thread.title = title
-        thread.userId = state.authId
+        thread.userId = rootState.auth.authId
 
         post.publishedAt = Math.floor(Date.now() / 1000)
         post.text = text
         post.threadId = threadId
-        post.userId = state.authId
+        post.userId = rootState.auth.authId
 
         var updates = {}
         updates[`/threads/${threadId}`] = thread
@@ -53,14 +53,14 @@ export default {
 
         database.ref().update(updates).then(() => {
           // Update post.
-          commit('SET_ITEM', { resource: 'threads', id: threadId, item: thread })
-          commit('ADD_THREAD_TO_FORUM', { parentId: forumId, childId: threadId })
-          commit('ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId })
+          commit('SET_ITEM', { resource: 'threads', id: threadId, item: thread }, { root: true })
+          commit('forums/ADD_THREAD_TO_FORUM', { parentId: forumId, childId: threadId }, { root: true })
+          commit('users/ADD_THREAD_T0_USER', { parentId: thread.userId, childId: threadId }, { root: true })
 
           // Update thread.
-          commit('SET_ITEM', { resource: 'posts', id: postId, item: post })
+          commit('SET_ITEM', { resource: 'posts', id: postId, item: post }, { root: true })
           commit('ADD_POST_TO_THREAD', { parentId: threadId, childId: postId })
-          commit('ADD_POST_TO_USER', { parentId: post.userId, childId: postId })
+          commit('users/ADD_POST_TO_USER', { parentId: post.userId, childId: postId }, { root: true })
 
           resolve(state.items[threadId])
         })

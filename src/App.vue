@@ -4,9 +4,10 @@
 
     <div class="container">
       <!-- special component -->
-      <transition name="fade">
+      <!-- <transition name="fade">
         <router-view v-show="showPage" v-on:ready="pageReady(true)"></router-view>
-      </transition>
+      </transition> -->
+      <router-view v-show="showPage" v-on:ready="pageReady(true)"></router-view>
 
       <AppSpinner v-show="!showPage"/>
     </div>
@@ -44,11 +45,11 @@ export default {
     })
     NProgress.start()
 
-    // this.$router.beforeEach((to, from, next) => {
-    //   NProgress.start()
-    //   this.showPage = false
-    //   next()
-    // })
+    this.$router.beforeEach((to, from, next) => {
+      NProgress.start()
+      this.showPage = false
+      next()
+    })
   }
 }
 </script>

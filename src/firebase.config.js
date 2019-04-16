@@ -1,5 +1,4 @@
 import firebase from 'firebase'
-import store from '@/store'
 
 // Initialize Firebase.
 const config = {
@@ -11,19 +10,10 @@ const config = {
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID
 }
 const app = firebase.initializeApp(config)
-const auth = app.auth()
-// Get a reference to the database service.
-const database = app.database()
-// Create an instance of the Google provider object.
-const GoogleAuthProvider = new firebase.auth.GoogleAuthProvider()
 
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    store.dispatch('fetchAuthUser', { id: user.uid })
-  }
-  // } else {
-  //   store.dispatch({ type: 'fetchUser', id: store.state.authId })
-  // }
-})
+const auth = app.auth()
+const database = app.database()
+
+const GoogleAuthProvider = new firebase.auth.GoogleAuthProvider()
 
 export { auth, database, GoogleAuthProvider }

@@ -26,7 +26,9 @@ export default {
   },
 
   computed: {
-    ...mapState(['categories']),
+    ...mapState({
+      categories: state => state.categories.items
+    }),
 
     category () {
       return this.categories[this.categoryId]
@@ -34,13 +36,31 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchCategory', 'fetchForums'])
+    ...mapActions({
+      fetchCategory: 'categories/fetchCategory',
+      fetchForums: 'forums/fetchForums'
+    })
   },
 
   created () {
     // action
     this.fetchCategory({ id: this.categoryId })
       .then(category => this.fetchForums({ ids: category.forums }))
+      .then(forums =>
+        Promise.all(forums.map(forum => {
+          if (forum.threads) {
+            const threads = Object.keys(forum.threads)
+            return this.$store.dispatch('threads/fetchThread', { id: threads[0] })
+          }
+        }))
+      )
+      .then((threads) => {
+        Promise.all(threads.map((thread) => {
+          if (thread) {
+            return this.$store.dispatch('users/fetchUser', { id: thread.userId })
+          }
+        }))
+      })
       .then(this.asyncDataStatus_fetched)
   }
 }

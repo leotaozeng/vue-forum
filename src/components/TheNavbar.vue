@@ -1,7 +1,7 @@
 <template>
   <header class="header" id="header">
     <router-link :to="{name: 'Home'}" class="logo">
-      <img src="../assets/images/svg/vueschool-logo.svg">
+      <img src="../assets/images/svg/vueschool-logo.svg" alt="The Vue Forum logo">
     </router-link>
 
     <!-- Show these option only on mobile-->
@@ -14,7 +14,7 @@
 
     <!-- use .navbar-open to open nav -->
     <nav class="navbar">
-      <ul v-if="user">
+      <ul v-if="authUser">
         <li class="navbar-user">
           <a @click="switchDropdownStatus">
             <img class="avatar-small" :src="user.avatar" :alt="user.username">
@@ -48,6 +48,19 @@
         <li class="navbar-item">
           <router-link :to="{name: 'Logout'}" title="Log out of your account">Log out</router-link>
         </li>
+
+        <li class="navbar-item">
+          <router-link :to="{ name: 'Home'}">Home</router-link>
+        </li>
+
+        <!-- Show these options only on mobile -->
+        <li class="navbar-item mobile-only">
+          <router-link :to="{name: 'Profile'}">My Profile</router-link>
+        </li>
+
+        <li class="navbar-item mobile-only">
+          <router-link :to="{name: 'Logout'}">Log out</router-link>
+        </li>
       </ul>
 
       <ul v-else>
@@ -59,34 +72,12 @@
           <router-link :to="{ name: 'Signup' }">Sign up</router-link>
         </li>
       </ul>
-
-      <ul>
-        <li class="navbar-item">
-          <router-link :to="{ name: 'Home'}">Home</router-link>
-        </li>
-        <li class="navbar-item">
-          <a href="category.html">Category</a>
-        </li>
-        <li class="navbar-item">
-          <a href="forum.html">Forum</a>
-        </li>
-        <li class="navbar-item">
-          <a href="thread.html">Thread</a>
-        </li>
-        <!-- Show these option only on mobile-->
-        <li class="navbar-item">
-          <router-link :to="{name: 'Profile'}">My Profile</router-link>
-        </li>
-        <li class="navbar-item mobile-only">
-          <a href="#">Logout</a>
-        </li>
-      </ul>
     </nav>
   </header>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -96,6 +87,10 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      logout: 'auth/logout'
+    }),
+
     switchDropdownStatus () {
       this.userDropDownOpen = !this.userDropDownOpen
     }
@@ -103,7 +98,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      user: 'auth/authUser'
+      authUser: 'auth/authUser'
     })
   }
 }

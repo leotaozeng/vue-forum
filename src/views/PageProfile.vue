@@ -32,10 +32,12 @@ export default {
   },
 
   computed: {
-    ...mapState(['posts']),
+    ...mapState({
+      posts: state => state.posts.items
+    }),
 
     ...mapGetters({
-      user: 'authUser'
+      user: 'auth/authUser'
     }),
 
     userPosts () {

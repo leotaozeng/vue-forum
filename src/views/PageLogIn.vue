@@ -1,8 +1,8 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <form @submit.prevent="login" class="card card-form">
-        <h1 class="text-center">Log In to Vue Forum</h1>
+      <form @submit.prevent="loginWithEmailAndPwd" class="card card-form">
+        <h1 class="text-center">Log Into Vue Forum</h1>
 
         <div class="form-group">
           <label for="email">Email address</label>
@@ -15,7 +15,7 @@
         </div>
 
         <div class="push-top">
-          <button type="submit" class="btn-blue btn-block">Log In</button>
+          <button type="submit" class="btn-blue btn-block">Log in</button>
         </div>
 
         <div class="push-top text-center">
@@ -47,18 +47,27 @@ export default {
   },
 
   methods: {
-    ...mapActions(['signInWithEmailAndPassword', 'signInWithGoogle']),
+    ...mapActions({
+      signInWithEmailAndPassword: 'auth/signInWithEmailAndPassword',
+      signInWithGoogle: 'auth/signInWithGoogle'
+    }),
 
-    login () {
+    loginWithEmailAndPwd () {
       const { email, password } = this.form
 
-      this.signInWithEmailAndPassword({ email, password })
-        .then(user => this.$router.push({ name: 'Home' }))
+      this.signInWithEmailAndPassword({ email, password }).then(() =>
+        this.successRedirect()
+      )
     },
 
     loginWithGoogle () {
-      this.signInWithGoogle()
-        .then(user => this.$router.push({ name: 'Home' }))
+      this.signInWithGoogle().then(() => this.successRedirect())
+    },
+
+    successRedirect () {
+      const redirect = this.$route.query.redirect || { name: 'Home' }
+
+      this.$router.push(redirect)
     }
   },
 

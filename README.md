@@ -6,6 +6,10 @@
 5. <a href="https://firebase.google.com/docs/auth/web/google-signin">Authenticate Using Google Sign-In with JavaScript</a>
 
 ## Notes:
+### Forum:
+1. The major ingredients of a forum are the threads, the posts and the users.
+2. A thread is a stream of posts 
+
 ### Application Structure:
 1. The src directory contains our application's code.
 2. Main.js is the application's entry file.
@@ -16,7 +20,7 @@
 7. The class selector is way faster than the element selector, because it is more specific.
 8. Keep the logic that alters the state in the parent component.
 
-### Vue
+### Vue:
 1. Each component is a Vue instance.
 9. Each Vue.set is an individual state change.
 10. Create and Update things are usually all together.
@@ -34,19 +38,17 @@
 23. Create a generic action.
 24. Create a generic mutation.
 
-### Vue-Router
+### Vue-Router:
 1. Route protection is essential in any application.
 2. A navigation guard acts as a middleware that can protect a route component.
 3. A common need is to protect specific routes from guests.
 4. Component-less routes are routes that don't use a component.
 
-### Vuex
+### Vuex:
 1. Highly recommend using namespaced modules from the early stages of application
+2. Single Source of Truth.
+3. Useful Library of Actions, Mutations, Getters.
+4. It's a best practice to have our actions call mutations which update our state directly.
 
-### Form
+### Form:
 1. Wrap form's data in a form object.
-
-### Vuex provides:
-1. Single Source of Truth.
-2. Useful Library of Actions, Mutations, Getters.
-3. It's a best practice to have our actions call mutations which update our state directly.

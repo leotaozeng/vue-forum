@@ -47,10 +47,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'userPostsCount',
-      'userThreadsCount'
-    ])
+    ...mapGetters({
+      userPostsCount: 'users/userPostsCount',
+      userThreadsCount: 'users/userThreadsCount'
+    })
   }
 }
 </script>

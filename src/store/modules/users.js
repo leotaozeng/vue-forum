@@ -18,6 +18,10 @@ export default {
   },
 
   actions: {
+    fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'users' }, { root: true }),
+
+    fetchUsers: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'users' }, { root: true }),
+
     createUser: ({ state, commit, rootState }, { id, email, name, username, avatar = null }) =>
       new Promise((resolve, reject) => {
         const user = {}
@@ -31,18 +35,13 @@ export default {
         user.usernameLower = username.toLowerCase()
 
         database.ref(`users/${id}`).set(user).then(() => {
-          commit('SET_ITEM', { resource: 'users', id, item: user })
-          // commit('SET_AUTH_USER', id)
+          commit('SET_ITEM', { resource: 'users', id, item: user }, { root: true })
 
-          resolve(state.users[id])
+          resolve(state.items[id])
         })
       }),
 
-    updateUser: ({ commit }, user) => commit('SET_USER', { id: user['.key'], item: user }),
-
-    fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'users' }, { root: true }),
-
-    fetchUsers: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'users' }, { root: true })
+    updateUser: ({ commit }, user) => commit('SET_USER', { id: user['.key'], item: user })
   },
 
   getters: {

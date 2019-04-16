@@ -41,7 +41,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchThread', 'fetchPost', 'updateThread']),
+    ...mapActions({
+      fetchThread: 'threads/fetchThread',
+      updateThread: 'threads/updateThread',
+      fetchPost: 'posts/fetchPost'
+    }),
 
     update ({ title, text }) {
       if (this.hasUnsavedChanges) {
@@ -62,7 +66,10 @@ export default {
   },
 
   computed: {
-    ...mapState(['threads', 'posts']),
+    ...mapState({
+      threads: state => state.threads.items,
+      posts: state => state.posts.items
+    }),
 
     thread () {
       return this.threads[this.threadId]

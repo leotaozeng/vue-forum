@@ -91,7 +91,11 @@ const router = new Router({
     {
       path: '/logout',
       name: 'Logout',
-      beforeEnter: (to, from, next) => store.dispatch('logout')
+      beforeEnter: (to, from, next) => {
+        console.log('logout')
+        store.dispatch('auth/logout').then(() => next({ name: 'Home' }))
+      },
+      meta: { requiresAuth: true }
     },
 
     {
@@ -103,23 +107,25 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    console.log(1, store.state.authId)
-    if (store.state.authId) {
-      next()
+  console.log(to, from)
+  store.dispatch('auth/initAuthentication').then(user => {
+    console.log(user)
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (user) {
+        next()
+      } else {
+        next({ name: 'Login', query: { redirect: to.path } })
+      }
+    } else if (to.matched.some(record => record.meta.requiresGuest)) {
+      if (user) {
+        next({ name: 'Home' })
+      } else {
+        next()
+      }
     } else {
-      next({ name: 'Login' })
+      next() // make sure to always call next()!
     }
-  } else if (to.matched.some(record => record.meta.requiresGuest)) {
-    console.log(2, store.state.authId)
-    if (store.state.authId) {
-      next({ name: 'Home' })
-    } else {
-      next()
-    }
-  } else {
-    next() // make sure to always call next()!
-  }
+  })
 })
 
 export default router

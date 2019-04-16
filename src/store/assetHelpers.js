@@ -9,7 +9,7 @@ const makeAppendChildToParentMutation = ({ parent, child }) => {
   return (state, { parentId, childId }) => {
     // Can't use a variable after the dot.
     // Find the parent resource in the state.
-    var resource = state[parent].items[parentId] // user.name === user['name']
+    var resource = state.items[parentId] // user.name === user['name']
 
     if (!resource[child]) {
       Vue.set(resource, child, [])

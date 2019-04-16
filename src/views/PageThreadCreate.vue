@@ -36,10 +36,14 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchForum', 'createThread']),
+    ...mapActions({
+      fetchForum: 'forums/fetchForum',
+      createThread: 'threads/createThread'
+    }),
 
     publish ({ title, text }) {
-      if (this.isNotEmpty) {
+      // title and content all must be not empty
+      if (this.hasNoEmpty) {
         this.createThread({ forumId: this.forumId, title, text }).then(
           thread => {
             this.published = true
@@ -60,13 +64,15 @@ export default {
   },
 
   computed: {
-    ...mapState(['forums']),
+    ...mapState({
+      forums: state => state.forums.items
+    }),
 
     forum () {
       return this.forums[this.forumId]
     },
 
-    isNotEmpty () {
+    hasNoEmpty () {
       const { title, content } = this.$refs.editor.form
 
       return title && content

@@ -17,9 +17,9 @@
       <ul v-if="authUser">
         <li class="navbar-user">
           <a @click="switchDropdownStatus">
-            <img class="avatar-small" :src="user.avatar" :alt="user.username">
+            <img class="avatar-small" :src="authUser.avatar" :alt="authUser.username">
             <span>
-              {{ user.name }}
+              {{ authUser.name }}
               <img
                 class="icon-profile"
                 src="../assets/images/svg/arrow-profile.svg"
@@ -49,7 +49,7 @@
           <router-link :to="{name: 'Logout'}" title="Log out of your account">Log out</router-link>
         </li>
 
-        <li class="navbar-item">
+        <li class="navbar-item mobile-only">
           <router-link :to="{ name: 'Home'}">Home</router-link>
         </li>
 
@@ -65,11 +65,11 @@
 
       <ul v-else>
         <li class="navbar-item">
-          <router-link :to="{ name: 'Login' }">Log in</router-link>
+          <router-link :to="{ name: 'Login', query: { redirect: $route.path } }">Log in</router-link>
         </li>
 
         <li class="navbar-item">
-          <router-link :to="{ name: 'Signup' }">Sign up</router-link>
+          <router-link :to="{ name: 'Signup', query: { redirect: $route.path } }">Sign up</router-link>
         </li>
       </ul>
     </nav>

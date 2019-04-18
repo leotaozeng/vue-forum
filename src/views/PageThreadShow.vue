@@ -9,7 +9,7 @@
         tag="button"
       >Edit Thread</router-link>
     </h1>
-
+    <router-link :to="{name: 'ThreadShow', params: { threadId: '-KvgL0BNLNz4cJhQjdP4' }}">Random thread</router-link>
     <p>
       By
       <a href="#" class="link-unstyled">{{ user.name }}</a>,
@@ -25,8 +25,8 @@
     <PostEditor v-if="authUser" :threadId="threadId"/>
 
     <div v-else class="text-center" style="margin-bottom: 50px;">
-      <router-link :to="{ name: 'Login'}">Log in</router-link> or
-      <router-link :to="{ name: 'Signup'}">Sign up</router-link> to post a reply.
+      <router-link :to="{ name: 'Login', query: { redirect: $route.path } }">Log in</router-link>or
+      <router-link :to="{ name: 'Signup', query: { redirect: $route.path } }">Sign up</router-link>to post a reply.
     </div>
   </div>
 </template>
@@ -110,6 +110,7 @@ export default {
 
   // I can access this.threadId in the following hook
   created () {
+    console.log(1)
     // fetch the thread with this.threadId
     this.fetchThread({ id: this.threadId })
       .then(thread => {

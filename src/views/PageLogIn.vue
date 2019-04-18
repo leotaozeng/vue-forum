@@ -1,7 +1,7 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <form @submit.prevent="loginWithEmailAndPwd" class="card card-form">
+      <form @submit.prevent="login" @keyup.enter="login" class="card card-form">
         <h1 class="text-center">Log Into Vue Forum</h1>
 
         <div class="form-group">
@@ -52,7 +52,7 @@ export default {
       signInWithGoogle: 'auth/signInWithGoogle'
     }),
 
-    loginWithEmailAndPwd () {
+    login () {
       const { email, password } = this.form
 
       this.signInWithEmailAndPassword({ email, password }).then(() =>
@@ -65,6 +65,8 @@ export default {
     },
 
     successRedirect () {
+      // The $route is the active route
+      // If the query param is not defined, set the value of redirect to a default path
       const redirect = this.$route.query.redirect || { name: 'Home' }
 
       this.$router.push(redirect)

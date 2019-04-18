@@ -1,11 +1,10 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-// import NProgress from 'nprogress'
-import store from '@/store/index'
+import VueRouter from 'vue-router'
+import store from 'Store/index'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-const router = new Router({
+const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -16,17 +15,33 @@ const router = new Router({
     },
 
     {
-      path: '/category/:categoryId',
-      name: 'Category',
-      component: () => import('@/views/PageCategory'),
-      props: true
+      path: '/signup',
+      name: 'Signup',
+      component: () => import('@/views/PageSignup'),
+      meta: { requiresGuest: true }
     },
 
     {
-      path: '/forum/:forumId',
-      name: 'Forum',
-      component: () => import('@/views/PageForum'),
-      props: true
+      path: '/login',
+      name: 'Login',
+      component: () => import('@/views/PageLogin'),
+      meta: { requiresGuest: true }
+    },
+
+    {
+      path: '/me',
+      name: 'Profile',
+      component: () => import('@/views/PageProfile'),
+      props: false,
+      meta: { requiresAuth: true }
+    },
+
+    {
+      path: '/me/edit',
+      name: 'ProfileEdit',
+      component: () => import('@/views/PageProfile'),
+      props: { edit: true },
+      meta: { requiresAuth: true }
     },
 
     {
@@ -46,6 +61,20 @@ const router = new Router({
     },
 
     {
+      path: '/category/:categoryId',
+      name: 'Category',
+      component: () => import('@/views/PageCategory'),
+      props: true
+    },
+
+    {
+      path: '/forum/:forumId',
+      name: 'Forum',
+      component: () => import('@/views/PageForum'),
+      props: true
+    },
+
+    {
       path: '/thread/:threadId',
       name: 'ThreadShow',
       component: () => import('@/views/PageThreadShow'),
@@ -53,49 +82,13 @@ const router = new Router({
     },
 
     {
-      path: '/me',
-      name: 'Profile',
-      component: () => import('@/views/PageProfile'),
-      props: false,
-      meta: { requiresAuth: true },
-      children: [
-        {
-          path: 'bar',
-          component: () => import('@/views/PageProfile')
-        }
-      ]
-    },
-
-    {
-      path: '/me/edit',
-      name: 'ProfileEdit',
-      component: () => import('@/views/PageProfile'),
-      props: { edit: true },
-      meta: { requiresAuth: true }
-    },
-
-    {
-      path: '/signup',
-      name: 'Signup',
-      component: () => import('@/views/PageSignUp'),
-      meta: { requiresGuest: true }
-    },
-
-    {
-      path: '/login',
-      name: 'Login',
-      component: () => import('@/views/PageLogIn'),
-      meta: { requiresGuest: true }
-    },
-
-    {
       path: '/logout',
       name: 'Logout',
+      meta: { requiresAuth: true },
       beforeEnter: (to, from, next) => {
         console.log('logout')
         store.dispatch('auth/logout').then(() => next({ name: 'Home' }))
-      },
-      meta: { requiresAuth: true }
+      }
     },
 
     {
@@ -109,21 +102,22 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   console.log(to, from)
   store.dispatch('auth/initAuthentication').then(user => {
-    console.log(user)
     if (to.matched.some(record => record.meta.requiresAuth)) {
+      console.log(user)
       if (user) {
         next()
       } else {
-        next({ name: 'Login', query: { redirect: to.path } })
+        if (to.path.includes('logout')) {
+          next({ name: 'Login' })
+        } else {
+          // Query parameter
+          next({ name: 'Login', query: { redirect: to.path } })
+        }
       }
     } else if (to.matched.some(record => record.meta.requiresGuest)) {
-      if (user) {
-        next({ name: 'Home' })
-      } else {
-        next()
-      }
+      user ? next({ name: 'Home' }) : next()
     } else {
-      next() // make sure to always call next()!
+      next() // Make sure to always call next()!
     }
   })
 })

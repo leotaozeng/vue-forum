@@ -1,7 +1,7 @@
 <template>
   <div v-if="user && post" class="post">
     <div class="user-info">
-      <a href="#" class="user-name">{{ user.name }}</a>
+      <router-link to="#" class="user-name">{{ user.name }}</router-link>
 
       <a href="#">
         <img class="avatar-large" :src="user.avatar" alt="avatar">
@@ -18,19 +18,15 @@
       <template v-else>
         <p>{{ post.text }}</p>
 
-        <a
-          @click="editing = true"
-          style="margin-left: auto;"
-          class="link-unstyled"
-          title="Make a change"
-        >
+        <span v-if="authUser" @click="editing = true" class="edit-icon">
           <i class="fa fa-pencil"></i>
-        </a>
+        </span>
       </template>
     </div>
 
     <div class="post-date text-faded">
       <div v-if="post.edited" class="edition-info">edited</div>
+
       <AppDate :timestamp="post.publishedAt"/>
     </div>
   </div>
@@ -65,7 +61,8 @@ export default {
 
     ...mapGetters({
       userPostsCount: 'users/userPostsCount',
-      userThreadsCount: 'users/userThreadsCount'
+      userThreadsCount: 'users/userThreadsCount',
+      authUser: 'auth/authUser'
     }),
 
     user () {
@@ -82,3 +79,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.edit-icon {
+  height: 16px;
+  margin-left: auto;
+  line-height: normal;
+  cursor: pointer;
+}
+</style>

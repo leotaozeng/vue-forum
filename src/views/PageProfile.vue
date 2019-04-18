@@ -1,19 +1,19 @@
 <template>
-  <div v-if="user" class="flex-grid">
-    <UserProfileCard v-if="!edit" :user="user"/>
+  <div v-if="authUser" class="flex-grid">
+    <UserProfileCard v-if="!edit" :user="authUser"/>
 
-    <UserProfileCardEditor v-else :user="user"/>
+    <UserProfileCardEditor v-else :user="authUser"/>
 
     <div class="col-7 push-top">
       <div class="profile-header">
-        <span class="text-lead">{{ user.username }}'s recent activity</span>
+        <span class="text-lead">{{ authUser.username }}'s recent activity</span>
 
         <a href="#">See only started threads?</a>
       </div>
 
       <hr>
 
-      <PostList :posts="userPosts"/>
+      <PostList :posts="userPosts({ resourceId: 'userId', id: authUser['.key'] })"/>
     </div>
   </div>
 </template>
@@ -22,9 +22,12 @@
 import PostList from '@/components/PostList'
 import UserProfileCard from '@/components/UserProfileCard'
 import UserProfileCardEditor from '@/components/UserProfileCardEditor'
-import { mapState, mapGetters } from 'vuex'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
+  mixins: [asyncDataStatus],
+
   props: {
     edit: {
       type: Boolean
@@ -37,18 +40,15 @@ export default {
     }),
 
     ...mapGetters({
-      user: 'auth/authUser'
-    }),
+      authUser: 'auth/authUser',
+      userPosts: 'posts/posts'
+    })
+  },
 
-    userPosts () {
-      if (this.user.posts) {
-        return Object.values(this.posts).filter(
-          post => post.userId === this.user['.key']
-        )
-      } else {
-        return []
-      }
-    }
+  methods: {
+    ...mapActions({
+      fetchPosts: 'posts/fetchPosts'
+    })
   },
 
   components: {
@@ -57,8 +57,14 @@ export default {
     UserProfileCardEditor
   },
 
-  beforeUpdate () {
-    this.$emit('ready')
+  created () {
+    if (this.authUser.posts) {
+      this.fetchPosts({ ids: this.authUser.posts }).then(
+        this.asyncDataStatus_fetched
+      )
+    } else {
+      this.asyncDataStatus_fetched()
+    }
   }
 }
 </script>

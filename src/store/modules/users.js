@@ -48,11 +48,11 @@ export default {
     // we can't pass arguments to getters by default
     // dynamic getter
     userThreadsCount: state => {
-      return id => {
-        return countObjectProperties(state.items[id].threads)
-      }
+      return id => countObjectProperties(state.items[id].threads)
     },
 
-    userPostsCount: state => id => countObjectProperties(state.items[id].posts)
+    userPostsCount: state => {
+      return id => countObjectProperties(state.items[id].posts)
+    }
   }
 }

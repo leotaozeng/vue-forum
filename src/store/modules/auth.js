@@ -27,13 +27,17 @@ export default {
 
   actions: {
     fetchAuthUser: ({ dispatch, commit }, { id }) => {
-      console.log(1)
-      // Here is asynchronous so it might take some time to resolve
-      return database.ref('users').child(id).once('value').then(snapshot => {
-        if (snapshot.exists()) {
+      return new Promise((resolve, reject) => {
+        // Here is asynchronous so it might take some time to resolve
+        database.ref(`users/${id}`).once('value').then(snapshot => {
+          if (snapshot.exists()) {
           // store authenticated user's information in the vuex and then set authId
-          dispatch('users/fetchUser', { id }, { root: true }).then(() => commit('SET_AUTH_USER', id))
-        }
+            dispatch('users/fetchUser', { id }, { root: true }).then(() => {
+              commit('SET_AUTH_USER', id)
+              resolve(snapshot.val())
+            })
+          }
+        })
       })
     },
 
@@ -41,7 +45,8 @@ export default {
       return new Promise((resolve, reject) => {
         const unsubscrive = auth.onAuthStateChanged((user) => {
           if (user) {
-            dispatch('fetchAuthUser', { id: user.uid }).then(() => resolve(user))
+            console.log(1)
+            dispatch('fetchAuthUser', { id: user.uid }).then((dbUser) => resolve(dbUser))
           } else {
             resolve(null)
           }

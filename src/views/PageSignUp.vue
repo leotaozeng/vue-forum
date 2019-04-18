@@ -1,7 +1,7 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <form @submit.prevent="signup" class="card card-form">
+      <form @submit.prevent="signup" @keyup.enter="signup" class="card card-form">
         <h1 class="text-center">Get Started for Free</h1>
 
         <div class="form-group">
@@ -138,11 +138,10 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'signUpUserWithEmailAndPassword',
-      'signInWithGoogle',
-      'createUser'
-    ]),
+    ...mapActions({
+      signUpUserWithEmailAndPassword: 'auth/signUpUserWithEmailAndPassword',
+      createUser: 'users/createUser'
+    }),
 
     signup () {
       const { name, username, email, password, avatar } = this.form
@@ -150,7 +149,7 @@ export default {
       this.$v.form.$touch()
 
       if (!this.$v.form.$invalid) {
-        console.log('error')
+        alert('error')
       } else {
         // don't couple the component to Firebae
         this.signUpUserWithEmailAndPassword({ email, password })
@@ -166,13 +165,17 @@ export default {
               avatar
             })
           })
-          .then(user => this.$router.push({ name: 'Home' }))
+          .then(user => this.successRedirect())
           .catch(error => console.log(error))
       }
     },
 
-    signUpWithGoogle () {
-      this.signInWithGoogle().then(user => this.$router.push({ name: 'Home' }))
+    successRedirect () {
+      // The $route is the active route
+      // If the query param is not defined, set the value of redirect to a default path
+      const redirect = this.$route.query.redirect || { name: 'Home' }
+
+      this.$router.push(redirect)
     }
   },
 

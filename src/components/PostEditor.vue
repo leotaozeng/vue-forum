@@ -50,7 +50,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(['createPost', 'updatePost']),
+    ...mapActions({
+      createPost: 'posts/createPost',
+      updatePost: 'posts/updatePost'
+    }),
 
     save () {
       this.isUpdate ? this.update() : this.create()
@@ -61,6 +64,8 @@ export default {
 
       if (text) {
         this.createPost({ threadId, text }).then(post => (this.text = ''))
+      } else {
+        console.log('Content shouldn\'t be empty')
       }
     },
 

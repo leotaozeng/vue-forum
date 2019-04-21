@@ -92,20 +92,26 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'forums/fetchForum',
-      'threads/fetchThreads',
-      'users/fetchUser'
-    ])
+    ...mapActions({
+      fetchForum: 'forums/fetchForum',
+      fetchThreads: 'threads/fetchThreads',
+      fetchPost: 'posts/fetchPost',
+      fetchUser: 'users/fetchUser'
+    })
   },
 
   created () {
-    this['forums/fetchForum']({ id: this.forumId })
-      .then(forum => this['threads/fetchThreads']({ ids: forum.threads }))
+    this.fetchForum({ id: this.forumId })
+      .then(forum => this.fetchThreads({ ids: forum.threads }))
+      .then(threads => {
+        threads.forEach(thread => this.fetchUser({ id: thread.userId }))
+        return threads
+      })
       .then(threads =>
-        Promise.all(
-          threads.map(thread => this['users/fetchUser']({ id: thread.userId }))
-        )
+        Promise.all(threads.map(thread => this.fetchPost({ id: thread.lastPostId })))
+      )
+      .then(posts =>
+        Promise.all(posts.map(post => this.fetchUser({ id: post.userId })))
       )
       .then(this.asyncDataStatus_fetched)
   }

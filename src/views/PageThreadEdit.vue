@@ -41,11 +41,9 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      fetchThread: 'threads/fetchThread',
-      updateThread: 'threads/updateThread',
-      fetchPost: 'posts/fetchPost'
-    }),
+    ...mapActions('threads', ['fetchThread', 'updateThread']),
+
+    ...mapActions('posts', ['fetchPost']),
 
     update ({ title, text }) {
       if (this.hasUnsavedChanges) {

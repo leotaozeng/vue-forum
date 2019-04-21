@@ -27,4 +27,14 @@ const countObjectProperties = obj => {
   }
 }
 
-export { makeSetItemMutation, makeAppendChildToParentMutation, countObjectProperties }
+const removeEmptyProperties = obj => {
+  const objCopy = { ...obj }
+
+  Object.keys(objCopy).forEach((key) => {
+    ((objCopy[key] === undefined || objCopy[key] === null) && delete objCopy[key])
+  })
+
+  return objCopy
+}
+
+export { makeSetItemMutation, makeAppendChildToParentMutation, countObjectProperties, removeEmptyProperties }

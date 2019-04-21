@@ -36,10 +36,8 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      fetchCategory: 'categories/fetchCategory',
-      fetchForums: 'forums/fetchForums'
-    })
+    ...mapActions('categories', ['fetchCategory']),
+    ...mapActions('forums', ['fetchForums'])
   },
 
   created () {

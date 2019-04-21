@@ -1,6 +1,6 @@
 import { database } from '@/firebase.config'
 import { SET_USER, ADD_POST_TO_USER, ADD_THREAD_T0_USER } from '../mutation-types'
-import { countObjectProperties, makeSetItemMutation, makeAppendChildToParentMutation } from '../assetHelpers'
+import { makeSetItemMutation, makeAppendChildToParentMutation, countObjectProperties, removeEmptyProperties } from '../assetHelpers'
 
 export default {
   namespaced: true,
@@ -41,7 +41,32 @@ export default {
         })
       }),
 
-    updateUser: ({ commit }, user) => commit('SET_USER', { id: user['.key'], item: user })
+    updateUser: ({ commit }, user) =>
+      new Promise((resolve, reject) => {
+        const userData = {
+          avatar: user.avatar,
+          bio: user.bio,
+          email: user.email,
+          name: user.name,
+          posts: user.posts,
+          threads: user.threads,
+          username: user.username,
+          usernameLower: user.username.toLowerCase(),
+          website: user.webiste,
+          location: user.location
+        }
+
+        database.ref(`users/${user['.key']}`).set(removeEmptyProperties(userData), (error) => {
+          if (error) {
+            // The write failed...
+            reject(error)
+          } else {
+            // Data saved successfully!
+            console.log('Set successfully')
+            resolve()
+          }
+        })
+      })
   },
 
   getters: {

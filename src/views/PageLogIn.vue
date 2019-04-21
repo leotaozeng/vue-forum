@@ -47,10 +47,7 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      signInWithEmailAndPassword: 'auth/signInWithEmailAndPassword',
-      signInWithGoogle: 'auth/signInWithGoogle'
-    }),
+    ...mapActions('auth', ['signInWithEmailAndPassword', 'signInWithGoogle']),
 
     login () {
       const { email, password } = this.form

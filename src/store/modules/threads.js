@@ -6,7 +6,7 @@ export default {
   namespaced: true,
 
   state: {
-    items: {} // store.state.threads.items[id]
+    items: {} // store.state.threads.items[id]/all[id]/cached[id]
   },
 
   mutations: {
@@ -66,13 +66,12 @@ export default {
         })
       }),
 
-    updateThread: ({ commit, state, rootState }, { threadId, title, text }) =>
+    updateThread: ({ state, commit, rootState }, { threadId, title, text }) =>
       new Promise((resolve, reject) => {
-        const { posts, authId } = state
         const thread = state.items[threadId]
-        const post = posts[thread.firstPostId]
+        const post = rootState.posts.items[thread.firstPostId]
 
-        const edited = { at: Math.floor(Date.now() / 1000), by: authId }
+        const edited = { at: Math.floor(Date.now() / 1000), by: rootState.auth.authId }
 
         const updates = {}
         updates[`/threads/${threadId}/title`] = title
@@ -81,7 +80,7 @@ export default {
 
         database.ref().update(updates).then(() => {
           commit('SET_THREAD', { id: threadId, item: { ...thread, title } })
-          commit('SET_POST', { id: thread.firstPostId, item: { ...post, text, edited } })
+          commit('posts/SET_POST', { id: thread.firstPostId, item: { ...post, text, edited } }, { root: true })
 
           resolve(state.items[threadId])
         })

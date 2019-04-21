@@ -8,7 +8,7 @@ export default {
   },
 
   actions: {
-    fetchAllCategories: ({ state, commit, rootState }) =>
+    fetchAllCategories: ({ state, commit }) =>
       new Promise((resolve, reject) => {
         database
           .ref('categories')

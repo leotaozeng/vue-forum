@@ -13,9 +13,6 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   strict: true,
-  state: {
-    showPage: false
-  },
   mutations,
   actions,
   modules: {

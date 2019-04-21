@@ -7,7 +7,7 @@
       <!-- <transition name="fade">
         <router-view v-show="showPage" v-on:ready="pageReady(true)"></router-view>
       </transition> -->
-      <router-view v-show="showPage" v-on:ready="pageReady(true)"></router-view>
+      <router-view :key="$route.path" v-show="showPage" v-on:ready="pageReady(true)"></router-view>
 
       <AppSpinner v-show="!showPage"/>
     </div>

@@ -17,10 +17,10 @@
     <div class="activity">
       <p class="replies-count">{{ threadRepliesCount(thread['.key']) }} reply</p>
 
-      <!-- <img
+      <img
         class="avatar-medium"
-        src="http://i0.kym-cdn.com/photos/images/facebook/000/010/934/46623-batman_pikachu_super.png"
-        alt
+        :src="lastPostUser.avatar"
+        alt="avatar"
       >
 
       <div>
@@ -28,8 +28,8 @@
           <a href="profile.html">{{ lastPostUser.name }}</a>
         </p>
 
-        <AppDate v-if="thread" :timestamp="lastPost.publishedAt"/>
-      </div>-->
+        <AppDate :timestamp="lastPost.publishedAt"/>
+      </div>
     </div>
   </div>
 </template>

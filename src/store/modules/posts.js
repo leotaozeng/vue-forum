@@ -78,17 +78,13 @@ export default {
         })
       }),
 
-    updatePost: ({ commit, state }, { postId, text }) =>
+    updatePost: ({ state, commit, rootState }, { postId, text }) =>
       new Promise((resolve, reject) => {
-        const {
-          posts,
-          authId
-        } = state
-        const post = posts[postId]
+        const post = state.items[postId]
 
         const edited = {
           at: Math.floor(Date.now() / 1000),
-          by: authId
+          by: rootState.auth.authId
         }
 
         const updates = {}
@@ -106,7 +102,7 @@ export default {
             }
           })
 
-          resolve(state.posts[postId])
+          resolve(state.items[postId])
         })
       }),
 

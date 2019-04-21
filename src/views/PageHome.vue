@@ -33,6 +33,7 @@ export default {
   // The earlier I instantiate the call
   // the more time it has to resolve before the user sees the page.
   beforeCreate () {
+    console.log('Page Home Before Create')
     this.$store
       .dispatch('categories/fetchAllCategories')
       .then(categories =>

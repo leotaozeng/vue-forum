@@ -110,7 +110,6 @@ export default {
 
   // I can access this.threadId in the following hook
   created () {
-    console.log(1)
     // fetch the thread with this.threadId
     this.fetchThread({ id: this.threadId })
       .then(thread => {

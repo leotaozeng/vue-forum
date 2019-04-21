@@ -11,27 +11,27 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'Home',
-      component: () => import('@/views/PageHome')
+      component: () => import('Views/PageHome')
     },
 
     {
       path: '/signup',
       name: 'Signup',
-      component: () => import('@/views/PageSignup'),
+      component: () => import('Views/PageSignup'),
       meta: { requiresGuest: true }
     },
 
     {
       path: '/login',
       name: 'Login',
-      component: () => import('@/views/PageLogin'),
+      component: () => import('Views/PageLogin'),
       meta: { requiresGuest: true }
     },
 
     {
       path: '/me',
       name: 'Profile',
-      component: () => import('@/views/PageProfile'),
+      component: () => import('Views/PageProfile'),
       props: false,
       meta: { requiresAuth: true }
     },
@@ -39,7 +39,7 @@ const router = new VueRouter({
     {
       path: '/me/edit',
       name: 'ProfileEdit',
-      component: () => import('@/views/PageProfile'),
+      component: () => import('Views/PageProfile'),
       props: { edit: true },
       meta: { requiresAuth: true }
     },
@@ -47,7 +47,7 @@ const router = new VueRouter({
     {
       path: '/thread/create/:forumId',
       name: 'ThreadCreate',
-      component: () => import('@/views/PageThreadCreate'),
+      component: () => import('Views/PageThreadCreate'),
       props: true,
       meta: { requiresAuth: true }
     },
@@ -55,7 +55,7 @@ const router = new VueRouter({
     {
       path: '/thread/edit/:threadId',
       name: 'ThreadEdit',
-      component: () => import('@/views/PageThreadEdit'),
+      component: () => import('Views/PageThreadEdit'),
       props: true,
       meta: { requiresAuth: true }
     },
@@ -63,21 +63,21 @@ const router = new VueRouter({
     {
       path: '/category/:categoryId',
       name: 'Category',
-      component: () => import('@/views/PageCategory'),
+      component: () => import('Views/PageCategory'),
       props: true
     },
 
     {
       path: '/forum/:forumId',
       name: 'Forum',
-      component: () => import('@/views/PageForum'),
+      component: () => import('Views/PageForum'),
       props: true
     },
 
     {
       path: '/thread/:threadId',
       name: 'ThreadShow',
-      component: () => import('@/views/PageThreadShow'),
+      component: () => import('Views/PageThreadShow'),
       props: true
     },
 
@@ -86,7 +86,6 @@ const router = new VueRouter({
       name: 'Logout',
       meta: { requiresAuth: true },
       beforeEnter: (to, from, next) => {
-        console.log('logout')
         store.dispatch('auth/logout').then(() => next({ name: 'Home' }))
       }
     },

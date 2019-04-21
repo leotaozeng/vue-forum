@@ -9,7 +9,7 @@
 
       <div class="form-group">
         <input type="text"
-               v-model="activeUser.usernameLower"
+               v-model="activeUser.username"
                placeholder="Username"
                class="form-input text-lead text-bold">
       </div>
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -94,21 +94,21 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      updateUser: 'users/updateUser'
+    }),
+
     cancel () {
       this.$router.push({ name: 'Profile' })
     },
 
     save () {
-      this.$store.dispatch('updateUser', { ...this.activeUser })
-      this.$router.push({ name: 'Profile' })
+      this.updateUser(this.activeUser).then(() => this.$router.push({ name: 'Profile' }))
     }
   },
 
   computed: {
-    ...mapGetters({
-      userPostsCount: 'users/userPostsCount',
-      userThreadsCount: 'users/userThreadsCount'
-    })
+    ...mapGetters('users', ['userPostsCount', 'userThreadsCount'])
   }
 }
 </script>

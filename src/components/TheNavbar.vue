@@ -16,7 +16,7 @@
     <nav class="navbar">
       <ul v-if="authUser">
         <li class="navbar-user">
-          <a @click="switchDropdownStatus">
+          <a @click.stop="switchDropdownStatus">
             <img class="avatar-small" :src="authUser.avatar" :alt="authUser.username">
             <span>
               {{ authUser.name }}
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -87,18 +87,24 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      logout: 'auth/logout'
-    }),
-
-    switchDropdownStatus () {
-      this.userDropDownOpen = !this.userDropDownOpen
+    switchDropdownStatus (status) {
+      if (typeof status === 'boolean') {
+        this.userDropDownOpen = status
+      } else {
+        this.userDropDownOpen = !this.userDropDownOpen
+      }
     }
   },
 
   computed: {
     ...mapGetters({
       authUser: 'auth/authUser'
+    })
+  },
+
+  created () {
+    document.addEventListener('click', e => {
+      if (this.userDropDownOpen) this.switchDropdownStatus(false)
     })
   }
 }

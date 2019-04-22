@@ -99,18 +99,16 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to, from)
   store.dispatch('auth/initAuthentication').then(user => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-      console.log(user)
       if (user) {
         next()
       } else {
-        if (to.path.includes('logout')) {
+        if (from.name === 'Logout') {
           next({ name: 'Login' })
         } else {
           // Query parameter
-          next({ name: 'Login', query: { redirect: to.path } })
+          next({ name: 'Login', query: { redirect: from.path } })
         }
       }
     } else if (to.matched.some(record => record.meta.requiresGuest)) {

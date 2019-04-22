@@ -40,7 +40,7 @@ export default {
 
   created () {
     NProgress.configure({
-      speed: 350,
+      speed: 300,
       showSpinner: false
     })
     NProgress.start()

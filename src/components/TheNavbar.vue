@@ -65,11 +65,11 @@
 
       <ul v-else>
         <li class="navbar-item">
-          <router-link :to="{ name: 'Login', query: { redirect: $route.path } }">Log in</router-link>
+          <router-link :to="{ name: 'Login', query: hasQuery }">Log in</router-link>
         </li>
 
         <li class="navbar-item">
-          <router-link :to="{ name: 'Signup', query: { redirect: $route.path } }">Sign up</router-link>
+          <router-link :to="{ name: 'Signup', query: hasQuery }">Sign up</router-link>
         </li>
       </ul>
     </nav>
@@ -99,7 +99,11 @@ export default {
   computed: {
     ...mapGetters({
       authUser: 'auth/authUser'
-    })
+    }),
+
+    hasQuery () {
+      return this.$route.name !== 'Home' ? { redirect: this.$route.path } : null
+    }
   },
 
   created () {

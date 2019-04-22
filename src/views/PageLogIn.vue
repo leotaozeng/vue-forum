@@ -35,6 +35,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { required, email, minLength } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -43,6 +44,18 @@ export default {
         email: null,
         password: null
       }
+    }
+  },
+
+  validations: {
+    name: {
+      required,
+      email
+    },
+
+    password: {
+      required,
+      minLength: minLength(6)
     }
   },
 
@@ -59,15 +72,15 @@ export default {
 
     loginWithGoogle () {
       this.signInWithGoogle().then(() => this.successRedirect())
-    },
-
-    successRedirect () {
-      // The $route is the active route
-      // If the query param is not defined, set the value of redirect to a default path
-      const redirect = this.$route.query.redirect || { name: 'Home' }
-
-      this.$router.push(redirect)
     }
+
+    // successRedirect () {
+    //   // The $route is the active route
+    //   // If the query param is not defined, set the value of redirect to a default path
+    //   const redirect = this.$route.query.redirect
+
+    //   this.$router.push(redirect)
+    // }
   },
 
   beforeCreate () {

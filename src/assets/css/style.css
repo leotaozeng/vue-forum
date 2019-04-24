@@ -8,8 +8,8 @@ body {
   box-sizing: border-box;
 }
 
-::-webkit-scrollbar { 
-  display: none; 
+::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 1024px) {
@@ -71,6 +71,7 @@ figcaption {
 .img-round, .avatar, .avatar-xsmall, .avatar-small, .avatar-medium, .avatar-large, .avatar-xlarge {
   border-radius: 50%;
   max-width: 100%;
+  object-fit: cover;
 }
 
 .forum-list {

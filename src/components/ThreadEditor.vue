@@ -2,7 +2,18 @@
   <form @submit.prevent="save">
     <div class="form-group">
       <label for="thread_title">Title:</label>
-      <input type="text" id="thread_title" class="form-input" name="title" v-model="form.title">
+      <input
+        type="text"
+        id="thread_title"
+        class="form-input"
+        name="title"
+        v-model.trim.lazy="form.title"
+        @blur="$v.form.title.$touch()"
+      >
+      <template v-if="$v.form.title.$error">
+        <span v-if="!$v.form.title.required" class="form-error">This field is required</span>
+        <span v-if="!$v.form.title.minLength" class="form-error">The title must be least 10 characters long</span>
+      </template>
     </div>
 
     <div class="form-group">
@@ -13,8 +24,13 @@
         name="content"
         rows="8"
         cols="140"
-        v-model="form.content"
+        v-model.trim.lazy="form.content"
+        @blur="$v.form.content.$touch()"
       ></textarea>
+      <template v-if="$v.form.content.$error">
+        <span v-if="!$v.form.content.required" class="form-error">This field is required</span>
+        <span v-if="!$v.form.content.minLength" class="form-error">The content of the thread must be 40 characters long, Type at least 32 more</span>
+      </template>
     </div>
 
     <div class="btn-group">
@@ -25,6 +41,8 @@
 </template>
 
 <script>
+import { required, minLength } from 'vuelidate/lib/validators'
+
 export default {
   props: {
     title: {
@@ -47,6 +65,20 @@ export default {
     }
   },
 
+  validations: {
+    form: {
+      title: {
+        required,
+        minLength: minLength(10)
+      },
+
+      content: {
+        required,
+        minLength: minLength(32)
+      }
+    }
+  },
+
   computed: {
     isEdit () {
       return this.title ? 'Update' : 'Publish'
@@ -55,9 +87,13 @@ export default {
 
   methods: {
     save () {
-      const { title, content } = this.form
+      this.$v.form.$touch()
 
-      this.$emit('save', { title, text: content })
+      if (this.$v.form.$invalid) {
+        alert('error')
+      } else {
+        this.$emit('save', { title: this.form.title, text: this.form.content })
+      }
     },
 
     cancel () {

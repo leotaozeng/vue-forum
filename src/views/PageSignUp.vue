@@ -1,7 +1,7 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <form @submit.prevent="signup" @keyup.enter="signup" class="card card-form">
+      <form @submit.prevent="signup" @keyup.enter="signup" class="card card-form" autocomplete="off">
         <h1 class="text-center">Get Started for Free</h1>
 
         <div class="form-group">
@@ -29,7 +29,7 @@
           >
           <template v-if="$v.form.username.$error">
             <span v-if="!$v.form.username.required" class="form-error">This field is required</span>
-            <span v-if="!$v.form.username.unique" class="form-error">Sorry! this username is taken</span>
+            <span v-else-if="!$v.form.username.unique" class="form-error">Sorry! this username is taken</span>
           </template>
         </div>
 
@@ -64,7 +64,7 @@
           <template v-if="$v.form.password.$error">
             <span v-if="!$v.form.password.required" class="form-error">This field is required</span>
             <span
-              v-if="!$v.form.password.minLength"
+              v-else-if="!$v.form.password.minLength"
               class="form-error"
             >The password should be at least 6 characters long</span>
           </template>
@@ -106,10 +106,9 @@
 </template>
 
 <script>
-import { database } from '@/firebase.config.js'
 import { mapActions } from 'vuex'
 import { required, email, minLength, url } from 'vuelidate/lib/validators'
-import { Promise } from 'q'
+import { uniqueUsername, uniqueEmail, supportedImageFile, responseOk } from '@/utils/validators.js'
 
 export default {
   data () {
@@ -132,31 +131,13 @@ export default {
 
       username: {
         required,
-        unique (value) {
-          // simulate async call, fail for all logins with even length
-          return new Promise((resolve, reject) => {
-            database
-              .ref('users')
-              .orderByChild('usernameLower')
-              .equalTo(value.toLowerCase())
-              .once('value', snapshot => resolve(!snapshot.exists()))
-          })
-        }
+        uniqueUsername
       },
 
       email: {
         required,
         email,
-        unique (value) {
-          // simulate async call, fail for all logins with even length
-          return new Promise((resolve, reject) => {
-            database
-              .ref('users')
-              .orderByChild('email')
-              .equalTo(value.toLowerCase())
-              .once('value', snapshot => resolve(!snapshot.exists()))
-          })
-        }
+        uniqueEmail
       },
 
       password: {
@@ -167,20 +148,8 @@ export default {
       // end with a suffix like .jpg or .png or another file type.
       avatar: {
         url,
-        supportedImageFile (value) {
-          const supported = ['jpg', 'jpeg', 'gif', 'png', 'svg']
-          const suffix = value.split('.').pop()
-
-          return supported.includes(suffix)
-        },
-        responseOk (value) {
-          return new Promise((resolve, reject) => {
-            fetch(value)
-              .then(res => resolve(res.ok))
-              // The thing with fetch is that it won't reject if the URL is not found.
-              .catch(() => resolve(false))
-          })
-        }
+        supportedImageFile,
+        responseOk
       }
     }
   },

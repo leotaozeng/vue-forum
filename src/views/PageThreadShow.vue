@@ -9,7 +9,7 @@
         tag="button"
       >Edit Thread</router-link>
     </h1>
-    <router-link :to="{name: 'ThreadShow', params: { threadId: '-KvgL0BNLNz4cJhQjdP4' }}">Random thread</router-link>
+
     <p>
       By
       <a href="#" class="link-unstyled">{{ user.name }}</a>,

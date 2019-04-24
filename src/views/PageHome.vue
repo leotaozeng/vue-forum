@@ -44,23 +44,36 @@ export default {
         )
       )
       .then(forumsArray =>
-        Promise.all(forumsArray.map(forums =>
-          Promise.all(forums.map(forum => {
-            if (forum.threads) {
-              const threads = Object.keys(forum.threads)
-              return this.$store.dispatch('threads/fetchThread', { id: threads[0] })
-            }
-          }))
-        ))
+        // [[], [], []]
+        Promise.all(
+          forumsArray.map(forums =>
+            Promise.all(
+              forums.map(forum => {
+                if (forum.threads) {
+                  const threads = Object.keys(forum.threads)
+                  return this.$store.dispatch('threads/fetchThread', {
+                    id: threads[0]
+                  })
+                }
+              })
+            )
+          )
+        )
       )
-      .then((threadsArray) => {
-        Promise.all(threadsArray.map((threads) => {
-          Promise.all(threads.map((thread) => {
-            if (thread) {
-              return this.$store.dispatch('users/fetchUser', { id: thread.userId })
-            }
-          }))
-        }))
+      .then(threadsArray => {
+        Promise.all(
+          threadsArray.map(threads => {
+            Promise.all(
+              threads.map(thread => {
+                if (thread) {
+                  return this.$store.dispatch('users/fetchUser', {
+                    id: thread.userId
+                  })
+                }
+              })
+            )
+          })
+        )
       })
       .then(() => this.asyncDataStatus_fetched())
   }

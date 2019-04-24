@@ -19,14 +19,6 @@ const makeAppendChildToParentMutation = ({ parent, child }) => {
   }
 }
 
-const countObjectProperties = obj => {
-  if (typeof obj === 'object') {
-    return Object.keys(obj).length
-  } else {
-    return 0
-  }
-}
-
 const removeEmptyProperties = obj => {
   const objCopy = { ...obj }
 
@@ -37,4 +29,4 @@ const removeEmptyProperties = obj => {
   return objCopy
 }
 
-export { makeSetItemMutation, makeAppendChildToParentMutation, countObjectProperties, removeEmptyProperties }
+export { makeSetItemMutation, makeAppendChildToParentMutation, removeEmptyProperties }

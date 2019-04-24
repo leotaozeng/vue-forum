@@ -1,6 +1,7 @@
 import { database } from '@/firebase.config'
 import { SET_USER, ADD_POST_TO_USER, ADD_THREAD_T0_USER } from '../mutation-types'
-import { makeSetItemMutation, makeAppendChildToParentMutation, countObjectProperties, removeEmptyProperties } from '../assetHelpers'
+import { makeSetItemMutation, makeAppendChildToParentMutation, removeEmptyProperties } from '../assetHelpers'
+import { countObjectProperties } from '@/utils'
 
 export default {
   namespaced: true,
@@ -46,7 +47,7 @@ export default {
         const userData = {
           avatar: user.avatar,
           bio: user.bio,
-          email: user.email,
+          email: user.email.toLowerCase(),
           name: user.name,
           posts: user.posts,
           threads: user.threads,

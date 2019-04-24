@@ -45,7 +45,7 @@ export default {
       return new Promise((resolve, reject) => {
         const unsubscrive = auth.onAuthStateChanged((user) => {
           if (user) {
-            console.log(1)
+            console.log('user')
             dispatch('fetchAuthUser', { id: user.uid }).then((dbUser) => resolve(dbUser))
           } else {
             resolve(null)

@@ -1,6 +1,7 @@
 import { database } from '@/firebase.config'
 import { SET_THREAD, ADD_POST_TO_THREAD, ADD_CONTRIBUTOR_TO_THREAD } from '../mutation-types'
-import { countObjectProperties, makeSetItemMutation, makeAppendChildToParentMutation } from '../assetHelpers'
+import { makeSetItemMutation, makeAppendChildToParentMutation } from '../assetHelpers'
+import { countObjectProperties } from '@/utils'
 
 export default {
   namespaced: true,

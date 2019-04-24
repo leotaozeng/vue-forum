@@ -54,7 +54,7 @@ export default {
           }
         )
       } else {
-        console.log('error')
+        alert('Sorry! Nothing has been changed')
       }
     },
 

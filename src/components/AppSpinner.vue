@@ -21,10 +21,13 @@ export default {}
 
 <style scoped>
 .sk-circle {
-  margin: 100px auto;
   width: 40px;
   height: 40px;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -20px;
 }
 .sk-circle .sk-child {
   width: 100%;

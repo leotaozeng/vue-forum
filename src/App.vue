@@ -4,12 +4,11 @@
 
     <div class="container">
       <!-- special component -->
-      <!-- <transition name="fade">
-        <router-view v-show="showPage" v-on:ready="pageReady(true)"></router-view>
-      </transition> -->
-      <router-view :key="$route.path" v-show="showPage" v-on:ready="pageReady(true)"></router-view>
+      <transition name="fade" mode="out-in" v-show="showPage">
+        <router-view :key="$route.path" v-on:ready="pageReady"></router-view>
+      </transition>
 
-      <AppSpinner v-show="!showPage"/>
+      <AppSpinner v-show="showSpinner"/>
     </div>
   </div>
 </template>
@@ -18,6 +17,7 @@
 import TheNavbar from './components/TheNavbar'
 import AppSpinner from './components/AppSpinner'
 import NProgress from 'nprogress'
+import { setTimeout } from 'timers'
 
 export default {
   components: {
@@ -27,14 +27,19 @@ export default {
 
   data () {
     return {
-      showPage: false
+      showPage: false,
+      showSpinner: true
     }
   },
 
   methods: {
-    pageReady (status) {
+    pageReady () {
       NProgress.done()
-      this.showPage = status
+      this.showSpinner = false
+
+      if (!this.showSpinner) {
+        this.showPage = true
+      }
     }
   },
 
@@ -46,8 +51,13 @@ export default {
     NProgress.start()
 
     this.$router.beforeEach((to, from, next) => {
-      NProgress.start()
       this.showPage = false
+
+      setTimeout(() => {
+        NProgress.start()
+        this.showSpinner = true
+      }, 300)
+
       next()
     })
   }
@@ -64,7 +74,7 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity .3s;
 }
 
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {

@@ -102,7 +102,11 @@ export default {
     }),
 
     hasQuery () {
-      return this.$route.name !== 'Home' ? { redirect: this.$route.path } : null
+      return this.$route.name !== 'Home' &&
+        this.$route.name !== 'Signup' &&
+        this.$route.name !== 'Login'
+        ? { redirect: this.$route.path }
+        : null
     }
   },
 

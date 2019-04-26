@@ -17,7 +17,6 @@
 import TheNavbar from './components/TheNavbar'
 import AppSpinner from './components/AppSpinner'
 import NProgress from 'nprogress'
-import { setTimeout } from 'timers'
 
 export default {
   components: {

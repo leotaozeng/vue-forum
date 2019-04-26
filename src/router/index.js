@@ -17,14 +17,14 @@ const router = new VueRouter({
     {
       path: '/signup',
       name: 'Signup',
-      component: () => import('Views/PageSignup'),
+      component: () => import('Views/PageSignUp'),
       meta: { requiresGuest: true }
     },
 
     {
       path: '/login',
       name: 'Login',
-      component: () => import('Views/PageLogin'),
+      component: () => import('Views/PageLogIn'),
       meta: { requiresGuest: true }
     },
 

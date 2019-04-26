@@ -93,7 +93,6 @@ export default {
 
         database.ref().update(updates).then(() => {
           commit('SET_POST', {
-            resource: 'posts',
             id: postId,
             item: {
               ...post,

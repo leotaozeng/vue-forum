@@ -5,7 +5,7 @@
         <img :src="user.avatar" :alt="user.username" class="avatar-xlarge">
       </p>
 
-      <h1 class="username title">{{ user.usernameLower }}</h1>
+      <h1 class="username title">{{ user.username }}</h1>
 
       <p class="name text-lead">{{ user.name }}</p>
 

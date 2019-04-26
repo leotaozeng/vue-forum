@@ -16,8 +16,9 @@
     <nav class="navbar">
       <ul v-if="authUser">
         <li class="navbar-user">
-          <a @click.stop="switchDropdownStatus">
+          <a v-click-outside="switchDropdownStatus">
             <img class="avatar-small" :src="authUser.avatar" :alt="authUser.username">
+
             <span>
               {{ authUser.name }}
               <img
@@ -49,6 +50,7 @@
           <router-link :to="{name: 'Logout'}" title="Log out of your account">Log out</router-link>
         </li>
 
+        <!-- mobile-only -->
         <li class="navbar-item mobile-only">
           <router-link :to="{ name: 'Home'}">Home</router-link>
         </li>
@@ -110,10 +112,40 @@ export default {
     }
   },
 
-  created () {
-    document.addEventListener('click', e => {
-      if (this.userDropDownOpen) this.switchDropdownStatus(false)
-    })
+  directives: {
+    clickOutside: {
+      bind: (el, binding) => {
+        el.__ClickOutSideHandler__ = event => {
+          let targetElement = event.target
+
+          do {
+            if (targetElement === el) {
+              // This is a click inside. Do nothing, just return.
+              binding.value()
+              return
+            }
+            // Go up the DOM
+            targetElement = targetElement.parentNode
+          } while (targetElement)
+
+          // This is a click outside.
+          binding.value(false)
+        }
+
+        document.addEventListener('click', el.__ClickOutSideHandler__)
+      },
+
+      unbind: el => {
+        document.removeEventListener('click', el.__ClickOutSideHandler__)
+        el.__ClickOutSideHandler__ = null
+      }
+    }
   }
+
+  // created () {
+  //   document.addEventListener('click', e => {
+  //     if (this.userDropDownOpen) this.switchDropdownStatus(false)
+  //   })
+  // }
 }
 </script>

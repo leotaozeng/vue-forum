@@ -5,15 +5,15 @@
     </router-link>
 
     <!-- Show these option only on mobile-->
-    <div class="btn-hamburger">
+    <label class="btn-hamburger" for="menustate">
       <!-- use .btn-humburger-active to open the menu -->
       <div class="top bar"></div>
       <div class="middle bar"></div>
       <div class="bottom bar"></div>
-    </div>
+    </label>
 
     <!-- use .navbar-open to open nav -->
-    <nav class="navbar">
+    <nav class="navbar" :class="{'navbar-open': mobileNavbarOpen}">
       <ul v-if="authUser">
         <li class="navbar-user">
           <a v-click-outside="switchDropdownStatus">
@@ -31,7 +31,7 @@
 
           <!-- dropdown menu -->
           <!-- add class "active-drop" to show the dropdown -->
-          <div id="user-dropdown" :class="{ 'active-drop': userDropDownOpen }">
+          <div id="user-dropdown" :class="{ 'active-drop': userDropdownOpen }">
             <div class="triangle-drop"></div>
 
             <ul class="dropdown-menu">
@@ -51,17 +51,13 @@
         </li>
 
         <!-- mobile-only -->
-        <li class="navbar-item mobile-only">
+        <li class="navbar-mobile-item">
           <router-link :to="{ name: 'Home'}">Home</router-link>
         </li>
 
         <!-- Show these options only on mobile -->
         <li class="navbar-item mobile-only">
           <router-link :to="{name: 'Profile'}">My Profile</router-link>
-        </li>
-
-        <li class="navbar-item mobile-only">
-          <router-link :to="{name: 'Logout'}">Log out</router-link>
         </li>
       </ul>
 
@@ -84,17 +80,22 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      userDropDownOpen: false
+      userDropdownOpen: false,
+      mobileNavbarOpen: false
     }
   },
 
   methods: {
     switchDropdownStatus (status) {
       if (typeof status === 'boolean') {
-        this.userDropDownOpen = status
+        this.userDropdownOpen = status
       } else {
-        this.userDropDownOpen = !this.userDropDownOpen
+        this.userDropdownOpen = !this.userDropdownOpen
       }
+    },
+
+    switchNavbarStatus () {
+      this.mobileNavbarOpen = !this.mobileNavbarOpen
     }
   },
 
@@ -141,11 +142,11 @@ export default {
       }
     }
   }
-
-  // created () {
-  //   document.addEventListener('click', e => {
-  //     if (this.userDropDownOpen) this.switchDropdownStatus(false)
-  //   })
-  // }
 }
 </script>
+
+<style lang="scss" scoped>
+  .menustate {
+    display: none;
+  }
+</style>

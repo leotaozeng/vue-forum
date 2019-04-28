@@ -29,6 +29,17 @@ const router = new VueRouter({
     },
 
     {
+      path: '/logout',
+      name: 'Logout',
+      beforeEnter: (to, from, next) => {
+        store.dispatch('auth/logout').then(() => {
+          next({ name: 'Home', query: { redirect: Date.now() } })
+        })
+      },
+      meta: { requiresAuth: true }
+    },
+
+    {
       path: '/me',
       name: 'Profile',
       component: () => import('Views/PageProfile'),
@@ -82,15 +93,6 @@ const router = new VueRouter({
     },
 
     {
-      path: '/logout',
-      name: 'Logout',
-      meta: { requiresAuth: true },
-      beforeEnter: (to, from, next) => {
-        store.dispatch('auth/logout').then(() => next({ name: 'Home' }))
-      }
-    },
-
-    {
       path: '*',
       name: 'NotFound',
       component: () => import('@/views/PageNotFound')
@@ -104,7 +106,7 @@ router.beforeEach((to, from, next) => {
       if (user) {
         next()
       } else {
-        if (from.name === 'Logout') {
+        if (to.name === 'Logout') {
           next({ name: 'Login' })
         } else {
           // Query parameter

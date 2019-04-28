@@ -11,10 +11,10 @@
       {{ showWord }}
     </div>
 
-    <div v-if="thread && user" class="last-thread">
-      <img class="avatar" :src="userAvatar" :alt="user.name">
+    <div class="last-thread">
+      <img class="avatar" :src="userAvatar" alt="avatar">
 
-      <div class="last-thread-details">
+      <div v-if="thread && user" class="last-thread-details">
         <router-link
           :to="{ name: 'ThreadShow', params: { threadId: thread['.key'] } }"
         >{{ thread.title }}</router-link>

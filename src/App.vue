@@ -5,7 +5,7 @@
     <div class="container">
       <!-- special component -->
       <transition name="fade" mode="out-in" v-show="showPage">
-        <router-view :key="$route.path" v-on:ready="pageReady"></router-view>
+        <router-view :key="`${$route.path + $route.query.redirect}`" v-on:ready="pageReady"></router-view>
       </transition>
 
       <AppSpinner v-show="showSpinner"/>
@@ -73,7 +73,7 @@ export default {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity .3s;
+  transition: opacity .3s ease-out;
 }
 
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {

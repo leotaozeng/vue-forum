@@ -31,10 +31,10 @@ export default {
         const valid = keyIsValid && textIsValid
 
         if (!keyIsValid) {
-          console.error('The post prop must includes a `.key` attribute.')
+          alert('The post prop must includes a `.key` attribute.')
         }
         if (!textIsValid) {
-          console.error('The post prop must includes a `text` attribute.')
+          alert('The post prop must includes a `text` attribute.')
         }
 
         // console.log(valid)

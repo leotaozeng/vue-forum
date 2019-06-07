@@ -1,7 +1,7 @@
 ## Documentations:
 1. <a href="https://firebase.google.com/docs/web/setup?authuser=0">Add Firebase to your JavaScript Project</a>
-2. <a href="https://firebase.google.com/docs/database/web/start">Installation & Setup in JavaScript</a>
-3. <a href="https://firebase.google.com/docs/database/">Firebase Realtime Database</a>
+2. <a href="https://firebase.google.com/docs/database/">Firebase Realtime Database</a>
+3. <a href="https://firebase.google.com/docs/database/web/start">Installation & Setup in JavaScript</a>
 4. <a href="https://firebase.google.com/docs/auth/web/password-auth">Authenticate with Firebase using Password-Based Accounts using Javascript</a>
 5. <a href="https://firebase.google.com/docs/auth/web/google-signin">Authenticate Using Google Sign-In with JavaScript</a>
 

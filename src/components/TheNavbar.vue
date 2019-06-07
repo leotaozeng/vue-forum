@@ -1,21 +1,23 @@
 <template>
-  <header class="header" id="header">
-    <router-link :to="{name: 'Home'}" class="logo">
-      <img src="../assets/images/svg/vueschool-logo.svg" alt="The Vue Forum logo">
-    </router-link>
+  <header id="header" class="header">
+    <div class="header-wrapper">
+      <router-link :to="{name: 'Home'}" class="logo">
+        <img src="../assets/images/svg/vueschool-logo.svg" alt="The Vue Forum logo">
+      </router-link>
 
-    <!-- Show these option only on mobile-->
-    <label class="btn-hamburger" for="menustate">
-      <!-- use .btn-humburger-active to open the menu -->
-      <div class="top bar"></div>
-      <div class="middle bar"></div>
-      <div class="bottom bar"></div>
-    </label>
+      <!-- Show these option only on mobile-->
+      <div class="btn-hamburger" @touchend="switchNavbarStatus">
+        <!-- use .btn-humburger-active to open the menu -->
+        <div class="top bar"></div>
+        <div class="middle bar"></div>
+        <div class="bottom bar"></div>
+      </div>
+    </div>
 
     <!-- use .navbar-open to open nav -->
     <nav class="navbar" :class="{'navbar-open': mobileNavbarOpen}">
-      <ul v-if="authUser">
-        <li class="navbar-user">
+      <ul v-if="authUser" class="navbar-list">
+        <li class="navbar-user" v-if="!isMobileDevice">
           <a v-click-outside="switchDropdownStatus">
             <img class="avatar-small" :src="authUser.avatar" :alt="authUser.username">
 
@@ -51,17 +53,17 @@
         </li>
 
         <!-- mobile-only -->
-        <li class="navbar-mobile-item">
+        <li class="navbar-mobile-item" v-if="isMobileDevice">
           <router-link :to="{ name: 'Home'}">Home</router-link>
         </li>
 
         <!-- Show these options only on mobile -->
-        <li class="navbar-item mobile-only">
+        <li class="navbar-mobile-item" v-if="isMobileDevice">
           <router-link :to="{name: 'Profile'}">My Profile</router-link>
         </li>
       </ul>
 
-      <ul v-else>
+      <ul v-else class="navbar-list">
         <li class="navbar-item">
           <router-link :to="{ name: 'Login', query: hasQuery }">Log in</router-link>
         </li>
@@ -87,7 +89,7 @@ export default {
 
   methods: {
     switchDropdownStatus (status) {
-      if (typeof status === 'boolean') {
+      if (!status && typeof status === 'boolean') {
         this.userDropdownOpen = status
       } else {
         this.userDropdownOpen = !this.userDropdownOpen
@@ -110,6 +112,14 @@ export default {
         this.$route.name !== 'Login'
         ? { redirect: this.$route.path }
         : null
+    },
+
+    isMobileDevice () {
+      return (
+        /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+        typeof window.orientation !== 'undefined' ||
+        navigator.userAgent.indexOf('IEMobile') !== -1
+      )
     }
   },
 
@@ -145,8 +155,245 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .menustate {
-    display: none;
+<style style="scss" scoped>
+.header {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+
+  height: 80px;
+  padding: 0 20px;
+
+  background: #263959;
+}
+
+.header-wrapper > a.logo {
+  width: 50px;
+}
+
+.logo {
+  float: left;
+
+  padding-top: 5px;
+}
+
+.bar {
+  position: absolute;
+
+  width: 30px;
+  height: 4px;
+
+  transition: all .5s;
+
+  border-radius: 10px;
+  background: white;
+}
+
+.btn-hamburger-active .top {
+  top: 16px;
+}
+
+.btn-hamburger-active .middle {
+  overflow: hidden;
+
+  opacity: 0;
+}
+
+.btn-hamburger-active .bottom {
+  top: 16px;
+}
+
+.btn-hamburger {
+  position: relative;
+
+  display: none;
+  float: right;
+
+  width: 30px;
+  height: 30px;
+  margin-left: 20px;
+
+  cursor: pointer;
+}
+
+.btn-hamburger .top {
+  top: 3px;
+}
+
+.btn-hamburger .middle {
+  top: 13px;
+}
+
+.btn-hamburger .bottom {
+  top: 23px;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row-reverse;
+
+  width: 100%;
+}
+
+.navbar-list {
+  height: auto;
+}
+
+.navbar-item {
+  display: inline-block;
+
+  vertical-align: middle;
+
+  border-right: 1px solid #3c4d6a;
+}
+
+.navbar-list .navbar-item:last-child,
+.navbar-list .navbar-mobile-item:last-child {
+  border-right: none;
+}
+
+.navbar-item a {
+  font-size: 18px;
+
+  padding: 10px 20px;
+
+  transition: all .6s ease;
+  text-decoration: none;
+
+  color: white;
+}
+
+@media (min-width: 240px) and (max-width: 720px) {
+  .header {
+    width: 100%;
+    height: 60px;
+    padding: 0 10px;
   }
+
+  .header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  .header-wrapper > a.logo {
+    width: 35px;
+  }
+
+  .logo {
+    padding-top: 0;
+  }
+
+  .btn-hamburger {
+    display: block;
+  }
+
+  .navbar {
+    position: fixed;
+    z-index: 10;
+    top: 60px;
+    left: 0;
+
+    width: 100%;
+    height: 0;
+
+    transition: height .56s cubic-bezier(.52, .16, .24, 1);
+
+    background: #263959;
+  }
+
+  .navbar-open {
+    display: flex;
+
+    height: 100%;
+    padding: 10px 10px 10px;
+
+    transition: all .56s cubic-bezier(.52, .16, .24, 1);
+
+    border-top: 1px solid #fff;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .navbar-list {
+    position: absolute;
+    top: 15px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    visibility: hidden;
+
+    padding-left: 20px;
+
+    transition: visibility 0s linear 1s;
+  }
+
+  .navbar-open .navbar-list {
+    visibility: visible;
+
+    transition-delay: 0s;
+  }
+
+  .navbar-item {
+    display: block;
+    opacity: 0;
+
+    border: none;
+  }
+
+  .navbar-item:nth-child(1) {
+    transition: opacity .3345s cubic-bezier(.52, .16, .52, .84) .15s,
+    transform .4669s cubic-bezier(.52, .16, .52, .84) .108s;
+    transform: translateY(-44px);
+  }
+
+  .navbar-item:nth-child(2) {
+    transition: opacity .29294s cubic-bezier(.52, .16, .52, .84) .13s,
+    transform .45043s cubic-bezier(.52, .16, .52, .84) .095s;
+    transform: translateY(-40px);
+  }
+
+  .navbar-item:nth-child(3) {
+    transition: opacity .33467s cubic-bezier(.32, .08, .24, 1) .07s,
+    transform .37539s cubic-bezier(.32, .08, .24, 1) .06s;
+    transform: translateY(-36px);
+  }
+
+  .navbar-item:nth-child(4) {
+    transition: opacity .34577s cubic-bezier(.32, .08, .24, 1) .09s,
+    transform .39692s cubic-bezier(.32, .08, .24, 1) .08s;
+    transform: translateY(-32px);
+  }
+
+  .navbar-open .navbar-item:nth-child(1) {
+    transition: opacity .3091s cubic-bezier(.32, .08, .24, 1) .03s,
+    transform .3455s cubic-bezier(.32, .08, .24, 1) .02s;
+  }
+
+  .navbar-open .navbar-item:nth-child(2) {
+    transition: opacity .32244s cubic-bezier(.32, .08, .24, 1) .05s,
+    transform .35825s cubic-bezier(.32, .08, .24, 1) .04s;
+  }
+
+  .navbar-open .navbar-item {
+    opacity: 1;
+    /* margin: 6px 0; */
+
+    transform: none;
+  }
+
+  .navbar-item a {
+    padding: 10px 0;
+  }
+}
+
 </style>

@@ -1,6 +1,7 @@
 const path = require('path')
 
 module.exports = {
+  publicPath: '/projects/forum/',
   configureWebpack: {
     resolve: {
       alias: {

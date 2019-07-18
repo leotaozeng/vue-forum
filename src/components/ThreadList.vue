@@ -1,9 +1,8 @@
 <template>
   <div class="thread-list">
     <ul>
-      <li v-for="thread in threads"
-          :key="thread['.key']">
-        <ThreadListItem :thread="thread" />
+      <li v-for="thread in threads" :key="thread['.key']">
+        <ThreadListItem :thread="thread"/>
       </li>
     </ul>
   </div>

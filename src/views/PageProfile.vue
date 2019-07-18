@@ -58,7 +58,6 @@ export default {
   },
 
   created () {
-    console.log(!!this.authUser.posts)
     if (this.authUser.posts) {
       this.fetchPosts({ ids: this.authUser.posts }).then(
         this.asyncDataStatus_fetched

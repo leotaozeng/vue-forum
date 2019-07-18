@@ -62,7 +62,7 @@ export default {
       if (text) {
         this.createPost({ threadId, text }).then(post => (this.text = ''))
       } else {
-        console.log("Content shouldn't be empty")
+        alert("Content shouldn't be empty")
       }
     },
 

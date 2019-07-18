@@ -184,7 +184,6 @@ export default {
             })
           })
           .then(user => this.successRedirect())
-          .catch(error => console.log(error))
       }
     },
 

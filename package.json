@@ -9,23 +9,26 @@
     "db:seed": "firebase database:set / src/data-copy.json -y"
   },
   "dependencies": {
-    "firebase": "^7.9.1",
-    "moment": "^2.23.0",
+    "firebase": "^7.14.4",
+    "moment": "^2.25.3",
     "nprogress": "^0.2.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.5",
+    "vue-router": "^3.1.6",
     "vuelidate": "^0.7.5",
-    "vuex": "^3.1.2"
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.2.2",
-    "@vue/cli-plugin-eslint": "^4.2.2",
-    "@vue/cli-service": "^4.2.2",
-    "@vue/eslint-config-standard": "^5.1.2",
-    "babel-eslint": "^10.0.3",
+    "@babel/polyfill": "^7.8.7",
+    "@vue/cli-plugin-babel": "^4.3.1",
+    "@vue/cli-plugin-eslint": "^4.3.1",
+    "@vue/cli-service": "^4.3.1",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^6.2.1",
-    "node-sass": "^4.12.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.14.1",
+    "prettier": "^2.0.5",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
   }

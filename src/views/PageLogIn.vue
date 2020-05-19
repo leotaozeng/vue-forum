@@ -1,7 +1,12 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <form @submit.prevent="login" @keyup.enter="login" class="card card-form" autocomplete="off">
+      <form
+        @submit.prevent="login"
+        @keyup.enter="login"
+        class="card card-form"
+        autocomplete="off"
+      >
         <h1 class="text-center">Log Into Vue Forum</h1>
 
         <div class="form-group">
@@ -12,13 +17,14 @@
             class="form-input"
             v-model.trim.lazy="form.email"
             @blur="$v.form.email.$touch()"
-          >
+          />
           <template v-if="$v.form.email.$error">
-            <span v-if="!$v.form.email.required" class="form-error">This field is required</span>
-            <span
-              v-else-if="!$v.form.email.email"
-              class="form-error"
-            >This is not a valid email address</span>
+            <span v-if="!$v.form.email.required" class="form-error"
+              >This field is required</span
+            >
+            <span v-else-if="!$v.form.email.email" class="form-error"
+              >This is not a valid email address</span
+            >
           </template>
         </div>
 
@@ -30,13 +36,14 @@
             class="form-input"
             v-model.lazy="form.password"
             @blur="$v.form.password.$touch()"
-          >
+          />
           <template v-if="$v.form.password.$error">
-            <span v-if="!$v.form.password.required" class="form-error">This field is required</span>
-            <span
-              v-else-if="!$v.form.password.minLength"
-              class="form-error"
-            >The password should be at least 6 characters long</span>
+            <span v-if="!$v.form.password.required" class="form-error"
+              >This field is required</span
+            >
+            <span v-else-if="!$v.form.password.minLength" class="form-error"
+              >The password should be at least 6 characters long</span
+            >
           </template>
         </div>
 
@@ -64,7 +71,7 @@ import { mapActions } from 'vuex'
 import { required, email, minLength } from 'vuelidate/lib/validators'
 
 export default {
-  data () {
+  data() {
     return {
       form: {
         email: null,
@@ -90,7 +97,7 @@ export default {
   methods: {
     ...mapActions('auth', ['signInWithEmailAndPassword', 'signInWithGoogle']),
 
-    login () {
+    login() {
       this.$v.form.$touch()
 
       if (this.$v.form.$invalid) {
@@ -104,11 +111,11 @@ export default {
       }
     },
 
-    loginWithGoogle () {
+    loginWithGoogle() {
       this.signInWithGoogle().then(() => this.successRedirect())
     },
 
-    successRedirect () {
+    successRedirect() {
       // The $route is the active route
       // If the query param is not defined, set the value of redirect to a default path
       const redirect = this.$route.query.redirect || { name: 'Home' }
@@ -117,7 +124,7 @@ export default {
     }
   },
 
-  beforeCreate () {
+  beforeCreate() {
     this.$emit('ready')
   }
 }

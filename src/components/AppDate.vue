@@ -1,5 +1,7 @@
 <template>
-  <span :title="timestamp | humanFriendlyDates">{{ timestamp | diffForHumans }}</span>
+  <span :title="timestamp | humanFriendlyDates">{{
+    timestamp | diffForHumans
+  }}</span>
 </template>
 
 <script>
@@ -14,11 +16,11 @@ export default {
   },
 
   filters: {
-    humanFriendlyDates (date) {
+    humanFriendlyDates(date) {
       return moment.unix(date).format('MMMM Do YYYY, h:mm:ss a')
     },
 
-    diffForHumans (date) {
+    diffForHumans(date) {
       return moment.unix(date).fromNow()
     }
   }

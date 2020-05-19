@@ -5,6 +5,7 @@ const makeSetItemMutation = () => {
   return (state, { id, item }) => Vue.set(state.items, id, item)
 }
 
+// eslint-disable-next-line no-unused-vars
 const makeAppendChildToParentMutation = ({ parent, child }) => {
   return (state, { parentId, childId }) => {
     // Can't use a variable after the dot.
@@ -22,11 +23,16 @@ const makeAppendChildToParentMutation = ({ parent, child }) => {
 const removeEmptyProperties = obj => {
   const objCopy = { ...obj }
 
-  Object.keys(objCopy).forEach((key) => {
-    ((objCopy[key] === undefined || objCopy[key] === null) && delete objCopy[key])
+  Object.keys(objCopy).forEach(key => {
+    ;(objCopy[key] === undefined || objCopy[key] === null) &&
+      delete objCopy[key]
   })
 
   return objCopy
 }
 
-export { makeSetItemMutation, makeAppendChildToParentMutation, removeEmptyProperties }
+export {
+  makeSetItemMutation,
+  makeAppendChildToParentMutation,
+  removeEmptyProperties
+}

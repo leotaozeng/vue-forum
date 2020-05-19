@@ -57,4 +57,9 @@ dist/
 npm-debug.log
 yarn-error.log
 
+# dotenv environment variables file
+.env
+.env.local
+.env.*.local
+
 # End of https://www.gitignore.io/api/vuejs,macos,firebase,visualstudiocode

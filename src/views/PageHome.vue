@@ -2,7 +2,7 @@
   <div v-if="asyncDataStatus_ready" class="col-full push-top">
     <h1>Welcome to the Forum</h1>
 
-    <CategoryList :catgories="catgories"/>
+    <CategoryList :catgories="catgories" />
   </div>
 </template>
 
@@ -25,14 +25,14 @@ export default {
       categories: state => state.categories.items
     }),
 
-    catgories () {
+    catgories() {
       return Object.values(this.categories)
     }
   },
 
   // The earlier I instantiate the call
   // the more time it has to resolve before the user sees the page.
-  beforeCreate () {
+  beforeCreate() {
     this.$store
       .dispatch('categories/fetchAllCategories')
       .then(categories =>

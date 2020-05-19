@@ -4,16 +4,25 @@
       <router-link to="#" class="user-name">{{ user.name }}</router-link>
 
       <a href="#">
-        <img class="avatar-large" :src="user.avatar" alt="avatar">
+        <img class="avatar-large" :src="user.avatar" alt="avatar" />
       </a>
 
-      <p class="desktop-only text-small">{{ userThreadsCount(post.userId) }} threads</p>
+      <p class="desktop-only text-small">
+        {{ userThreadsCount(post.userId) }} threads
+      </p>
 
-      <p class="desktop-only text-small">{{ userPostsCount(post.userId) }} posts</p>
+      <p class="desktop-only text-small">
+        {{ userPostsCount(post.userId) }} posts
+      </p>
     </div>
 
     <div class="post-content">
-      <PostEditor v-if="editing" :post="post" @update="editing = false" @cancel="editing = false"/>
+      <PostEditor
+        v-if="editing"
+        :post="post"
+        @update="editing = false"
+        @cancel="editing = false"
+      />
 
       <template v-else>
         <p>{{ post.text }}</p>
@@ -27,7 +36,7 @@
     <div class="post-date text-faded">
       <div v-if="post.edited" class="edition-info">edited</div>
 
-      <AppDate :timestamp="post.publishedAt"/>
+      <AppDate :timestamp="post.publishedAt" />
     </div>
   </div>
 </template>
@@ -48,7 +57,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       editing: false
     }
@@ -65,7 +74,7 @@ export default {
       authUser: 'auth/authUser'
     }),
 
-    user () {
+    user() {
       return this.users[this.post.userId]
     }
 

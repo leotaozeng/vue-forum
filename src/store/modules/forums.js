@@ -9,12 +9,17 @@ export default {
   },
 
   mutations: {
-    [ADD_THREAD_TO_FORUM]: makeAppendChildToParentMutation({ parent: 'forums', child: 'threads' })
+    [ADD_THREAD_TO_FORUM]: makeAppendChildToParentMutation({
+      parent: 'forums',
+      child: 'threads'
+    })
   },
 
   actions: {
-    fetchForum: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'forums' }, { root: true }),
+    fetchForum: ({ dispatch }, { id }) =>
+      dispatch('fetchItem', { id, resource: 'forums' }, { root: true }),
 
-    fetchForums: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'forums' }, { root: true })
+    fetchForums: ({ dispatch }, { ids }) =>
+      dispatch('fetchItems', { ids, resource: 'forums' }, { root: true })
   }
 }

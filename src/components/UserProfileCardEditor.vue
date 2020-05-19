@@ -2,7 +2,11 @@
   <div class="col-3 push-top">
     <form class="profile-card" @submit.prevent="save" autocomplete="off">
       <p class="text-center">
-        <img :src="user.avatar" :alt="user.username" class="avatar-xlarge img-update">
+        <img
+          :src="user.avatar"
+          :alt="user.username"
+          class="avatar-xlarge img-update"
+        />
       </p>
 
       <div class="form-group">
@@ -12,13 +16,14 @@
           class="form-input text-lead text-bold"
           v-model.trim.lazy="activeUser.username"
           @blur="$v.activeUser.username.$touch()"
-        >
+        />
         <template v-if="$v.activeUser.username.$error">
-          <span v-if="!$v.activeUser.username.required" class="form-error">This field is required</span>
-          <span
-            v-else-if="!$v.activeUser.username.unique"
-            class="form-error"
-          >Sorry! this username is taken</span>
+          <span v-if="!$v.activeUser.username.required" class="form-error"
+            >This field is required</span
+          >
+          <span v-else-if="!$v.activeUser.username.unique" class="form-error"
+            >Sorry! this username is taken</span
+          >
         </template>
       </div>
 
@@ -29,9 +34,11 @@
           class="form-input text-lead"
           v-model.trim.lazy="activeUser.name"
           @blur="$v.activeUser.name.$touch()"
-        >
+        />
         <template v-if="$v.activeUser.name.$error">
-          <span v-if="!$v.activeUser.name.required" class="form-error">This field is required</span>
+          <span v-if="!$v.activeUser.name.required" class="form-error"
+            >This field is required</span
+          >
         </template>
       </div>
 
@@ -50,11 +57,15 @@
         <span>{{ userThreadsCount(user['.key']) }} threads</span>
       </div>
 
-      <hr>
+      <hr />
 
       <div class="form-group">
         <label class="form-label" for="user_website">Website</label>
-        <input class="form-input" id="user_website" v-model.trim="activeUser.webiste">
+        <input
+          class="form-input"
+          id="user_website"
+          v-model.trim="activeUser.webiste"
+        />
       </div>
 
       <div class="form-group">
@@ -64,16 +75,24 @@
           id="user_email"
           v-model.trim.lazy="activeUser.email"
           @blur="$v.activeUser.email.$touch()"
-        >
+        />
         <template v-if="$v.activeUser.email.$error">
-          <span v-if="!$v.activeUser.email.required" class="form-error">This field is required</span>
-          <span v-else-if="!$v.activeUser.email.unique" class="form-error">Sorry! this email is taken</span>
+          <span v-if="!$v.activeUser.email.required" class="form-error"
+            >This field is required</span
+          >
+          <span v-else-if="!$v.activeUser.email.unique" class="form-error"
+            >Sorry! this email is taken</span
+          >
         </template>
       </div>
 
       <div class="form-group">
         <label class="form-label" for="user_location">Location</label>
-        <input class="form-input" id="user_location" v-model.trim="activeUser.location">
+        <input
+          class="form-input"
+          id="user_location"
+          v-model.trim="activeUser.location"
+        />
       </div>
 
       <div class="btn-group space-between">
@@ -82,7 +101,9 @@
       </div>
     </form>
 
-    <p class="text-xsmall text-faded text-center">Member since june 2003, last visited 4 hours ago</p>
+    <p class="text-xsmall text-faded text-center">
+      Member since june 2003, last visited 4 hours ago
+    </p>
   </div>
 </template>
 
@@ -99,7 +120,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       activeUser: { ...this.user }
     }
@@ -109,7 +130,7 @@ export default {
     activeUser: {
       username: {
         required,
-        unique (value) {
+        unique(value) {
           if (value.toLowerCase() === this.user.usernameLower) {
             return true
           } else {
@@ -124,7 +145,7 @@ export default {
 
       email: {
         required,
-        unique (value) {
+        unique(value) {
           if (value.toLowerCase() === this.user.email.toLowerCase()) {
             return true
           } else {
@@ -140,11 +161,11 @@ export default {
       updateUser: 'users/updateUser'
     }),
 
-    cancel () {
+    cancel() {
       this.$router.push({ name: 'Profile' })
     },
 
-    save () {
+    save() {
       this.$v.activeUser.$touch()
 
       if (this.$v.activeUser.$invalid) {

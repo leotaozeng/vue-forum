@@ -9,10 +9,14 @@
         name="title"
         v-model.trim.lazy="form.title"
         @blur="$v.form.title.$touch()"
-      >
+      />
       <template v-if="$v.form.title.$error">
-        <span v-if="!$v.form.title.required" class="form-error">This field is required</span>
-        <span v-if="!$v.form.title.minLength" class="form-error">The title must be least 10 characters long</span>
+        <span v-if="!$v.form.title.required" class="form-error"
+          >This field is required</span
+        >
+        <span v-if="!$v.form.title.minLength" class="form-error"
+          >The title must be least 10 characters long</span
+        >
       </template>
     </div>
 
@@ -28,14 +32,19 @@
         @blur="$v.form.content.$touch()"
       ></textarea>
       <template v-if="$v.form.content.$error">
-        <span v-if="!$v.form.content.required" class="form-error">This field is required</span>
-        <span v-if="!$v.form.content.minLength" class="form-error">The content of the thread must be 40 characters long, Type at least 32 more</span>
+        <span v-if="!$v.form.content.required" class="form-error"
+          >This field is required</span
+        >
+        <span v-if="!$v.form.content.minLength" class="form-error"
+          >The content of the thread must be 40 characters long, Type at least
+          32 more</span
+        >
       </template>
     </div>
 
     <div class="btn-group">
       <button class="btn btn-ghost" @click.prevent="cancel">Cancel</button>
-      <button class="btn btn-blue">{{isEdit}}</button>
+      <button class="btn btn-blue">{{ isEdit }}</button>
     </div>
   </form>
 </template>
@@ -56,7 +65,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       form: {
         title: this.title,
@@ -80,13 +89,13 @@ export default {
   },
 
   computed: {
-    isEdit () {
+    isEdit() {
       return this.title ? 'Update' : 'Publish'
     }
   },
 
   methods: {
-    save () {
+    save() {
       this.$v.form.$touch()
 
       if (this.$v.form.$invalid) {
@@ -96,7 +105,7 @@ export default {
       }
     },
 
-    cancel () {
+    cancel() {
       this.$emit('cancel')
     }
   }

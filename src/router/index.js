@@ -15,7 +15,7 @@ const router = new VueRouter({
     },
 
     {
-      path: '/signup',
+      path: '/register',
       name: 'Signup',
       component: () => import('Views/PageSignUp'),
       meta: { requiresGuest: true }

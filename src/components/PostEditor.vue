@@ -2,13 +2,24 @@
   <div class="post-editor">
     <form @submit.prevent="save">
       <div class="form-group">
-        <textarea name id cols="30" rows="10" class="form-input" v-model="text"></textarea>
+        <textarea
+          name
+          id
+          cols="30"
+          rows="10"
+          class="form-input"
+          v-model="text"
+        ></textarea>
       </div>
 
       <div class="form-actions">
-        <button class="btn" v-if="isUpdate" @click.prevent="cancel">Cancel</button>
+        <button class="btn" v-if="isUpdate" @click.prevent="cancel">
+          Cancel
+        </button>
 
-        <button class="btn-blue">{{ isUpdate ? 'Update' : 'Submit' }} post</button>
+        <button class="btn-blue">
+          {{ isUpdate ? 'Update' : 'Submit' }} post
+        </button>
       </div>
     </form>
   </div>
@@ -43,7 +54,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       text: this.post ? this.post.text : ''
     }
@@ -52,37 +63,37 @@ export default {
   methods: {
     ...mapActions('posts', ['createPost', 'updatePost']),
 
-    save () {
+    save() {
       this.isUpdate ? this.update() : this.create()
     },
 
-    create () {
+    create() {
       const { threadId, text } = this
 
       if (text) {
-        this.createPost({ threadId, text }).then(post => (this.text = ''))
+        this.createPost({ threadId, text }).then(() => (this.text = ''))
       } else {
         alert("Content shouldn't be empty")
       }
     },
 
-    update () {
+    update() {
       const { post, text } = this
 
       if (text) {
-        this.updatePost({ postId: post['.key'], text }).then(post =>
+        this.updatePost({ postId: post['.key'], text }).then(() =>
           this.$emit('update')
         )
       }
     },
 
-    cancel () {
+    cancel() {
       this.$emit('cancel')
     }
   },
 
   computed: {
-    isUpdate () {
+    isUpdate() {
       return !!this.post
     }
   }

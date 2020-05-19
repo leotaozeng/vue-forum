@@ -2,7 +2,7 @@ import { database } from '../firebase.config.js'
 
 export default {
   fetchItem: ({ state, commit }, { id, resource }) =>
-    new Promise((resolve, reject) =>
+    new Promise(resolve =>
       database
         .ref(`${resource}/${id}`)
         .once('value')
@@ -18,12 +18,15 @@ export default {
           }
 
           resolve(state[resource]['items'][id])
-        })),
+        })
+    ),
 
   // Each fetchItem call retuens a promise.
   fetchItems: ({ dispatch }, { ids, resource }) => {
     ids = Array.isArray(ids) ? ids : Object.keys(ids)
 
-    return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource }, { root: true })))
+    return Promise.all(
+      ids.map(id => dispatch('fetchItem', { id, resource }, { root: true }))
+    )
   }
 }

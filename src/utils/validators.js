@@ -1,8 +1,8 @@
 import { database } from '@/firebase.config.js'
 
-const uniqueUsername = (value) => {
+const uniqueUsername = value => {
   // simulate async call, fail for all logins with even length
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     database
       .ref('users')
       .orderByChild('usernameLower')
@@ -11,9 +11,9 @@ const uniqueUsername = (value) => {
   })
 }
 
-const uniqueEmail = (value) => {
+const uniqueEmail = value => {
   // simulate async call, fail for all logins with even length
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     database
       .ref('users')
       .orderByChild('email')
@@ -22,15 +22,15 @@ const uniqueEmail = (value) => {
   })
 }
 
-const supportedImageFile = (value) => {
+const supportedImageFile = value => {
   const supported = ['jpg', 'jpeg', 'gif', 'png', 'svg']
   const suffix = value.split('.').pop()
 
   return supported.includes(suffix)
 }
 
-const responseOk = (value) => {
-  return new Promise((resolve, reject) => {
+const responseOk = value => {
+  return new Promise(resolve => {
     fetch(value)
       .then(res => {
         console.log(res)

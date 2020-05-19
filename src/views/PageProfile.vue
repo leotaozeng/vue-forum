@@ -1,8 +1,8 @@
 <template>
   <div v-if="authUser" class="flex-grid">
-    <UserProfileCard v-if="!edit" :user="authUser"/>
+    <UserProfileCard v-if="!edit" :user="authUser" />
 
-    <UserProfileCardEditor v-else :user="authUser"/>
+    <UserProfileCardEditor v-else :user="authUser" />
 
     <div class="col-7 push-top">
       <div class="profile-header">
@@ -11,9 +11,11 @@
         <a href="#">See only started threads?</a>
       </div>
 
-      <hr>
+      <hr />
 
-      <PostList :posts="userPosts({ resourceId: 'userId', id: authUser['.key'] })"/>
+      <PostList
+        :posts="userPosts({ resourceId: 'userId', id: authUser['.key'] })"
+      />
     </div>
   </div>
 </template>
@@ -57,7 +59,7 @@ export default {
     UserProfileCardEditor
   },
 
-  created () {
+  created() {
     if (this.authUser.posts) {
       this.fetchPosts({ ids: this.authUser.posts }).then(
         this.asyncDataStatus_fetched

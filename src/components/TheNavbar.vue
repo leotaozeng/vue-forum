@@ -1,8 +1,11 @@
 <template>
   <header id="header" class="header">
     <div class="header-wrapper">
-      <router-link :to="{name: 'Home'}" class="logo">
-        <img src="../assets/images/svg/vueschool-logo.svg" alt="The Vue Forum logo">
+      <router-link :to="{ name: 'Home' }" class="logo">
+        <img
+          src="../assets/images/svg/vueschool-logo.svg"
+          alt="The Vue Forum logo"
+        />
       </router-link>
 
       <!-- Show these option only on mobile-->
@@ -15,11 +18,15 @@
     </div>
 
     <!-- use .navbar-open to open nav -->
-    <nav class="navbar" :class="{'navbar-open': mobileNavbarOpen}">
+    <nav class="navbar" :class="{ 'navbar-open': mobileNavbarOpen }">
       <ul v-if="authUser" class="navbar-list">
         <li class="navbar-user" v-if="!isMobileDevice">
           <a v-click-outside="switchDropdownStatus">
-            <img class="avatar-small" :src="authUser.avatar" :alt="authUser.username">
+            <img
+              class="avatar-small"
+              :src="authUser.avatar"
+              :alt="authUser.username"
+            />
 
             <span>
               {{ authUser.name }}
@@ -27,7 +34,7 @@
                 class="icon-profile"
                 src="../assets/images/svg/arrow-profile.svg"
                 alt="icon"
-              >
+              />
             </span>
           </a>
 
@@ -38,38 +45,50 @@
 
             <ul class="dropdown-menu">
               <li class="dropdown-menu-item">
-                <router-link :to="{name: 'Profile'}">View profile</router-link>
+                <router-link :to="{ name: 'Profile' }"
+                  >View profile</router-link
+                >
               </li>
 
               <li class="dropdown-menu-item">
-                <router-link :to="{name: 'Logout'}" title="Log out of your account">Log out</router-link>
+                <router-link
+                  :to="{ name: 'Logout' }"
+                  title="Log out of your account"
+                  >Log out</router-link
+                >
               </li>
             </ul>
           </div>
         </li>
 
         <li class="navbar-item">
-          <router-link :to="{name: 'Logout'}" title="Log out of your account">Log out</router-link>
+          <router-link :to="{ name: 'Logout' }" title="Log out of your account"
+            >Log out</router-link
+          >
         </li>
 
         <!-- mobile-only -->
         <li class="navbar-mobile-item" v-if="isMobileDevice">
-          <router-link :to="{ name: 'Home'}">Home</router-link>
+          <router-link :to="{ name: 'Home' }">Home</router-link>
         </li>
 
         <!-- Show these options only on mobile -->
         <li class="navbar-mobile-item" v-if="isMobileDevice">
-          <router-link :to="{name: 'Profile'}">My Profile</router-link>
+          <router-link :to="{ name: 'Profile' }">My Profile</router-link>
         </li>
       </ul>
 
       <ul v-else class="navbar-list">
         <li class="navbar-item">
-          <router-link :to="{ name: 'Login', query: hasQuery }">Log in</router-link>
+          <router-link :to="{ name: 'Login', query: hasQuery }"
+            >Log in</router-link
+          >
         </li>
 
         <li class="navbar-item">
-          <router-link :to="{ name: 'Signup', query: hasQuery }">Sign up</router-link>
+          <router-link :to="{ name: 'Signup', query: hasQuery }"
+            >Sign up</router-link
+          >
         </li>
       </ul>
     </nav>
@@ -80,7 +99,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  data () {
+  data() {
     return {
       userDropdownOpen: false,
       mobileNavbarOpen: false
@@ -88,7 +107,7 @@ export default {
   },
 
   methods: {
-    switchDropdownStatus (status) {
+    switchDropdownStatus(status) {
       if (!status && typeof status === 'boolean') {
         this.userDropdownOpen = status
       } else {
@@ -96,7 +115,7 @@ export default {
       }
     },
 
-    switchNavbarStatus () {
+    switchNavbarStatus() {
       this.mobileNavbarOpen = !this.mobileNavbarOpen
     }
   },
@@ -106,7 +125,7 @@ export default {
       authUser: 'auth/authUser'
     }),
 
-    hasQuery () {
+    hasQuery() {
       return this.$route.name !== 'Home' &&
         this.$route.name !== 'Signup' &&
         this.$route.name !== 'Login'
@@ -114,7 +133,7 @@ export default {
         : null
     },
 
-    isMobileDevice () {
+    isMobileDevice() {
       return (
         /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
         typeof window.orientation !== 'undefined' ||
@@ -188,7 +207,7 @@ export default {
   width: 30px;
   height: 4px;
 
-  transition: all .5s;
+  transition: all 0.5s;
 
   border-radius: 10px;
   background: white;
@@ -262,7 +281,7 @@ export default {
 
   padding: 10px 20px;
 
-  transition: all .6s ease;
+  transition: all 0.6s ease;
   text-decoration: none;
 
   color: white;
@@ -305,7 +324,7 @@ export default {
     width: 100%;
     height: 0;
 
-    transition: height .56s cubic-bezier(.52, .16, .24, 1);
+    transition: height 0.56s cubic-bezier(0.52, 0.16, 0.24, 1);
 
     background: #263959;
   }
@@ -316,7 +335,7 @@ export default {
     height: 100%;
     padding: 10px 10px 10px;
 
-    transition: all .56s cubic-bezier(.52, .16, .24, 1);
+    transition: all 0.56s cubic-bezier(0.52, 0.16, 0.24, 1);
 
     border-top: 1px solid #fff;
     border-bottom-right-radius: 5px;
@@ -351,37 +370,37 @@ export default {
   }
 
   .navbar-item:nth-child(1) {
-    transition: opacity .3345s cubic-bezier(.52, .16, .52, .84) .15s,
-    transform .4669s cubic-bezier(.52, .16, .52, .84) .108s;
+    transition: opacity 0.3345s cubic-bezier(0.52, 0.16, 0.52, 0.84) 0.15s,
+      transform 0.4669s cubic-bezier(0.52, 0.16, 0.52, 0.84) 0.108s;
     transform: translateY(-44px);
   }
 
   .navbar-item:nth-child(2) {
-    transition: opacity .29294s cubic-bezier(.52, .16, .52, .84) .13s,
-    transform .45043s cubic-bezier(.52, .16, .52, .84) .095s;
+    transition: opacity 0.29294s cubic-bezier(0.52, 0.16, 0.52, 0.84) 0.13s,
+      transform 0.45043s cubic-bezier(0.52, 0.16, 0.52, 0.84) 0.095s;
     transform: translateY(-40px);
   }
 
   .navbar-item:nth-child(3) {
-    transition: opacity .33467s cubic-bezier(.32, .08, .24, 1) .07s,
-    transform .37539s cubic-bezier(.32, .08, .24, 1) .06s;
+    transition: opacity 0.33467s cubic-bezier(0.32, 0.08, 0.24, 1) 0.07s,
+      transform 0.37539s cubic-bezier(0.32, 0.08, 0.24, 1) 0.06s;
     transform: translateY(-36px);
   }
 
   .navbar-item:nth-child(4) {
-    transition: opacity .34577s cubic-bezier(.32, .08, .24, 1) .09s,
-    transform .39692s cubic-bezier(.32, .08, .24, 1) .08s;
+    transition: opacity 0.34577s cubic-bezier(0.32, 0.08, 0.24, 1) 0.09s,
+      transform 0.39692s cubic-bezier(0.32, 0.08, 0.24, 1) 0.08s;
     transform: translateY(-32px);
   }
 
   .navbar-open .navbar-item:nth-child(1) {
-    transition: opacity .3091s cubic-bezier(.32, .08, .24, 1) .03s,
-    transform .3455s cubic-bezier(.32, .08, .24, 1) .02s;
+    transition: opacity 0.3091s cubic-bezier(0.32, 0.08, 0.24, 1) 0.03s,
+      transform 0.3455s cubic-bezier(0.32, 0.08, 0.24, 1) 0.02s;
   }
 
   .navbar-open .navbar-item:nth-child(2) {
-    transition: opacity .32244s cubic-bezier(.32, .08, .24, 1) .05s,
-    transform .35825s cubic-bezier(.32, .08, .24, 1) .04s;
+    transition: opacity 0.32244s cubic-bezier(0.32, 0.08, 0.24, 1) 0.05s,
+      transform 0.35825s cubic-bezier(0.32, 0.08, 0.24, 1) 0.04s;
   }
 
   .navbar-open .navbar-item {
@@ -395,5 +414,4 @@ export default {
     padding: 10px 0;
   }
 }
-
 </style>

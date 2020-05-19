@@ -2,7 +2,7 @@
   <div v-if="asyncDataStatus_ready" class="col-full push-top">
     <h1>{{ category.name }}</h1>
 
-    <CategoryListItem :category="category"/>
+    <CategoryListItem :category="category" />
   </div>
 </template>
 
@@ -30,7 +30,7 @@ export default {
       categories: state => state.categories.items
     }),
 
-    category () {
+    category() {
       return this.categories[this.categoryId]
     }
   },
@@ -40,24 +40,32 @@ export default {
     ...mapActions('forums', ['fetchForums'])
   },
 
-  created () {
+  created() {
     // action
     this.fetchCategory({ id: this.categoryId })
       .then(category => this.fetchForums({ ids: category.forums }))
       .then(forums =>
-        Promise.all(forums.map(forum => {
-          if (forum.threads) {
-            const threads = Object.keys(forum.threads)
-            return this.$store.dispatch('threads/fetchThread', { id: threads[0] })
-          }
-        }))
+        Promise.all(
+          forums.map(forum => {
+            if (forum.threads) {
+              const threads = Object.keys(forum.threads)
+              return this.$store.dispatch('threads/fetchThread', {
+                id: threads[0]
+              })
+            }
+          })
+        )
       )
-      .then((threads) => {
-        Promise.all(threads.map((thread) => {
-          if (thread) {
-            return this.$store.dispatch('users/fetchUser', { id: thread.userId })
-          }
-        }))
+      .then(threads => {
+        Promise.all(
+          threads.map(thread => {
+            if (thread) {
+              return this.$store.dispatch('users/fetchUser', {
+                id: thread.userId
+              })
+            }
+          })
+        )
       })
       .then(this.asyncDataStatus_fetched)
   }

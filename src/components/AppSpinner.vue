@@ -37,7 +37,7 @@ export default {}
   top: 0;
 }
 .sk-circle .sk-child:before {
-  content: "";
+  content: '';
   display: block;
   margin: 0 auto;
   width: 15%;

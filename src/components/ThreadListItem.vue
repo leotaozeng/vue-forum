@@ -3,32 +3,31 @@
     <div>
       <p>
         <router-link
-          :to="{ name: 'ThreadShow', params: { threadId: thread['.key'] }}"
-        >{{ thread.title }}</router-link>
+          :to="{ name: 'ThreadShow', params: { threadId: thread['.key'] } }"
+          >{{ thread.title }}</router-link
+        >
       </p>
 
       <p class="text-faded text-xsmall">
         By
-        <a href="profile.html">{{ threadUser.name }}</a>,
-        <AppDate :timestamp="thread.publishedAt"/>.
+        <a href="profile.html">{{ threadUser.name }}</a
+        >, <AppDate :timestamp="thread.publishedAt" />.
       </p>
     </div>
 
     <div class="activity">
-      <p class="replies-count">{{ threadRepliesCount(thread['.key']) }} reply</p>
+      <p class="replies-count">
+        {{ threadRepliesCount(thread['.key']) }} reply
+      </p>
 
-      <img
-        class="avatar-medium"
-        :src="lastPostUser.avatar"
-        alt="avatar"
-      >
+      <img class="avatar-medium" :src="lastPostUser.avatar" alt="avatar" />
 
       <div>
         <p class="text-xsmall">
           <a href="profile.html">{{ lastPostUser.name }}</a>
         </p>
 
-        <AppDate :timestamp="lastPost.publishedAt"/>
+        <AppDate :timestamp="lastPost.publishedAt" />
       </div>
     </div>
   </div>
@@ -60,15 +59,15 @@ export default {
       threadRepliesCount: 'threads/threadRepliesCount'
     }),
 
-    lastPost () {
+    lastPost() {
       return this.posts[this.thread.lastPostId]
     },
 
-    lastPostUser () {
+    lastPostUser() {
       return this.users[this.lastPost.userId]
     },
 
-    threadUser () {
+    threadUser() {
       return this.users[this.thread.userId]
     }
   }

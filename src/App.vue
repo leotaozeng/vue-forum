@@ -1,14 +1,17 @@
 <template>
   <div id="app">
-    <TheNavbar/>
+    <TheNavbar />
 
     <div class="container">
       <!-- special component -->
       <transition name="fade" mode="out-in" v-show="showPage">
-        <router-view :key="`${$route.path + $route.query.redirect}`" v-on:ready="pageReady"></router-view>
+        <router-view
+          :key="`${$route.path + $route.query.redirect}`"
+          v-on:ready="pageReady"
+        ></router-view>
       </transition>
 
-      <AppSpinner v-show="showSpinner"/>
+      <AppSpinner v-show="showSpinner" />
     </div>
   </div>
 </template>
@@ -24,7 +27,7 @@ export default {
     AppSpinner
   },
 
-  data () {
+  data() {
     return {
       showPage: false,
       showSpinner: true
@@ -32,7 +35,7 @@ export default {
   },
 
   methods: {
-    pageReady () {
+    pageReady() {
       NProgress.done()
       this.showSpinner = false
 
@@ -42,7 +45,7 @@ export default {
     }
   },
 
-  created () {
+  created() {
     NProgress.configure({
       speed: 300,
       showSpinner: false
@@ -64,8 +67,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import "assets/css/style";
-@import "~nprogress/nprogress.css";
+@import 'assets/css/style';
+@import '~nprogress/nprogress.css';
 
 #nprogress .bar {
   background-color: #57ad8d;

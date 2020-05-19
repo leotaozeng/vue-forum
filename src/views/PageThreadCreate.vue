@@ -5,7 +5,7 @@
       <i>{{ forum.name }}</i>
     </h1>
 
-    <ThreadEditor ref="editor" @save="publish" @cancel="cancel"/>
+    <ThreadEditor ref="editor" @save="publish" @cancel="cancel" />
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       published: false
     }
@@ -41,7 +41,7 @@ export default {
       createThread: 'threads/createThread'
     }),
 
-    publish ({ title, text }) {
+    publish({ title, text }) {
       // title and content all must be not empty
       if (this.hasNoEmpty) {
         this.createThread({ forumId: this.forumId, title, text }).then(
@@ -56,7 +56,7 @@ export default {
       }
     },
 
-    cancel () {
+    cancel() {
       this.$router.push({ name: 'Forum', params: { forumId: this.forumId } })
     }
   },
@@ -66,28 +66,28 @@ export default {
       forums: state => state.forums.items
     }),
 
-    forum () {
+    forum() {
       return this.forums[this.forumId]
     },
 
-    hasNoEmpty () {
+    hasNoEmpty() {
       const { title, content } = this.$refs.editor.form
 
       return title && content
     },
 
-    hasUnsavedChanges () {
+    hasUnsavedChanges() {
       const { title, content } = this.$refs.editor.form
 
       return title || content
     }
   },
 
-  created () {
+  created() {
     this.fetchForum({ id: this.forumId }).then(this.asyncDataStatus_fetched)
   },
 
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     if (this.hasUnsavedChanges && !this.published) {
       const answer = window.confirm(
         'Do you really want to leave? you have unsaved changes!'

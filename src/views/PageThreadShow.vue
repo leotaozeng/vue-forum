@@ -4,29 +4,36 @@
     <h1 id="moderation" class="space-between">
       {{ thread.title }}
       <router-link
-        :to="{name: 'ThreadEdit', params: {threadId}}"
+        :to="{ name: 'ThreadEdit', params: { threadId } }"
         class="btn-green btn-small"
         tag="button"
-      >Edit Thread</router-link>
+        >Edit Thread</router-link
+      >
     </h1>
 
     <p>
       By
-      <a href="#" class="link-unstyled">{{ user.name }}</a>,
-      <AppDate :timestamp="thread.publishedAt"/>.
+      <a href="#" class="link-unstyled">{{ user.name }}</a
+      >, <AppDate :timestamp="thread.publishedAt" />.
       <span
-        style="float:right; margin-top: 2px;"
+        style="float: right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
-      >{{ threadRepliesCount(threadId) }} replies by {{ contributorsCount }} contributors</span>
+        >{{ threadRepliesCount(threadId) }} replies by
+        {{ contributorsCount }} contributors</span
+      >
     </p>
 
-    <PostList :posts="threadPosts"/>
+    <PostList :posts="threadPosts" />
 
-    <PostEditor v-if="authUser" :threadId="threadId"/>
+    <PostEditor v-if="authUser" :threadId="threadId" />
 
     <div v-else class="text-center" style="margin-bottom: 50px;">
-      <router-link :to="{ name: 'Login', query: { redirect: $route.path } }">Log in</router-link>or
-      <router-link :to="{ name: 'Signup', query: { redirect: $route.path } }">Sign up</router-link>to post a reply.
+      <router-link :to="{ name: 'Login', query: { redirect: $route.path } }"
+        >Log in</router-link
+      >or
+      <router-link :to="{ name: 'Signup', query: { redirect: $route.path } }"
+        >Sign up</router-link
+      >to post a reply.
     </div>
   </div>
 </template>
@@ -65,21 +72,21 @@ export default {
       authUser: 'auth/authUser'
     }),
 
-    thread () {
+    thread() {
       return this.threads[this.threadId]
     },
 
-    threadPosts () {
+    threadPosts() {
       return Object.values(this.posts).filter(
         post => post.threadId === this.threadId
       )
     },
 
-    user () {
+    user() {
       return this.users[this.thread.userId]
     },
 
-    contributorsCount () {
+    contributorsCount() {
       return countObjectProperties(this.thread.contributors)
       // find the replies
       // get the user ids
@@ -104,12 +111,12 @@ export default {
     })
   },
 
-  beforeCreate () {
+  beforeCreate() {
     // this.threadId === undefined
   },
 
   // I can access this.threadId in the following hook
-  created () {
+  created() {
     // fetch the thread with this.threadId
     this.fetchThread({ id: this.threadId })
       .then(thread => {

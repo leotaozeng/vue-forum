@@ -9,7 +9,7 @@ export default {
 
   actions: {
     fetchAllCategories: ({ state, commit }) =>
-      new Promise((resolve, reject) => {
+      new Promise(resolve => {
         database
           .ref('categories')
           .once('value')
@@ -20,14 +20,18 @@ export default {
               const categoriesObject = snapshot.val()
 
               // forEach returns the value undefined and is not chainable
-              Object.keys(categoriesObject).forEach((id) => {
+              Object.keys(categoriesObject).forEach(id => {
                 const category = categoriesObject[id]
 
-                commit('SET_ITEM', {
-                  resource: 'categories',
-                  item: category,
-                  id
-                }, { root: true })
+                commit(
+                  'SET_ITEM',
+                  {
+                    resource: 'categories',
+                    item: category,
+                    id
+                  },
+                  { root: true }
+                )
               })
             }
 
@@ -35,9 +39,11 @@ export default {
           })
       }),
 
-    fetchCategory: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'categories' }, { root: true }),
+    fetchCategory: ({ dispatch }, { id }) =>
+      dispatch('fetchItem', { id, resource: 'categories' }, { root: true }),
 
-    fetchCategories: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'categories' }, { root: true })
+    fetchCategories: ({ dispatch }, { ids }) =>
+      dispatch('fetchItems', { ids, resource: 'categories' }, { root: true })
   },
 
   getters: {}

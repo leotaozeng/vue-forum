@@ -8,9 +8,10 @@
       </div>
 
       <router-link
-        :to="{name: 'ThreadCreate', params: { forumId: this.forumId }}"
+        :to="{ name: 'ThreadCreate', params: { forumId: this.forumId } }"
         class="btn-green btn-small"
-      >Start a thread</router-link>
+        >Start a thread</router-link
+      >
     </div>
 
     <div class="category-item">
@@ -21,11 +22,14 @@
           <div class="forum-details">
             <a href="#" class="forum-name">Recipes</a>
 
-            <p class="forum-description">Recipes, Guides and Tips &amp; Tricks</p>
+            <p class="forum-description">
+              Recipes, Guides and Tips &amp; Tricks
+            </p>
           </div>
 
           <div class="threads-count">
-            <p class="count text-lead">1</p>threads
+            <p class="count text-lead">1</p>
+            threads
           </div>
 
           <div class="last-thread">
@@ -33,7 +37,7 @@
               class="avatar"
               src="http://cleaneatsfastfeets.com/wp-content/uploads/2013/05/Mr-Burns.gif"
               alt
-            >
+            />
             <div class="last-thread-details">
               <a href="#">How I grill my fish</a>
               <p class="text-xsmall">
@@ -49,7 +53,7 @@
     <div class="thread-wrapper">
       <h2 class="list-title">Threads</h2>
 
-      <ThreadList :threads="forumThreads"/>
+      <ThreadList :threads="forumThreads" />
     </div>
   </div>
 </template>
@@ -79,11 +83,11 @@ export default {
       threads: state => state.threads.items
     }),
 
-    forum () {
+    forum() {
       return this.forums[this.forumId]
     },
 
-    forumThreads () {
+    forumThreads() {
       // need to return an array of threads
       return Object.values(this.threads).filter(
         thread => thread.forumId === this.forumId
@@ -100,7 +104,7 @@ export default {
     })
   },
 
-  created () {
+  created() {
     this.fetchForum({ id: this.forumId })
       .then(forum => this.fetchThreads({ ids: forum.threads }))
       .then(threads => {
@@ -108,7 +112,9 @@ export default {
         return threads
       })
       .then(threads =>
-        Promise.all(threads.map(thread => this.fetchPost({ id: thread.lastPostId })))
+        Promise.all(
+          threads.map(thread => this.fetchPost({ id: thread.lastPostId }))
+        )
       )
       .then(posts =>
         Promise.all(posts.map(post => this.fetchUser({ id: post.userId })))

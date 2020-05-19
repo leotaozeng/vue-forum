@@ -1,6 +1,14 @@
 import { database } from '@/firebase.config'
-import { SET_USER, ADD_POST_TO_USER, ADD_THREAD_T0_USER } from '../mutation-types'
-import { makeSetItemMutation, makeAppendChildToParentMutation, removeEmptyProperties } from '../assetHelpers'
+import {
+  SET_USER,
+  ADD_POST_TO_USER,
+  ADD_THREAD_T0_USER
+} from '../mutation-types'
+import {
+  makeSetItemMutation,
+  makeAppendChildToParentMutation,
+  removeEmptyProperties
+} from '../assetHelpers'
 import { countObjectProperties } from '@/utils'
 
 export default {
@@ -13,18 +21,29 @@ export default {
   mutations: {
     [SET_USER]: makeSetItemMutation({ resource: 'users' }),
 
-    [ADD_POST_TO_USER]: makeAppendChildToParentMutation({ parent: 'users', child: 'posts' }),
+    [ADD_POST_TO_USER]: makeAppendChildToParentMutation({
+      parent: 'users',
+      child: 'posts'
+    }),
 
-    [ADD_THREAD_T0_USER]: makeAppendChildToParentMutation({ parent: 'users', child: 'threads' })
+    [ADD_THREAD_T0_USER]: makeAppendChildToParentMutation({
+      parent: 'users',
+      child: 'threads'
+    })
   },
 
   actions: {
-    fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { id, resource: 'users' }, { root: true }),
+    fetchUser: ({ dispatch }, { id }) =>
+      dispatch('fetchItem', { id, resource: 'users' }, { root: true }),
 
-    fetchUsers: ({ dispatch }, { ids }) => dispatch('fetchItems', { ids, resource: 'users' }, { root: true }),
+    fetchUsers: ({ dispatch }, { ids }) =>
+      dispatch('fetchItems', { ids, resource: 'users' }, { root: true }),
 
-    createUser: ({ state, commit, rootState }, { id, email, name, username, avatar = null }) =>
-      new Promise((resolve, reject) => {
+    createUser: (
+      { state, commit },
+      { id, email, name, username, avatar = null }
+    ) =>
+      new Promise(resolve => {
         const user = {}
         const registeredAt = Math.floor(Date.now() / 1000)
 
@@ -35,13 +54,21 @@ export default {
         user.username = username
         user.usernameLower = username.toLowerCase()
 
-        database.ref(`users/${id}`).set(user).then(() => {
-          commit('SET_ITEM', { resource: 'users', id, item: user }, { root: true })
+        database
+          .ref(`users/${id}`)
+          .set(user)
+          .then(() => {
+            commit(
+              'SET_ITEM',
+              { resource: 'users', id, item: user },
+              { root: true }
+            )
 
-          resolve(state.items[id])
-        })
+            resolve(state.items[id])
+          })
       }),
 
+    // eslint-disable-next-line no-unused-vars
     updateUser: ({ commit }, user) =>
       new Promise((resolve, reject) => {
         const userData = {
@@ -57,16 +84,18 @@ export default {
           location: user.location
         }
 
-        database.ref(`users/${user['.key']}`).set(removeEmptyProperties(userData), (error) => {
-          if (error) {
-            // The write failed...
-            reject(error)
-          } else {
-            // Data saved successfully!
-            console.log('Set successfully')
-            resolve()
-          }
-        })
+        database
+          .ref(`users/${user['.key']}`)
+          .set(removeEmptyProperties(userData), error => {
+            if (error) {
+              // The write failed...
+              reject(error)
+            } else {
+              // Data saved successfully!
+              console.log('Set successfully')
+              resolve()
+            }
+          })
       })
   },
 
